@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectConfiguration">
+    <option name="json" value="{&#10;    &quot;result&quot;: true,&#10;    &quot;error_mesage&quot;: &quot;&quot;,&#10;    &quot;error_mesage_en&quot;: &quot;&quot;,&#10;    &quot;data&quot;: [&#10;        {&#10;            &quot;id&quot;: 4,&#10;            &quot;cat_id&quot;: 11,&#10;            &quot;name&quot;: &quot;موديل&quot;,&#10;            &quot;type_inserting&quot;: null&#10;        },&#10;        {&#10;            &quot;id&quot;: 5,&#10;            &quot;cat_id&quot;: 11,&#10;            &quot;name&quot;: &quot;ناقل الحركة&quot;,&#10;            &quot;type_inserting&quot;: null&#10;        },&#10;        {&#10;            &quot;id&quot;: 6,&#10;            &quot;cat_id&quot;: 11,&#10;            &quot;name&quot;: &quot;السنة&quot;,&#10;            &quot;type_inserting&quot;: null&#10;        },&#10;        {&#10;            &quot;id&quot;: 7,&#10;            &quot;cat_id&quot;: 11,&#10;            &quot;name&quot;: &quot;الحالة&quot;,&#10;            &quot;type_inserting&quot;: null&#10;        }&#10;    ]&#10;}" />
+    <option name="rootClassNameTextField" value="AddProAttributes" />
+  </component>
+</project>

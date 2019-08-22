@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/navigationHome"
+            android:icon="@mipmap/catego_hovmdpi"
+            android:title="@string/categories"/>
+
+    <item
+            android:id="@+id/navigationOffers"
+            android:icon="@mipmap/offersmdpi"
+            android:title="@string/offers"/>
+
+    <item
+            android:id="@+id/navigationMessages"
+            android:icon="@drawable/add_plus"
+            android:title="@string/yourAd"/>
+
+    <item
+            android:id="@+id/navigationNotifications"
+            android:icon="@mipmap/notemdpi"
+            android:title="@string/notifications"/>
+
+    <item
+            android:id="@+id/navigationMore"
+            android:icon="@mipmap/moremdpi"
+            android:title="@string/more"/>
+</menu>

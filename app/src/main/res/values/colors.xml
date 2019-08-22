@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#00aeef</color>
+    <color name="colorPrimaryDark">#00aeef</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="gray">#999999</color>
+    <color name="white_gray">#d1d2d4</color>
+    <color name="off_white">#eef1f3</color>
+    <color name="brown">#87643c</color>
+    <color name="lawyerColorPrimary">#87643c</color>
+    <color name="darkBrown">#5D3B1F</color>
+    <color name="officeColorPrimary">#5D3B1F</color>
+    <color name="authorizedColor">#5f873c</color>
+    <color name="servicesColor">#873e3c</color>
+    <color name="lawyersServicesColor">#5D3B1F</color>
+    <color name="lawsColor">#87643c</color>
+    <color name="newsAndCommentColor">#3c5f87</color>
+    <color name="consultantColor">#3c5f87</color>
+    <color name="white_disabled">#9bffffff</color>
+    <color name="dialog_placeholder_color">#aa000000</color>
+    <color name="scrollable_dialog_status_bar_color">#142f2c</color>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp">
+
+    <TextView
+            android:id="@+id/addProductCategoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14ssp"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:text="@string/app_name"
+            android:paddingBottom="@dimen/_4sdp"
+            android:paddingTop="@dimen/_4sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/black"/>
+
+    <ImageView
+            android:id="@+id/nextCategory"
+            android:layout_width="@dimen/_15sdp"
+               android:layout_height="@dimen/_15sdp"
+               app:srcCompat="@drawable/left_arrow"
+               android:layout_marginTop="@dimen/_6sdp"
+               android:layout_marginEnd="@dimen/_16sdp"
+               android:layout_marginStart="@dimen/_16sdp"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="@dimen/_1sdp"
+              android:background="@color/white_gray"
+              app:layout_constraintTop_toBottomOf="@id/addProductCategoryName"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
