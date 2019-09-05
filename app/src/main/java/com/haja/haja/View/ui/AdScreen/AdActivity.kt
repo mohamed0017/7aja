@@ -1,5 +1,6 @@
 package com.haja.haja.View.ui.AdScreen
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.haja.haja.R
 import com.haja.haja.Service.ApiService
 import com.haja.haja.Service.model.AdsModel
+import com.haja.haja.Utils.ApplicationLanguageHelper
+import com.haja.haja.Utils.LANG
+import com.haja.haja.Utils.SharedPreferenceUtil
 import com.haja.haja.View.ui.MainCategoriesActivity.MainCategoriesActivity
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.squareup.picasso.Picasso
@@ -60,5 +64,10 @@ class AdActivity : AppCompatActivity() {
         Picasso.get().load(ApiService.IMAGEBASEURL + "${ad.data?.get(0)?.img}")
             .placeholder(resources.getDrawable(R.drawable.placeholder))
             .error(resources.getDrawable(R.drawable.placeholder)).into(startupAdImg)
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
+        super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase, "$lang"))
     }
 }

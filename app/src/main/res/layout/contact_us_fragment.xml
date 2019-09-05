@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_20sdp">
+
+        <Button
+                android:id="@+id/callUs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_but"
+                android:layout_margin="@dimen/_40sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_16ssp"
+                android:text="@string/callUs"/>
+
+        <TextView
+                android:id="@+id/or"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/or"
+                android:textSize="@dimen/_20ssp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@id/callUs"/>
+
+        <TextView
+                android:id="@+id/sendUS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sendUS"
+                android:textSize="@dimen/_12ssp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@id/or"/>
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:background="@drawable/border"
+                android:hint="@string/name"
+                android:padding="@dimen/_4sdp"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/sendUS">
+
+            <EditText
+                    android:id="@+id/contactName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:inputType="text"
+                    android:padding="@dimen/_8sdp"
+                    android:textSize="@dimen/_12ssp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:background="@drawable/border"
+                android:hint="@string/phone"
+                android:padding="@dimen/_4sdp"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/name">
+
+            <EditText
+                    android:id="@+id/contactPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:inputType="phone"
+                    android:padding="@dimen/_8sdp"
+                    android:textSize="@dimen/_12ssp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/messageSubject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:background="@drawable/border"
+                android:hint="@string/messageSubject"
+                android:padding="@dimen/_4sdp"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/phone">
+
+            <EditText
+                    android:id="@+id/contactTitleُ"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:inputType="text"
+                    android:padding="@dimen/_8sdp"
+                    android:textSize="@dimen/_12ssp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:background="@drawable/border"
+                android:hint="@string/message"
+                android:padding="@dimen/_4sdp"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true"
+                app:layout_constraintTop_toBottomOf="@id/messageSubject">
+
+            <EditText
+                    android:id="@+id/contactMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:inputType="textMultiLine"
+                    android:lines="4"
+                    android:padding="@dimen/_8sdp"
+                    android:textSize="@dimen/_12ssp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+                android:id="@+id/sendContactBut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_but"
+                android:layout_margin="@dimen/_30sdp"
+                app:layout_constraintTop_toBottomOf="@id/message"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_16ssp"
+                android:text="@string/send"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -19,6 +19,7 @@ import com.haja.haja.Service.model.OfferCategoriesData
 import com.haja.haja.Service.model.ProductData
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.kaopiz.kprogresshud.KProgressHUD
+import kotlinx.android.synthetic.main.app_bar_main.*
 
 class OffersFragment : Fragment(), OnItemClick {
 
@@ -69,6 +70,8 @@ class OffersFragment : Fragment(), OnItemClick {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.appBarTitle?.text = resources.getString(R.string.offers)
+
         viewModel = ViewModelProviders.of(this).get(OffersViewModel::class.java)
          progress = CustomProgressBar.showProgressBar(context!!)
         progress?.show()

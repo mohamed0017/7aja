@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.add_attributes_item.view.*
 
 class AddProductAttributesAdapter() : RecyclerView.Adapter<AddProductAttributesAdapter.ViewHolder>() {
 
-    private var attributes: List<AttributeData?>? = null
+    private var attributes: ArrayList<AttributeData>? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -49,25 +49,23 @@ class AddProductAttributesAdapter() : RecyclerView.Adapter<AddProductAttributesA
         })
     }
 
-    fun getEnteredAttributesData(): HashMap<String, List<String>> {
-        val addedAttributesIDs = ArrayList<String>()
-        val addedAttributesValues = ArrayList<String>()
-        val map = HashMap<String, List<String>>()
-        for (i in attributes?.indices!!) {
-            addedAttributesIDs.add(attributes!![i]?.id.toString())
-            addedAttributesValues.add(attributes!![i]?.value.toString())
+    fun getEnteredAttributesData(): HashMap<String, String> {
+        val map = HashMap<String, String>()
+        if (attributes != null){
+            for (i in attributes?.indices!!) {
+                map["attributes[${attributes!![i]?.id}]"] = attributes!![i]?.value.toString()
+            }
         }
-        map["attributes_id[]"] = addedAttributesIDs
-        map["attributes_value[]"] = addedAttributesValues
-        Log.i("attributes_id[]", map.get("attributes_id[]").toString())
-        Log.i("attributes_value[]", map.get("attributes_value[]").toString())
         return map
     }
 
-    fun setAttributes(attributes: List<AttributeData>) {
+    fun setAttributes(attributes: ArrayList<AttributeData>) {
         this.attributes = attributes
     }
 
+    fun clearAttributes(){
+        attributes?.clear()
+    }
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.addProAttributeName
         val value = itemView.addProAttributeValue

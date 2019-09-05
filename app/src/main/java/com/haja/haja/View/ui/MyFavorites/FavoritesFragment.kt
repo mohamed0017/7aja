@@ -16,6 +16,7 @@ import com.haja.haja.Service.model.ProductData
 import com.haja.haja.View.ui.Products.ProductsAdapter
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.favorites_fragment.*
 
 class FavoritesFragment : Fragment(), OnProductItemClicked {
@@ -50,9 +51,13 @@ class FavoritesFragment : Fragment(), OnProductItemClicked {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+    }
 
-        favoritesList.layoutManager = LinearLayoutManager(context!!)
+    override fun onResume() {
+        super.onResume()
+        activity?.appBarTitle?.text = resources.getString(R.string.fav)
         val progress = CustomProgressBar.showProgressBar(context!!)
+        favoritesList.layoutManager = LinearLayoutManager(context!!)
         adapter = ProductsAdapter(context!!, fragmentManager, this)
         progress.show()
         favoritesList.adapter = adapter
@@ -70,5 +75,4 @@ class FavoritesFragment : Fragment(), OnProductItemClicked {
                 Toast.makeText(context!!, resources.getString(R.string.error), Toast.LENGTH_SHORT).show()
         })
     }
-
 }

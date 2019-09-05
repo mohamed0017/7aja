@@ -11,48 +11,66 @@ import com.haja.haja.View.ui.Products.ProductsFragment
 import com.haja.haja.model.CategoriesData
 import kotlinx.android.synthetic.main.sub_child_category_item.view.*
 
-class SubCategoriesAdapter (
+class SubCategoriesAdapter(
     private val children: List<CategoriesData?>?,
-   private val fragmentManager: FragmentManager?
-)
-    : RecyclerView.Adapter<SubCategoriesAdapter.ViewHolder>(){
+    private val fragmentManager: FragmentManager?
+) : RecyclerView.Adapter<SubCategoriesAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
 
-        val v =  LayoutInflater.from(parent.context)
-            .inflate(R.layout.sub_child_category_item,parent,false)
+        val v = LayoutInflater.from(parent.context)
+            .inflate(R.layout.sub_child_category_item, parent, false)
         return ViewHolder(v)
     }
 
     override fun getItemCount(): Int {
-        return children?.size!!
+        return children?.size ?: 0
     }
 
-    override fun onBindViewHolder(holder: ViewHolder,
-                                  position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int
+    ) {
         val child = children?.get(position)
-          holder.catName.text = child?.name
-          holder.adsCounnt.text = child?.countProduct.toString()
-
+        holder.catName.text = child?.name
         holder.itemView.setOnClickListener {
-            if (child?.countProduct == 0){
+            if (child?.countSubCat == 0) {
                 fragmentManager?.inTransaction {
-                    replace(R.id.mainContainer, SubCategoriesFragment.newInstance(child.id!!))
-                        .addToBackStack("products")
+                    replace(R.id.mainContainer, ProductsFragment.newInstance(child.id!!, child.name))
+                        .addToBackStack("ProductsFragment")
                 }
-            }else{
+            } else {
                 fragmentManager?.inTransaction {
-                    replace(R.id.mainContainer, ProductsFragment.newInstance(child?.id!!))
-                        .addToBackStack("products")
+                    replace(R.id.mainContainer, SubCategoriesFragment.newInstance(child?.id!!, child.name))
+                        .addToBackStack("SubCategoriesFragment")
                 }
             }
 
         }
+        holder.bind(child)
+
     }
 
-    inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-         val catName = itemView.subCategoryName
-         val adsCounnt = itemView.subCategoryAdsCount
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val catName = itemView.subCategoryName
+        val adsCounnt = itemView.subCategoryAdsCount
+        val subCategoriesCount = itemView.subCategoriesCount
+        val adsCounntLayout = itemView.subCategoryAdsCountSection
+        val subCategoriesCountLayout = itemView.subCategoriesCountSection
+
+        fun bind(child: CategoriesData?) {
+            if (child?.countSubCat == 0) {
+                adsCounntLayout.visibility = View.VISIBLE
+                subCategoriesCountLayout.visibility = View.GONE
+                adsCounnt.text = child.countProduct.toString()
+            } else {
+                subCategoriesCountLayout.visibility = View.VISIBLE
+                adsCounntLayout.visibility = View.GONE
+                subCategoriesCount.text = child?.countSubCat.toString()
+            }
+        }
     }
 }

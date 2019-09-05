@@ -24,6 +24,12 @@ import com.example.easywaylocation.Listener
 import com.example.easywaylocation.EasyWayLocation.LOCATION_SETTING_REQUEST_CODE
 import android.content.Intent
 import android.util.Log
+import com.haja.haja.Utils.SharedPreferenceUtil
+import com.haja.haja.Utils.TOKEN
+import com.haja.haja.Utils.USERID
+import com.haja.haja.Utils.inTransaction
+import com.haja.haja.View.ui.MainCategoriesScreen.MainCategoriesFragment
+import kotlinx.android.synthetic.main.app_bar_main.*
 
 class RegisterFragment : Fragment(), Listener {
 
@@ -46,6 +52,9 @@ class RegisterFragment : Fragment(), Listener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
+       // activity?.bottomNavigation?.visibility = View.GONE
+        activity?.appBarTitle?.text = resources.getString(R.string.register)
+
         configLocationPremation()
         registerBut.setOnClickListener {
             if (isValidUserInputs()) {
@@ -53,8 +62,12 @@ class RegisterFragment : Fragment(), Listener {
                 viewModel.register(userRegistrationInfo()).observe(this, Observer { user ->
                     if (user != null) {
                         if (user.success != null && user.errorMesage == null) {
-                            goToActivationAccount(user.success.token)
+                            user.data?.id?.let { it1 -> SharedPreferenceUtil(context!!).putString(USERID, "$it1") }
+                            SharedPreferenceUtil(context!!).putString("userName", user.data?.name.toString())
+                            SharedPreferenceUtil(context!!).putString("userPhone", user.data?.mobile.toString())
+                            storeUserToken(user.success.token)
                             makeToast(context!!, resources.getString(R.string.success))
+                            goToActivationAccount()
                         } else {
                             when {
                                 user.errorMesage?.mobile != null -> makeToast(
@@ -104,12 +117,15 @@ class RegisterFragment : Fragment(), Listener {
         }
     }
 
-    private fun goToActivationAccount(accessToken: String?) {
-        /*fragmentManager?.inTransaction {
-            replace(R.id.mainContainer , AccountActivationFragment.newInstance(accessToken))
-        }*/
+    private fun goToActivationAccount() {
+        fragmentManager?.inTransaction {
+            replace(R.id.mainContainer, MainCategoriesFragment.newInstance())
+        }
     }
 
+    private fun storeUserToken(token: String?) {
+        SharedPreferenceUtil(context!!).putString(TOKEN , token)
+    }
     private fun isValidUserInputs(): Boolean {
         val name = registerName.text.toString()
         val phone = registerPhone.text.toString()

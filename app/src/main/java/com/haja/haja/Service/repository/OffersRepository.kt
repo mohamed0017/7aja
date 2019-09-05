@@ -8,16 +8,12 @@ import com.haja.haja.Service.model.OffersCategoriesModel
 import com.haja.haja.Service.model.ProductsModel
 import com.haja.haja.Utils.SingleLiveEvent2
 
-class OffersRepository private constructor(){
-
-    companion object {
-        val getInstance = OffersRepository()
-    }
+class OffersRepository(token:String){
 
     private var apiService: ApiService? = null
 
     init {
-        apiService = ServiceGenerator.createService
+        apiService = ServiceGenerator(token).createService
     }
 
 

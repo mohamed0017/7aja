@@ -23,6 +23,7 @@ import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar.Companion.sho
 import com.kaopiz.kprogresshud.KProgressHUD
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_ad.*
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.main_categories_fragment.*
 
 class MainCategoriesFragment : Fragment() {
@@ -32,7 +33,7 @@ class MainCategoriesFragment : Fragment() {
     }
 
     private var requestsCount = 0
-    private lateinit var viewModel: MainCategoriesViewModel
+    private  var viewModel: MainCategoriesViewModel? = null
     private var categories = ArrayList<CategoriesData>()
     private var progress: KProgressHUD? = null
     override fun onCreateView(
@@ -44,10 +45,15 @@ class MainCategoriesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+       // activity?.bottomNavigation?.visibility = View.VISIBLE
+        activity?.appBarTitle?.text = resources.getString(R.string.categories)
+
         progress = showProgressBar(context!!)
         progress?.show()
+        if (viewModel == null)
         viewModel = ViewModelProviders.of(this).get(MainCategoriesViewModel::class.java)
-        viewModel.getCategories(0).observe(this, Observer {
+        // get main categories
+        viewModel?.getCategories(0)?.observe(this, Observer {
             if (it != null) {
                 if (!it.data.isNullOrEmpty())
                     categories = it.data as ArrayList<CategoriesData>
@@ -73,7 +79,7 @@ class MainCategoriesFragment : Fragment() {
     }
 
     private fun getStartupAd() {
-        viewModel.getStartupAd().observe(this, Observer { ad ->
+        viewModel?.getStartupAd()?.observe(this, Observer { ad ->
             if (ad != null) {
                 if (ad.result == true)
                     setupStartupAdDialog(ad)
@@ -88,7 +94,7 @@ class MainCategoriesFragment : Fragment() {
         Log.i("getChildCategories", "two00")
         for (i in parentCategories?.data?.indices!!) {
             Log.i("getChildCategories", "oo")
-            viewModel.getCategories(parentCategories.data[i]?.id).observe(this, Observer {
+            viewModel?.getCategories(parentCategories.data[i]?.id)?.observe(this, Observer {
                 if (it != null) {
                     categories[i].childCategories = it.data
                     requestsCount++
@@ -111,7 +117,7 @@ class MainCategoriesFragment : Fragment() {
         Log.i("getChildrenAds", "two00")
         for (i in parentCategories?.data?.indices!!) {
             Log.i("getChildrenAds/i", "$i")
-            viewModel.getAds(parentCategories.data[i]?.id).observe(this, Observer {
+            viewModel?.getAds(parentCategories.data[i]?.id)?.observe(this, Observer {
                 if (it != null) {
                     categories[i].childAds = it.data
                     requestsCount++

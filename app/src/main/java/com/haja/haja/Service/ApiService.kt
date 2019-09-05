@@ -8,8 +8,8 @@ import retrofit2.http.*
 
 interface ApiService {
     companion object {
-        const val BASEURL = "https://7aja.puresoft.me/"
-        const val IMAGEBASEURL = "https://7aja.puresoft.me/uploads/"
+        const val BASEURL = "https://7ajaq8.com/"
+        const val IMAGEBASEURL = "https://7ajaq8.com/uploads/"
     }
 
     @Headers("Accept: application/json")
@@ -42,7 +42,16 @@ interface ApiService {
     @GET("/api/products/t/{lang}/1/{id}")
     fun getProducts(
         @Path("lang") lang: String,
-        @Path("id") parentId: Int
+        @Path("id") parentId: Int,
+        @Query("user_id") userId : Int
+    ): Call<ProductsModel>
+
+    @Headers("Accept: application/json")
+    @GET("/api/products/{id}")
+    fun getSingleProduct(
+        @Path("id") orderId: Int,
+        @Query("lang") lang : String,
+        @Query("user_id") userId : Int
     ): Call<ProductsModel>
 
     @Headers("Accept: application/json")
@@ -102,6 +111,38 @@ interface ApiService {
     fun addProduct(
         @QueryMap map: HashMap<String, String>,
         @Part lang: List<MultipartBody.Part>,
-        @QueryMap productAttributes: HashMap<String, List<String>>
+        @QueryMap productAttributes: HashMap<String, String>
     ): Call<AddProductResponse>
+
+    @Headers("Accept: application/json")
+    @POST("/api/products_report")
+    fun productReport(@QueryMap map: HashMap<String, String>): Call<ProductReportResponse>
+
+    @Headers("Accept: application/json")
+    @GET("/api/products/num_views/{id}")
+    fun productView(@Path("id") id: Int): Call<DefultResponse>
+
+    @Headers("Accept: application/json")
+    @GET("/api/notifications/t/ar/0/{id}/0")
+    fun getNotifications(@Path("id") id: Int): Call<NotificationsResponse>
+
+    @Headers("Accept: application/json")
+    @GET("/api/user-products/t/1/{id}")
+    fun getMyProducts(@Path("id") userId: Int): Call<ProductsModel>
+
+    @Headers("Accept: application/json")
+    @DELETE("/api/products/{id}")
+    fun removeProduct(@Path("id") productId: Int): Call<DefultResponse>
+
+    @Headers("Accept: application/json")
+    @POST("/api/contact_us")
+    fun contactUS(@Body contactUsModel: ContactUsModel): Call<DefultResponse>
+
+    @Headers("Accept: application/json")
+    @GET("/api/users/t/1")
+    fun getDelegates(): Call<DelegatesModel>
+
+    @Headers("Accept: application/json")
+    @GET("/api/contact-details")
+    fun getContactDetails(): Call<ContactDetailsModel>
 }

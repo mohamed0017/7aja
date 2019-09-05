@@ -14,14 +14,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.haja.haja.R
 import com.haja.haja.model.CategoriesData
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.sub_categories_fragment.*
 
 class SubCategoriesFragment : Fragment() {
 
     companion object {
-        fun newInstance(categoryId: Int) = SubCategoriesFragment().apply {
+        fun newInstance(categoryId: Int, name: String?) = SubCategoriesFragment().apply {
             arguments = Bundle().apply {
                 putInt("categoryId", categoryId)
+                putString("categoryName", name)
             }
         }
     }
@@ -37,7 +39,11 @@ class SubCategoriesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         val categoryId = arguments!!.getInt("categoryId")
+        val categoryName = arguments!!.getString("categoryName")
+        activity?.appBarTitle?.text = categoryName
+
         val progress = CustomProgressBar.showProgressBar(context!!)
         progress.show()
         Log.i("sub_categoryId", "$categoryId")

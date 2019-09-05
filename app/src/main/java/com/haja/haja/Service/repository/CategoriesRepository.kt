@@ -9,21 +9,17 @@ import com.haja.haja.Service.model.FavoriteModel
 import com.haja.haja.Service.model.ProductsModel
 import com.haja.haja.Utils.SingleLiveEvent2
 
-class CategoriesRepository private constructor(){
-
-    companion object {
-        val getInstance = CategoriesRepository()
-    }
+class CategoriesRepository(token:String){
 
     private var apiService: ApiService? = null
 
     init {
-        apiService = ServiceGenerator.createService
+        apiService = ServiceGenerator(token).createService
     }
 
-    fun getProducts(parentId:Int, language: String): SingleLiveEvent2<ProductsModel> {
+    fun getProducts(parentId:Int, language: String ,userId : Int): SingleLiveEvent2<ProductsModel> {
         val result = SingleLiveEvent2<ProductsModel>()
-        val call = apiService?.getProducts(parentId = parentId, lang = language)
+        val call = apiService?.getProducts(parentId = parentId, lang = language , userId = userId)
         call?.enqueue {
             onResponse = { response ->
                 Log.i("getProducts", response.code().toString())
@@ -42,7 +38,7 @@ class CategoriesRepository private constructor(){
 
     fun addToFavorite(productId:Int): SingleLiveEvent2<FavoriteModel> {
         val result = SingleLiveEvent2<FavoriteModel>()
-        val call = apiService?.addToFavorite( productId)
+        val call = apiService?. addToFavorite( productId)
         call?.enqueue {
             onResponse = { response ->
                 Log.i("addToFavorite", response.code().toString())

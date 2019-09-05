@@ -8,11 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.haja.haja.R
-import com.haja.haja.Utils.SharedPreferenceUtil
-import com.haja.haja.Utils.TOKEN
-import com.haja.haja.Utils.ValidationUtils
+import com.haja.haja.Utils.*
+import com.haja.haja.View.ui.MainCategoriesScreen.MainCategoriesFragment
+import com.haja.haja.View.ui.Register.RegisterFragment
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.login_fragment.*
 
 class LoginFragment : Fragment() {
@@ -33,6 +34,8 @@ class LoginFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+       // activity?.bottomNavigation?.visibility = View.GONE
+        activity?.appBarTitle?.text = resources.getString(R.string.login)
 
         val progress = CustomProgressBar.showProgressBar(context!!)
         loginBut.setOnClickListener {
@@ -43,7 +46,11 @@ class LoginFragment : Fragment() {
                     if (user != null) {
                         if (user.success != null && user.errorMesage == null) {
                             storeUserToken(user.success.token)
+                            user.data?.id?.let { it1 -> SharedPreferenceUtil(context!!).putString(USERID, "$it1") }
+                            SharedPreferenceUtil(context!!).putString("userName", user.data?.name.toString())
+                            SharedPreferenceUtil(context!!).putString("userPhone", user.data?.mobile.toString())
                             makeToast(context!!, resources.getString(R.string.success))
+                            goToActivationAccount()
                         } else {
                             makeToast(context!!, resources.getString(R.string.login_message))
                         }
@@ -53,8 +60,19 @@ class LoginFragment : Fragment() {
             }
 
         }
+
+        registerLogin.setOnClickListener {
+            fragmentManager?.inTransaction {
+                replace(R.id.mainContainer, RegisterFragment.newInstance())
+            }
+        }
     }
 
+    private fun goToActivationAccount() {
+        fragmentManager?.inTransaction {
+            replace(R.id.mainContainer, MainCategoriesFragment.newInstance())
+        }
+    }
     private fun storeUserToken(token: String?) {
         SharedPreferenceUtil(context!!).putString(TOKEN , token)
     }

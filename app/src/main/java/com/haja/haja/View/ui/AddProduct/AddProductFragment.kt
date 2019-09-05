@@ -1,5 +1,7 @@
 package com.haja.haja.View.ui.AddProduct
 
+import android.Manifest
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -18,28 +20,90 @@ import android.view.animation.AnimationUtils
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import android.content.Intent
 import android.app.Activity.RESULT_OK
+import android.location.Geocoder
 import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.easywaylocation.EasyWayLocation
+import com.example.easywaylocation.Listener
 import com.haja.haja.Service.model.AttributeData
 import com.haja.haja.Utils.SharedPreferenceUtil
 import com.haja.haja.Utils.USERID
+import com.haja.haja.Utils.inTransaction
+import com.haja.haja.View.ui.AboutusScreen.AboutFragment
+import com.haja.haja.View.ui.MyAdsScreen.MyAdsFragment
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.single.PermissionListener
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
+import kotlinx.android.synthetic.main.app_bar_main.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
-class AddProductFragment : Fragment(), OnCategoryItemClick {
+class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
+
+    override fun locationCancelled() {
+    }
+
+    override fun locationOn() {
+        easyWayLocation?.beginUpdates()
+        try {
+            lati = easyWayLocation?.latitude
+            longi = easyWayLocation?.longitude
+
+            if (lati != null && longi != null)
+                cityName.text = getAreaName()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    override fun onPositionChanged() {
+        easyWayLocation?.beginUpdates()
+        try {
+            lati = easyWayLocation?.latitude
+            longi = easyWayLocation?.longitude
+
+            if (lati != null && longi != null)
+                cityName.text = getAreaName()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    private fun getAreaName(): String {
+        val geocoder = Geocoder(context, Locale.getDefault());
+        val addresses = geocoder.getFromLocation(lati!!, longi!!, 1);
+        val cityName = addresses.get(0).getAddressLine(0);
+        val stateName = addresses.get(0).getAddressLine(1);
+        // val countryName = addresses.get(0).getAddressLine(2);
+
+        return "$cityName  "
+    }
 
     override fun onClick(possion: Int, itemData: CategoriesData) {
-        if (itemData.countSubCat == 0) {
+        selectedCategoriesCount++
+        if (selectedCategoriesCount == 2) {
             setupAttributesList(itemData.id)
-            categoriesDialog.dismiss()
+        }
+        if (itemData.countSubCat == 0) {
             selectedCategory = itemData.id!!
             selectCategory.text = itemData.name
+            categoriesDialog.dismiss()
+            categoriesAdapter.clearCategoriesList()
+            categoriesAdapter.notifyDataSetChanged()
+            selectedCategoriesCount = 0
         } else
             getNextCategories(itemData.id!!)
     }
@@ -49,12 +113,15 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
     }
 
     private lateinit var viewModel: AddProductViewModel
-    private lateinit var adapter: AddProductCatAdapter
+    private lateinit var categoriesAdapter: AddProductCatAdapter
     private var attributesAdapter = AddProductAttributesAdapter()
-
+    private var easyWayLocation: EasyWayLocation? = null
+    private var lati: Double? = null
+    private var longi: Double? = null
     private val categoriesDialog = AddProductCategoriesDialog()
     private var selectedImages = ArrayList<Image>()
     private var selectedCategory = 0
+    private var selectedCategoriesCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,8 +132,11 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.appBarTitle?.text = resources.getString(R.string.addProduct)
+
         viewModel = ViewModelProviders.of(this).get(AddProductViewModel::class.java)
-        adapter = AddProductCatAdapter(this)
+        categoriesAdapter = AddProductCatAdapter(this)
+        configLocationPremation()
         val progress = CustomProgressBar.showProgressBar(context!!)
 
         uploadImages.setOnClickListener {
@@ -74,13 +144,14 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         }
 
         selectCategory.setOnClickListener {
+            selectedCategoriesCount = 0
             categoriesDialog.show(context!!)
             categoriesDialog.getDialogView().addProductCategoriesList.layoutManager = LinearLayoutManager(context!!)
-            categoriesDialog.getDialogView().addProductCategoriesList.adapter = adapter
+            categoriesDialog.getDialogView().addProductCategoriesList.adapter = categoriesAdapter
             viewModel.setParentId(0)
             viewModel.getCategories().observe(this, Observer { categories ->
                 if (categories != null) {
-                    adapter.setCategoriesList(categories.data as List<CategoriesData>)
+                    categoriesAdapter.setCategoriesList(categories.data as ArrayList<CategoriesData>)
                     runLayoutAnimation(categoriesDialog.getDialogView().addProductCategoriesList)
                 } else {
 
@@ -98,6 +169,9 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
                     progress.dismiss()
                     if (products != null) {
                         makeToast(context!!, products.errorMesage.toString())
+                        fragmentManager?.inTransaction {
+                            replace(R.id.mainContainer, MyAdsFragment.newInstance())
+                        }
                     } else {
                         makeToast(context!!, resources.getString(R.string.error))
                     }
@@ -111,17 +185,19 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         map["name"] = addProNameAr.text.toString()
         map["name_en"] = addProNameEn.text.toString()
         map["price"] = addProPrice.text.toString()
-        map["discount"] = addProDiscount.text.toString()
-        map["quantity"] = addProQuantity.text.toString()
+        //  map["discount"] = addProDiscount.text.toString()
+        // map["quantity"] = addProQuantity.text.toString()
         map["description"] = addProDescriptionAr.text.toString()
         map["description_en"] = addProDescriptionEn.text.toString()
-        map["tags"] = addProTagsAr.text.toString()
-        map["tags_en"] = addProTags.text.toString()
-
+        //    map["tags"] = addProTagsAr.text.toString()
+        //  map["tags_en"] = addProTags.text.toString()
         map["cat_id"] = selectedCategory.toString()
+        map["mobile"] = proPhone.text.toString()
+        map["latitude"] = lati.toString()
+        map["longitude"] = longi.toString()
         map["type"] = "1"
         map["is_special"] = "0"
-        map["user_id"] = "167"
+        map["user_id"] = SharedPreferenceUtil(context!!).getString(USERID, "0").toString()
         return map
     }
 
@@ -159,6 +235,9 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
             adapter.notifyDataSetChanged()
 
         }
+        when (requestCode) {
+            EasyWayLocation.LOCATION_SETTING_REQUEST_CODE -> easyWayLocation?.onActivityResult(resultCode)
+        }
         super.onActivityResult(requestCode, resultCode, data)  // You MUST have this line to be here
         // so ImagePicker can work with fragment mode
     }
@@ -191,7 +270,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         viewModel.setParentId(id)
         viewModel.getCategories().observe(this, Observer { categories ->
             if (categories != null) {
-                adapter.setCategoriesList(categories.data as List<CategoriesData>)
+                categoriesAdapter.setCategoriesList(categories.data as ArrayList<CategoriesData>)
                 runLayoutAnimation(categoriesDialog.getDialogView().addProductCategoriesList)
             } else {
 
@@ -209,16 +288,60 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
 
     private fun setupAttributesList(catId: Int?) {
         addProductAttributes.layoutManager = LinearLayoutManager(context!!)
-        // TODO replace 11 with catId
-        viewModel.getCategoryAttributes(11).observe(this, Observer { attributes ->
+        viewModel.getCategoryAttributes(catId).observe(this, Observer { attributes ->
             if (attributes != null) {
+                selectCategoryToShowAtt.visibility = View.GONE
                 if (attributes.result == true) {
                     addProductAttributes.adapter = attributesAdapter
-                    attributesAdapter.setAttributes(attributes.data as List<AttributeData>)
-                } else
+                    attributesAdapter.setAttributes(attributes.data as ArrayList<AttributeData>)
+                    if (attributes.data.isEmpty()) {
+                        selectCategoryToShowAtt.visibility = View.VISIBLE
+                        selectCategoryToShowAtt.text = resources.getString(R.string.no_att)
+                    }
+                } else{
+                    attributesAdapter.clearAttributes()
+                    attributesAdapter.notifyDataSetChanged()
                     makeToast(context!!, attributes.errorMesage.toString())
+                }
+
             } else
                 makeToast(context!!, resources.getString(R.string.error))
         })
+    }
+
+    private fun configLocationPremation() {
+        Dexter.withActivity(activity)
+            .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+            .withListener(object : PermissionListener {
+                override fun onPermissionRationaleShouldBeShown(
+                    permission: com.karumi.dexter.listener.PermissionRequest?,
+                    token: PermissionToken?
+                ) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                @SuppressLint("MissingPermission")
+                override fun onPermissionGranted(response: PermissionGrantedResponse) {
+                    easyWayLocation = EasyWayLocation(context!!)
+                    easyWayLocation?.setListener(this@AddProductFragment)
+                }
+
+                override fun onPermissionDenied(response: PermissionDeniedResponse) {
+                    Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show();
+                }
+
+            }).check()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // make the device update its location
+        easyWayLocation?.beginUpdates()
+    }
+
+    override fun onPause() {
+        // stop location updates (saves battery)
+        easyWayLocation?.endUpdates()
+        super.onPause()
     }
 }

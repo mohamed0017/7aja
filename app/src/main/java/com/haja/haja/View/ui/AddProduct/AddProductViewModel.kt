@@ -8,35 +8,41 @@ import com.haja.haja.Service.model.AddProductResponse
 import com.haja.haja.Service.model.AdsModel
 import com.haja.haja.Service.repository.AppRepository
 import com.haja.haja.Service.repository.ProductRepository
+import com.haja.haja.Utils.LANG
+import com.haja.haja.Utils.SharedPreferenceUtil
 import com.haja.haja.Utils.SingleLiveEvent2
+import com.haja.haja.Utils.TOKEN
 import com.haja.haja.model.CategoriesModel
 import okhttp3.MultipartBody
 
 class AddProductViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val token = SharedPreferenceUtil(getApplication()).getString(TOKEN, "")
+    private val repository = AppRepository(token.toString())
     private lateinit var categories: SingleLiveEvent2<CategoriesModel>
-    private lateinit var ads: SingleLiveEvent2<AdsModel>
-    private val repository = AppRepository.getInstance
-    private val productRepository = ProductRepository.getInstance
+    private val productRepository = ProductRepository(token.toString())
+
     private var parentID = 0
     private var productData = HashMap<String, String>()
-    private var productAttributes = HashMap<String, List<String>>()
+    private var productAttributes = HashMap<String, String>()
     private lateinit var parts: List<MultipartBody.Part>
+    val lang = SharedPreferenceUtil(getApplication()).getString(LANG, "ar")
 
     fun setParentId(id: Int) {
         parentID = id
     }
 
     fun getCategories(): SingleLiveEvent2<CategoriesModel> {
-        categories = repository.getCategories(parentID, "ar")
+
+        categories = repository.getCategories(parentID, "$lang")
         return categories
     }
 
-    fun setProductAttributes(attributes : HashMap<String, List<String>>){
+    fun setProductAttributes(attributes : HashMap<String, String>){
         productAttributes = attributes
     }
     fun getCategoryAttributes(catId: Int?): SingleLiveEvent2<AddProAttributesModel> {
-        return productRepository.getCategoryAttributes(catId!!, "ar")
+        return productRepository.getCategoryAttributes(catId!!, "$lang")
     }
 
     fun addProduct(): SingleLiveEvent2<AddProductResponse> {
@@ -71,10 +77,10 @@ class AddProductViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun getAds(parentId: Int?): SingleLiveEvent2<AdsModel> {
-        return repository.getAds(parentId!!, "ar")
+        return repository.getAds(parentId!!, "$lang")
     }
 
     fun getStartupAd(): SingleLiveEvent2<AdsModel> {
-        return repository.getStartupAd("ar")
+        return repository.getStartupAd("$lang")
     }
 }

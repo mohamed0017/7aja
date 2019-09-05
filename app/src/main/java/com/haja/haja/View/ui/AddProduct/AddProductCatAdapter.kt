@@ -14,7 +14,7 @@ class AddProductCatAdapter(
 )
     : RecyclerView.Adapter<AddProductCatAdapter.ViewHolder>(){
 
-    private var children: List<CategoriesData>? = null
+    private var categories: ArrayList<CategoriesData>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): ViewHolder {
@@ -25,13 +25,13 @@ class AddProductCatAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (children == null) 0
-        else children?.size!!
+        return if (categories == null) 0
+        else categories?.size!!
     }
 
     override fun onBindViewHolder(holder: ViewHolder,
                                   position: Int) {
-        val category = children?.get(position)
+        val category = categories?.get(position)
         holder.catName.text = category?.name
         if (category?.countSubCat == 0){
             holder.itemView.nextCategory.visibility = View.INVISIBLE
@@ -43,8 +43,12 @@ class AddProductCatAdapter(
         }
     }
 
-    fun setCategoriesList(categories: List<CategoriesData>){
-        this.children = categories
+    fun setCategoriesList(categories: ArrayList<CategoriesData>){
+        this.categories = categories
+    }
+    
+    fun clearCategoriesList(){
+        categories?.clear()
     }
 
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){

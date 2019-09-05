@@ -21,7 +21,7 @@
                 android:gravity="center"
                 android:textSize="@dimen/_18sdp"
                 android:textColor="@color/colorPrimaryDark"
-                android:drawableEnd="@drawable/left_arrow"
+                android:drawableStart="@drawable/back_gray"
                 android:paddingEnd="@dimen/_12sdp"
                 android:paddingStart="@dimen/_12sdp"
                 android:drawablePadding="@dimen/_8sdp"
@@ -30,11 +30,21 @@
                 android:text="@string/select_cat"/>
 
         <TextView
+                android:id="@+id/cityName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_16sdp"
+                android:gravity="center"
+                android:text="@string/city"
+                app:layout_constraintTop_toBottomOf="@id/selectCategory"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
                 android:id="@+id/uploadImagesText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_16sdp"
-                app:layout_constraintTop_toBottomOf="@id/selectCategory"
+                app:layout_constraintTop_toBottomOf="@id/cityName"
                 android:text="@string/upload_img"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -77,6 +87,7 @@
                     android:text="@string/product_info"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:textSize="@dimen/_14ssp"
+                    android:textColor="@color/black"
                     app:layout_constraintTop_toTopOf="parent"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -123,6 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/pro_discount"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/proPrice">
                 <EditText
                         android:id="@+id/addProDiscount"
@@ -136,6 +148,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/pro_quantity"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/proDiscount">
                 <EditText
                         android:id="@+id/addProQuantity"
@@ -149,6 +162,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/pro_tags_ar"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/proQuantity">
                 <EditText
                         android:id="@+id/addProTagsAr"
@@ -162,6 +176,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/pro_tags"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/proTagsAr">
                 <EditText
                         android:id="@+id/addProTags"
@@ -197,6 +212,19 @@
                         android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/proUserPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/phone_contact"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    app:layout_constraintTop_toBottomOf="@id/proDescriptionEn">
+                <EditText
+                        android:id="@+id/proPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
             <TextView
                     android:id="@+id/addProductAttributesTitle"
                     android:layout_width="match_parent"
@@ -204,7 +232,8 @@
                     android:text="@string/product_attributes"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:textSize="@dimen/_14ssp"
-                    app:layout_constraintTop_toBottomOf="@+id/proDescriptionEn"/>
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toBottomOf="@+id/proUserPhone"/>
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/addProductAttributes"
@@ -214,15 +243,26 @@
                     android:layout_marginBottom="@dimen/_16sdp"
                     app:layout_constraintTop_toBottomOf="@id/addProductAttributesTitle"/>
 
+            <TextView
+                    android:id="@+id/selectCategoryToShowAtt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/selectCategoryToShowAtt"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:textSize="@dimen/_14ssp"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@+id/addProductAttributes"/>
+
             <Button
                     android:id="@+id/addProductBut"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/add_pro"
+                    android:text="@string/addProduct"
                     android:background="@drawable/rounded_but"
                     android:textColor="@color/white"
                     android:layout_margin="@dimen/_20sdp"
-                    app:layout_constraintTop_toBottomOf="@+id/addProductAttributes"/>
+                    app:layout_constraintTop_toBottomOf="@+id/selectCategoryToShowAtt"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

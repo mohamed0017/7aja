@@ -8,16 +8,12 @@ import com.haja.haja.Service.ServiceGenerator
 import com.haja.haja.Service.model.UserModel
 import com.haja.haja.Service.enqueue
 
-class AuthRepository private constructor() {
-
-    companion object {
-        val getInstance = AuthRepository()
-    }
+class AuthRepository(token:String){
 
     private var apiService: ApiService? = null
 
     init {
-        apiService = ServiceGenerator.createService
+        apiService = ServiceGenerator(token).createService
     }
 
     fun login(map: HashMap<String, String>): MutableLiveData<UserModel> {

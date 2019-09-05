@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.haja.haja.R
 import com.haja.haja.Service.ApiService
 import com.haja.haja.Utils.inTransaction
+import com.haja.haja.View.ui.Products.ProductsFragment
 import com.haja.haja.View.ui.SubCategoriesScreen.SubCategoriesFragment
 import com.haja.haja.model.CategoriesData
 import com.squareup.picasso.Picasso
@@ -44,9 +45,16 @@ class MainChildCatAdapter(
         holder.textView.text = child?.name
 
         holder.itemView.setOnClickListener {
-            fragmentManager?.inTransaction {
-                replace(R.id.mainContainer, SubCategoriesFragment.newInstance(child?.id!!))
-                    .addToBackStack("SubCategories")
+            if (child?.countSubCat == 0) {
+                fragmentManager?.inTransaction {
+                    replace(R.id.mainContainer, ProductsFragment.newInstance(child.id!!, child.name))
+                        .addToBackStack("ProductsFragment")
+                }
+            } else {
+                fragmentManager?.inTransaction {
+                    replace(R.id.mainContainer, SubCategoriesFragment.newInstance(child?.id!! , child.name))
+                        .addToBackStack("SubCategoriesFragment")
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.haja.haja.Service.model
 
 import android.os.Parcelable
+import android.service.autofill.UserData
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -28,11 +29,17 @@ data class ProductData(
 	@field:SerializedName("last_page_url")
 	val lastPageUrl: String? = null,
 
+	@field:SerializedName("mobile")
+	val mobile: String? = null,
+
 	@field:SerializedName("from")
 	val from: Int? = null,
 
 	@field:SerializedName("to")
 	val to: Int? = null,
+
+	@field:SerializedName("price")
+	val price: String? = null,
 
 	@field:SerializedName("prev_page_url")
 	val prevPageUrl: String? = null,
@@ -41,7 +48,10 @@ data class ProductData(
 	val currentPage: Int? = null,
 
 	@field:SerializedName("num_views")
-	val numViews: Int? = null,
+    var numViews: Int? = null,
+
+	@field:SerializedName("user")
+	var user: UserDataModel? = null,
 
 	@field:SerializedName("imgs")
 	val imgs: List<ProductImgs?>? = null,
@@ -62,13 +72,16 @@ data class ProductData(
 	val createdAt: String? = null,
 
 	@field:SerializedName("is_favorite")
-	val isFavorite: Int? = null,
+	var isFavorite: Int? = null,
 
 	@field:SerializedName("attributes")
 	val attributes: List<AttributesModel?>? = null,
 
 	@field:SerializedName("id")
 	val id: Int? = null,
+
+	@field:SerializedName("product_id")
+	val productId: Int? = null,
 
 	@field:SerializedName("product_code")
 	val productCode: String? = null,

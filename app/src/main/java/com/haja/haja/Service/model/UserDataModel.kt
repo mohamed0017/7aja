@@ -1,7 +1,10 @@
 package com.haja.haja.Service.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class UserDataModel(
 
 	@field:SerializedName("date_birth")
@@ -42,4 +45,4 @@ data class UserDataModel(
 
 	@field:SerializedName("longitude")
 	val longitude: Int? = null
-)
+) : Parcelable

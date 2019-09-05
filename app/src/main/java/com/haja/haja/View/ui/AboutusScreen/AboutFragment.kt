@@ -55,7 +55,7 @@ class AboutFragment : Fragment() {
     }
 
     private fun setPageData(content: StaticPagesModel?) {
-        activity?.catBarTitle?.text = content?.data?.name.toString()
+        activity?.appBarTitle?.text = content?.data?.name.toString()
         contentTitle.text = content?.data?.name.toString()
         contentDetails.text = content?.data?.details.toString()
     }
