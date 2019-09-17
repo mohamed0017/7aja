@@ -36,6 +36,9 @@ class LoginFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
        // activity?.bottomNavigation?.visibility = View.GONE
         activity?.appBarTitle?.text = resources.getString(R.string.login)
+        activity?.categoriesBarBack?.visibility = View.VISIBLE
+        activity?.categoriesBarMenu?.visibility = View.GONE
+        activity?.catBarSearch?.visibility = View.GONE
 
         val progress = CustomProgressBar.showProgressBar(context!!)
         loginBut.setOnClickListener {
@@ -44,15 +47,15 @@ class LoginFragment : Fragment() {
                 viewModel.login(getLoginCradentioals()).observe(this, Observer { user ->
                     progress.dismiss()
                     if (user != null) {
-                        if (user.success != null && user.errorMesage == null) {
-                            storeUserToken(user.success.token)
+                        if (user.result == true) {
+                            storeUserToken(user.data?.token)
                             user.data?.id?.let { it1 -> SharedPreferenceUtil(context!!).putString(USERID, "$it1") }
                             SharedPreferenceUtil(context!!).putString("userName", user.data?.name.toString())
                             SharedPreferenceUtil(context!!).putString("userPhone", user.data?.mobile.toString())
                             makeToast(context!!, resources.getString(R.string.success))
                             goToActivationAccount()
                         } else {
-                            makeToast(context!!, resources.getString(R.string.login_message))
+                            makeToast(context!!, user.errorMesage.toString())
                         }
                     } else
                         makeToast(context!!, resources.getString(R.string.error))

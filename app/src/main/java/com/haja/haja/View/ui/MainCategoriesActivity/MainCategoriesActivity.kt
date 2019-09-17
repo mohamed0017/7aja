@@ -42,12 +42,15 @@ class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationI
         toggle.syncState()
         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         nav_view.setNavigationItemSelectedListener(this)
-
+0
         supportFragmentManager.inTransaction {
             add(R.id.mainContainer, MainCategoriesFragment.newInstance())
         }
         categoriesBarMenu.setOnClickListener {
             drawer_layout.openDrawer(GravityCompat.START)
+        }
+        categoriesBarBack.setOnClickListener {
+            onBackPressed()
         }
     }
 

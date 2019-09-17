@@ -2,6 +2,7 @@ package com.haja.haja.View.ui.SubCategoriesScreen
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import com.haja.haja.Service.repository.AppRepository
 import com.haja.haja.Utils.LANG
 import com.haja.haja.Utils.SharedPreferenceUtil
@@ -14,15 +15,19 @@ class SubCategoriesViewModel(application: Application) : AndroidViewModel(applic
     private val token = SharedPreferenceUtil(getApplication()).getString(TOKEN, "")
     private val repository = AppRepository(token.toString())
     private var parentID = 0
-    private lateinit var categories: SingleLiveEvent2<CategoriesModel>
+    private var categories: MutableLiveData<CategoriesModel>? = null
 
     fun ssetParentId(id: Int) {
         parentID = id
     }
 
-    fun getCategories(): SingleLiveEvent2<CategoriesModel> {
+    fun getCategories(): MutableLiveData<CategoriesModel>? {
         val lang = SharedPreferenceUtil(getApplication()).getString(LANG, "ar")
-        categories = repository.getCategories(parentID, "$lang")
-        return categories
+        return if (categories == null) {
+            categories = repository.getCategories(parentID, "$lang")
+            categories
+        } else
+            return categories
+
     }
 }

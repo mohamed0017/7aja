@@ -1,14 +1,15 @@
 package com.haja.haja.View.ui.SubCategoriesScreen
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.haja.haja.R
@@ -28,7 +29,7 @@ class SubCategoriesFragment : Fragment() {
         }
     }
 
-    private lateinit var viewModel: SubCategoriesViewModel
+    private var viewModel: SubCategoriesViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,13 +44,17 @@ class SubCategoriesFragment : Fragment() {
         val categoryId = arguments!!.getInt("categoryId")
         val categoryName = arguments!!.getString("categoryName")
         activity?.appBarTitle?.text = categoryName
+        activity?.categoriesBarBack?.visibility = View.VISIBLE
+        activity?.categoriesBarMenu?.visibility = View.GONE
 
         val progress = CustomProgressBar.showProgressBar(context!!)
         progress.show()
         Log.i("sub_categoryId", "$categoryId")
-        viewModel = ViewModelProviders.of(this).get(SubCategoriesViewModel::class.java)
-        viewModel.ssetParentId(categoryId)
-        viewModel.getCategories().observe(this, Observer { subCategories ->
+        if (viewModel == null)
+            viewModel = ViewModelProviders.of(this).get(SubCategoriesViewModel::class.java)
+
+        viewModel?.ssetParentId(categoryId)
+        viewModel?.getCategories()?.observe(this, Observer { subCategories ->
             progress.dismiss()
             if (subCategories != null) {
                 if (subCategories.result == true)
@@ -63,11 +68,9 @@ class SubCategoriesFragment : Fragment() {
 
     private fun initRecycler(data: List<CategoriesData?>?) {
         subCategoriesList.apply {
-            layoutManager = LinearLayoutManager(
-                context,
-                RecyclerView.VERTICAL, false
-            )
-            adapter = SubCategoriesAdapter(data as List<CategoriesData>, fragmentManager)
+            layoutManager = GridLayoutManager(
+                context, 3)
+            adapter = SubCategoriesAdapter(data as List<CategoriesData>, fragmentManager, context!!)
         }
 
     }

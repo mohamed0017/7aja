@@ -17,12 +17,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.haja.haja.R
 import com.haja.haja.Service.ApiService
 import com.haja.haja.Service.model.AdsModel
+import com.haja.haja.Service.model.ImgesDataModel
+import com.haja.haja.View.Adapter.SliderAdapterExample
 import com.haja.haja.model.CategoriesData
 import com.haja.haja.model.CategoriesModel
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar.Companion.showProgressBar
+import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
 import com.kaopiz.kprogresshud.KProgressHUD
+import com.smarteist.autoimageslider.IndicatorAnimations
+import com.smarteist.autoimageslider.SliderAnimations
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_ad.*
+import kotlinx.android.synthetic.main.activity_product_details.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.main_categories_fragment.*
 
@@ -33,7 +39,7 @@ class MainCategoriesFragment : Fragment() {
     }
 
     private var requestsCount = 0
-    private  var viewModel: MainCategoriesViewModel? = null
+    private var viewModel: MainCategoriesViewModel? = null
     private var categories = ArrayList<CategoriesData>()
     private var progress: KProgressHUD? = null
     override fun onCreateView(
@@ -45,23 +51,46 @@ class MainCategoriesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-       // activity?.bottomNavigation?.visibility = View.VISIBLE
+        // activity?.bottomNavigation?.visibility = View.VISIBLE
         activity?.appBarTitle?.text = resources.getString(R.string.categories)
+        activity?.categoriesBarBack?.visibility = View.GONE
+        activity?.categoriesBarMenu?.visibility = View.VISIBLE
+        activity?.catBarSearch?.visibility = View.VISIBLE
 
         progress = showProgressBar(context!!)
-        progress?.show()
         if (viewModel == null)
-        viewModel = ViewModelProviders.of(this).get(MainCategoriesViewModel::class.java)
-        // get main categories
-        viewModel?.getCategories(0)?.observe(this, Observer {
-            if (it != null) {
-                if (!it.data.isNullOrEmpty())
-                    categories = it.data as ArrayList<CategoriesData>
-                getChildCategories(it)
-                getChildrenAds(it)
-            } else {
+            viewModel = ViewModelProviders.of(this).get(MainCategoriesViewModel::class.java)
 
-            }
+        if (viewModel?.getMainCategories() == null){
+            progress?.show()
+            // get main categories
+            viewModel?.getCategories(0)?.observe(this, Observer {
+                if (it != null) {
+                    if (!it.data.isNullOrEmpty())
+                        categories = it.data as ArrayList<CategoriesData>
+                    getChildCategories(it)
+                    getChildrenAds(it)
+                } else {
+
+                }
+            })
+        }else
+            initRecycler()
+
+        initSliderImages()
+    }
+
+    private fun initSliderImages() {
+        mainImageSlider.startAutoCycle()
+        mainImageSlider.setIndicatorAnimation(IndicatorAnimations.WORM)
+        mainImageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+
+        viewModel?.getMainSliderImages()?.observe(this, Observer { images ->
+            if (images != null) {
+                if (images.result == true)
+                mainImageSlider.sliderAdapter = MainSliderAdapter(context!!, images.imgesData as List<ImgesDataModel>)
+            }else
+                makeToast(context!! , resources.getString(R.string.error))
         })
     }
 
@@ -138,10 +167,21 @@ class MainCategoriesFragment : Fragment() {
     private fun initRecycler() {
 
         rv_parent.apply {
-            layoutManager = LinearLayoutManager(
-                context,
-                RecyclerView.VERTICAL, false
-            )
+            layoutManager = object : LinearLayoutManager(
+                context
+            ) {
+                override fun canScrollVertically(): Boolean {
+                    return false
+                }
+            }
+            if (viewModel?.getMainCategories() == null){
+                viewModel?.setMainCategories(categories)
+                Log.i("kghmghjmjhjh", "gkmikghm")
+
+            }else{
+                Log.i("gnhgmnvb", "gkmikghm")
+                categories = viewModel?.getMainCategories()!!
+            }
             adapter = MainCategoriesAdapter(categories, context, fragmentManager)
         }
 

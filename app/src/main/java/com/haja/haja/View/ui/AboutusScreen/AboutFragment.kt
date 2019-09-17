@@ -37,6 +37,8 @@ class AboutFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.categoriesBarBack?.visibility = View.VISIBLE
+        activity?.categoriesBarMenu?.visibility = View.GONE
         viewModel = ViewModelProviders.of(this).get(AboutViewModel::class.java)
         val contentType = arguments?.getInt("contentType")
         val progress = showProgressBar(context!!)

@@ -18,8 +18,8 @@ class AppRepository(token: String) {
         apiService = ServiceGenerator(token).createService
     }
 
-    fun getCategories(parentId:Int, language: String): SingleLiveEvent2<CategoriesModel> {
-        val result = SingleLiveEvent2<CategoriesModel>()
+    fun getCategories(parentId:Int, language: String): MutableLiveData<CategoriesModel> {
+        val result = MutableLiveData<CategoriesModel>()
         val call = apiService?.getCategories(parentId = parentId, lang = language)
         call?.enqueue {
             onResponse = { response ->
@@ -164,6 +164,25 @@ class AppRepository(token: String) {
             }
             onFailure = { t ->
                 Log.i("getCotDetails/Failure", t!!.message)
+                result.value = null
+            }
+        }
+        return result
+    }
+
+    fun getMainSliderImages(): MutableLiveData<SliderImgesModel> {
+        val result = MutableLiveData<SliderImgesModel>()
+        val call = apiService?.getMainSliderImages()
+        call?.enqueue {
+            onResponse = { response ->
+                Log.i("getMainSlider", response.code().toString())
+                if (response.code() / 100 == 2)
+                    result.value = response.body()
+                else
+                    result.value = null
+            }
+            onFailure = { t ->
+                Log.i("getMainSlider/Failure", t!!.message)
                 result.value = null
             }
         }

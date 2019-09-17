@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1023899595446",
+    "firebase_url": "https://aja-fc693.firebaseio.com",
+    "project_id": "aja-fc693",
+    "storage_bucket": "aja-fc693.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023899595446:android:63b696be4a09b36f02ac17",
+        "android_client_info": {
+          "package_name": "com.haja.haja"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1023899595446-q6v2ljbk58dmoioug3nrnq95mho7juc8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.haja.haja",
+            "certificate_hash": "232973ee61f39b2304be56f3dde1c07e14f3502f"
+          }
+        },
+        {
+          "client_id": "1023899595446-v0f02smplvvts6qnp27pe56ru8rq10uu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFDVg3uVE3-AeV3qB3Ut0CcijwV0ERqLs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1023899595446-v0f02smplvvts6qnp27pe56ru8rq10uu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -23,7 +23,7 @@
             app:headerLayout="@layout/nav_header_main"
             android:background="@color/white"
             app:itemTextColor="@color/black"
-            app:itemIconTint="@color/black"
+            app:itemIconTint="@color/colorPrimaryDark"
             app:menu="@menu/activity_main_drawer">
 
     </com.google.android.material.navigation.NavigationView>

@@ -15,7 +15,10 @@
             android:roundIcon="@mipmap/splash_logo"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-
+        <activity android:name=".View.ui.ChatScreen.ChatActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
         <activity
                 android:name=".View.ui.ProductDetails.ProductDetailsActivity"
                 android:screenOrientation="portrait"
@@ -43,8 +46,6 @@
                 android:name=".View.ui.MainCategoriesActivity.MainCategoriesActivity"
                 android:screenOrientation="portrait"
                 android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        </activity>
-        <activity android:name=".MainActivity">
         </activity>
 
         <provider

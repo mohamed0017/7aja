@@ -22,6 +22,7 @@ import com.haja.haja.R
 import com.haja.haja.Service.ApiService.Companion.IMAGEBASEURL
 import com.haja.haja.Utils.*
 import com.haja.haja.Utils.ShareImage.shareImage
+import com.haja.haja.View.ui.ChatScreen.ChatActivity
 import com.haja.haja.View.ui.MainCategoriesActivity.MainCategoriesActivity
 import com.haja.haja.View.ui.UserAdsScreen.UserAdsFragment
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
@@ -71,8 +72,6 @@ class ProductDetailsActivity : AppCompatActivity() {
 
                     if (!product.imgs.isNullOrEmpty())
                         imageSlider.sliderAdapter = SliderAdapterExample(this, product.imgs)
-
-
                     if (product.isFavorite != null)
                         productFav.setImageResource(R.mipmap.fav_hov_1mdpi)
                     // imageSlider.startAutoCycle()
@@ -130,6 +129,12 @@ class ProductDetailsActivity : AppCompatActivity() {
         productShare.setOnClickListener {
             if (!product.imgs.isNullOrEmpty())
                 shareAd(product.imgs[0]?.img!!, product.name!!)
+        }
+        productMessage.setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.putExtra("user2_id" , product.user?.id.toString())
+            intent.putExtra("user2_name" , product.user?.name.toString())
+            startActivity(intent)
         }
     }
 

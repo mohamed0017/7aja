@@ -26,16 +26,20 @@ class AdActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ad)
         val offerName = intent.getStringExtra("offerName")
+        val numViews = intent.getStringExtra("numViews")
         val offerImg = intent.getStringExtra("offerImage")
         viewModel = ViewModelProviders.of(this).get(StartupAdViewModel::class.java)
         if (offerName != null) {
             startupAdName.text = offerName
+            AdViews.text = numViews
             Picasso.get().load(ApiService.IMAGEBASEURL + offerImg)
                 .placeholder(resources.getDrawable(R.drawable.placeholder))
                 .error(resources.getDrawable(R.drawable.placeholder)).into(startupAdImg)
+            closeAd.setOnClickListener {
+                onBackPressed()
+            }
         } else {
             getStartupAd()
-
             closeAd.setOnClickListener {
                 startActivity(Intent(this, MainCategoriesActivity::class.java))
                 finish()

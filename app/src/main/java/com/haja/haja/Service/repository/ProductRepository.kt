@@ -8,7 +8,7 @@ import com.haja.haja.Service.model.*
 import com.haja.haja.Utils.SingleLiveEvent2
 import okhttp3.MultipartBody
 
-class ProductRepository(token:String) {
+class ProductRepository(token: String) {
 
     private var apiService: ApiService? = null
 
@@ -98,30 +98,28 @@ class ProductRepository(token:String) {
         return result
     }
 
-    fun getSingleProduct(orderId:Int, language: String ,userId : Int): SingleLiveEvent2<ProductsModel> {
+    fun getSingleProduct(orderId: Int, language: String, userId: Int): SingleLiveEvent2<ProductsModel> {
         val result = SingleLiveEvent2<ProductsModel>()
-        val call = apiService?.getSingleProduct(orderId = orderId, lang = language , userId = userId)
+        val call = apiService?.getSingleProduct(orderId = orderId, lang = language, userId = userId)
         call?.enqueue {
             onResponse = { response ->
                 Log.i("getSingleProduct", response.code().toString())
                 Log.i("getSingleProduct/url", call.request().url().toString())
-                if (response.code() / 100 == 2)
-                {
+                if (response.code() / 100 == 2) {
                     Log.i("getSingleProduct", response.body()?.errorMesage.toString())
                     result.value = response.body()
-                }
-                else
+                } else
                     result.value = null
             }
             onFailure = { t ->
-                Log.i("SingleProduct/Failure", t!!.message +"..")
+                Log.i("SingleProduct/Failure", t!!.message + "..")
                 result.value = null
             }
         }
         return result
     }
 
-    fun getMyProducts(userId : Int): SingleLiveEvent2<ProductsModel> {
+    fun getMyProducts(userId: Int): SingleLiveEvent2<ProductsModel> {
         val result = SingleLiveEvent2<ProductsModel>()
         val call = apiService?.getMyProducts(userId)
         call?.enqueue {
@@ -133,14 +131,14 @@ class ProductRepository(token:String) {
                     result.value = null
             }
             onFailure = { t ->
-                Log.i("getMyProducts/Failure", t!!.message +"..")
+                Log.i("getMyProducts/Failure", t!!.message + "..")
                 result.value = null
             }
         }
         return result
     }
 
-    fun removeProduct(productId : Int): SingleLiveEvent2<DefultResponse> {
+    fun removeProduct(productId: Int): SingleLiveEvent2<DefultResponse> {
         val result = SingleLiveEvent2<DefultResponse>()
         val call = apiService?.removeProduct(productId)
         call?.enqueue {
@@ -152,11 +150,11 @@ class ProductRepository(token:String) {
                     result.value = null
             }
             onFailure = { t ->
-                Log.i("removeProduct/Failure", t!!.message +"..")
+                Log.i("removeProduct/Failure", t!!.message + "..")
                 result.value = null
             }
         }
         return result
 
-}
+    }
 }

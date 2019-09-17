@@ -63,6 +63,7 @@ class OffiersAdapter(
             if (cat.imgs.isNotEmpty()) {
                 val intent = Intent(context, AdActivity::class.java)
                 intent.putExtra("offerName", cat.name)
+                intent.putExtra("numViews", cat.numViews.toString())
                 intent.putExtra("offerImage", cat.imgs[0]?.img)
                 context.startActivity(intent)
             }

@@ -37,6 +37,9 @@ class MyAdsFragment : Fragment(), OnProductItemClicked {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.appBarTitle?.text = resources.getString(R.string.my_ads)
+        activity?.categoriesBarBack?.visibility = View.VISIBLE
+        activity?.categoriesBarMenu?.visibility = View.GONE
+
         viewModel = ViewModelProviders.of(this).get(MyAdsViewModel::class.java)
         adapter = ProductsAdapter(context!!, fragmentManager, this)
 

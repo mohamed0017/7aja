@@ -2,7 +2,6 @@ package com.haja.haja.View.ui.Products
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,35 +53,15 @@ class ProductsAdapter(
         holder: ViewHolder,
         position: Int
     ) {
-        val product = products?.get(position)
-        if (product?.imgs?.isNotEmpty()!!) {
-            Picasso.get().load(ApiService.IMAGEBASEURL + product.imgs[0]?.img)
-                .placeholder(context.resources.getDrawable(R.drawable.placeholder))
-                .error(context.resources.getDrawable(R.drawable.placeholder)).into(holder.imageView)
-        }
-        if (productsFragment is FavoritesFragment)
-            holder.favIcon.setImageResource(R.mipmap.fav_hov_1mdpi)
+        val product = products?.get(position)!!
+        initProductData(product,holder)
+        seFavoriteIcon(holder , product)
+        setDeleteIconIfIsMyProducts(holder , product, position)
 
-        if (product.isFavorite != null)
-            holder.favIcon.setImageResource(R.mipmap.fav_hov_1mdpi)
-
-        if (productsFragment is MyAdsFragment)
-        {
-            holder.favIcon.visibility = View.GONE
-            holder.deleteIcon.visibility = View.VISIBLE
-            holder.deleteIcon.setOnClickListener {
-                productsFragment.onClick(position, product, holder.favIcon)
-            }
-        }
-        var date = product.createdAt
-        date = date?.substringBefore(" ")
-        holder.title.text = product.name
-        holder.description.text = product.description
-        holder.date.text = date
-        holder.cost.text = "${product.price.toString()}  ${context.resources.getString(R.string.price_unit)}"
         holder.favIcon.setOnClickListener {
             productsFragment.onClick(position, product, holder.favIcon)
         }
+
         if (productsFragment is FavoritesFragment) {
             holder.itemView.setOnClickListener {
                 val intent = Intent(context, ProductDetailsActivity::class.java)
@@ -97,6 +76,45 @@ class ProductsAdapter(
             }
         }
 
+    }
+
+    private fun initProductData(product: ProductData, holder: ProductsAdapter.ViewHolder) {
+        var date = product.createdAt
+        date = date?.substringBefore(" ")
+        holder.title.text = product.name
+        holder.description.text = product.description
+        holder.date.text = date
+        holder.cost.text = "${product.price.toString()}  ${context.resources.getString(R.string.price_unit)}"
+        if (product?.imgs?.isNotEmpty()!!) {
+            Picasso.get().load(ApiService.IMAGEBASEURL + product.imgs[0]?.img)
+                .placeholder(context.resources.getDrawable(R.drawable.placeholder))
+                .error(context.resources.getDrawable(R.drawable.placeholder)).into(holder.imageView)
+        }
+    }
+
+    private fun setDeleteIconIfIsMyProducts(
+        holder: ViewHolder,
+        product: ProductData,
+        position: Int
+    ) {
+        if (productsFragment is MyAdsFragment)
+        {
+            holder.favIcon.visibility = View.GONE
+            holder.deleteIcon.visibility = View.VISIBLE
+            holder.deleteIcon.setOnClickListener {
+                productsFragment.onClick(position, product, holder.favIcon)
+            }
+        }
+    }
+
+    private fun seFavoriteIcon(
+        holder: ViewHolder,
+        product: ProductData
+    ) {
+        if (productsFragment is FavoritesFragment)
+            holder.favIcon.setImageResource(R.mipmap.fav_hov_1mdpi)
+        else if (product.isFavorite != null)
+            holder.favIcon.setImageResource(R.mipmap.fav_hov_1mdpi)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

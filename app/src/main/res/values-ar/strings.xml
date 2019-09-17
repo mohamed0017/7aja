@@ -89,4 +89,5 @@
     <string name="message">الرسالة</string>
     <string name="title_notifications">الاشعارات</string>
     <string name="title_home">الرئيسية</string>
+    <string name="chatWith"> رسائلك مع  </string>
 </resources>

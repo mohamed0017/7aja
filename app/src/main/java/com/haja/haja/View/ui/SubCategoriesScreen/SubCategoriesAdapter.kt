@@ -1,19 +1,23 @@
 package com.haja.haja.View.ui.SubCategoriesScreen
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.haja.haja.R
+import com.haja.haja.Service.ApiService
 import com.haja.haja.Utils.inTransaction
 import com.haja.haja.View.ui.Products.ProductsFragment
 import com.haja.haja.model.CategoriesData
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.sub_child_category_item.view.*
 
 class SubCategoriesAdapter(
     private val children: List<CategoriesData?>?,
-    private val fragmentManager: FragmentManager?
+    private val fragmentManager: FragmentManager?,
+    private val  context: Context
 ) : RecyclerView.Adapter<SubCategoriesAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -50,11 +54,15 @@ class SubCategoriesAdapter(
             }
 
         }
+        Picasso.get().load(ApiService.IMAGEBASEURL +child?.img)
+            .placeholder(context.resources.getDrawable(R.mipmap.note_icon2hdpi))
+            .error(context.resources.getDrawable(R.mipmap.note_icon2hdpi)).into(holder.imageView)
         holder.bind(child)
 
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val imageView = itemView.subChildCatImg
         val catName = itemView.subCategoryName
         val adsCounnt = itemView.subCategoryAdsCount
         val subCategoriesCount = itemView.subCategoriesCount

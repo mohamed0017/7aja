@@ -34,6 +34,9 @@ class DelegatesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.categoriesBarBack?.visibility = View.VISIBLE
+        activity?.categoriesBarMenu?.visibility = View.GONE
+
         activity?.appBarTitle?.text = resources.getString(R.string.delegates)
 
         viewModel = ViewModelProviders.of(this).get(DelegatesViewModel::class.java)

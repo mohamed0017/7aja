@@ -71,6 +71,9 @@ class OffersFragment : Fragment(), OnItemClick {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.appBarTitle?.text = resources.getString(R.string.offers)
+        activity?.categoriesBarBack?.visibility = View.GONE
+        activity?.categoriesBarMenu?.visibility = View.VISIBLE
+        activity?.catBarSearch?.visibility = View.GONE
 
         viewModel = ViewModelProviders.of(this).get(OffersViewModel::class.java)
          progress = CustomProgressBar.showProgressBar(context!!)

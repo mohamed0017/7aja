@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp">
+        android:gravity="center"
+        android:layout_width="@dimen/_90sdp"
+        android:layout_height="@dimen/_110sdp"
+        android:layout_margin="@dimen/_6sdp"
+        android:background="@drawable/shadow_white_shap">
+
+    <ImageView
+            android:id="@+id/subChildCatImg"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
+            android:padding="@dimen/_4sdp"
+            app:srcCompat="@mipmap/note_icon2hdpi"/>
 
     <TextView
             android:id="@+id/subCategoryName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_14ssp"
-            android:text="@string/app_name"
-            android:paddingBottom="@dimen/_2sdp"
-            android:textColor="@color/black"/>
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:layout_gravity="center"
+            android:padding="@dimen/_2sdp"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"/>
 
     <LinearLayout
             android:id="@+id/subCategoryAdsCountSection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/_8sdp"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
 
         <TextView
@@ -37,6 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/_12ssp"
+
                 android:text="@string/ad"/>
     </LinearLayout>
 
@@ -45,6 +59,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/_8sdp"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
 
         <TextView
@@ -62,8 +78,4 @@
                 android:textSize="@dimen/_12ssp"
                 android:text="@string/categories"/>
     </LinearLayout>
-
-    <TextView android:layout_width="match_parent"
-              android:layout_height="@dimen/_1sdp"
-              android:background="@color/white_gray"/>
 </LinearLayout>

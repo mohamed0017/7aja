@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.haja.haja.R
 import com.haja.haja.Service.model.NotificationData
-import com.haja.haja.Service.model.NotificationsResponse
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -35,6 +34,9 @@ class NotificationsListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.appBarTitle?.text = resources.getString(R.string.notifications)
+        activity?.categoriesBarBack?.visibility = View.GONE
+        activity?.categoriesBarMenu?.visibility = View.VISIBLE
+        activity?.catBarSearch?.visibility = View.GONE
 
         val progress = CustomProgressBar.showProgressBar(context!!)
         progress.show()

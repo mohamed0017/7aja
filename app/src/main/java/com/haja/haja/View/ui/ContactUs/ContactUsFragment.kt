@@ -44,6 +44,9 @@ class ContactUsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.categoriesBarBack?.visibility = View.VISIBLE
+        activity?.categoriesBarMenu?.visibility = View.GONE
+
         activity?.appBarTitle?.text = resources.getString(R.string.support)
 
         viewModel = ViewModelProviders.of(this).get(ContactUsViewModel::class.java)

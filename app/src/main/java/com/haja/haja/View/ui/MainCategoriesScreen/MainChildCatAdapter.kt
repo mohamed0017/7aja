@@ -41,7 +41,7 @@ class MainChildCatAdapter(
         val child = children?.get(position)
         Picasso.get().load(ApiService.IMAGEBASEURL +child?.img)
             .placeholder(context.resources.getDrawable(R.mipmap.note_icon2hdpi))
-            .error(context.resources.getDrawable(R.mipmap.note_icon2hdpi)).into(holder.imageView);
+            .error(context.resources.getDrawable(R.mipmap.note_icon2hdpi)).into(holder.imageView)
         holder.textView.text = child?.name
 
         holder.itemView.setOnClickListener {

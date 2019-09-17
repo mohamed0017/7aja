@@ -54,6 +54,9 @@ class RegisterFragment : Fragment(), Listener {
         viewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
        // activity?.bottomNavigation?.visibility = View.GONE
         activity?.appBarTitle?.text = resources.getString(R.string.register)
+        activity?.categoriesBarBack?.visibility = View.VISIBLE
+        activity?.categoriesBarMenu?.visibility = View.GONE
+        activity?.catBarSearch?.visibility = View.GONE
 
         configLocationPremation()
         registerBut.setOnClickListener {
@@ -61,28 +64,29 @@ class RegisterFragment : Fragment(), Listener {
                 Log.e("latandLang", "$lati + $longi")
                 viewModel.register(userRegistrationInfo()).observe(this, Observer { user ->
                     if (user != null) {
-                        if (user.success != null && user.errorMesage == null) {
+                        if (user.result == true) {
                             user.data?.id?.let { it1 -> SharedPreferenceUtil(context!!).putString(USERID, "$it1") }
                             SharedPreferenceUtil(context!!).putString("userName", user.data?.name.toString())
                             SharedPreferenceUtil(context!!).putString("userPhone", user.data?.mobile.toString())
-                            storeUserToken(user.success.token)
+                            storeUserToken(user.data?.token)
                             makeToast(context!!, resources.getString(R.string.success))
                             goToActivationAccount()
                         } else {
-                            when {
-                                user.errorMesage?.mobile != null -> makeToast(
-                                    context!!,
-                                    user.errorMesage.mobile[0].toString()
-                                )
-                                user.errorMesage?.email != null -> makeToast(
-                                    context!!,
-                                    user.errorMesage.email[0].toString()
-                                )
-                                user.errorMesage?.name != null -> makeToast(
-                                    context!!,
-                                    user.errorMesage.name[0].toString()
-                                )
-                            }
+                            makeToast(context!!, user.errorMesage.toString())
+                            /*     when {
+                                     user.errorMesage?.mobile != null -> makeToast(
+                                         context!!,
+                                         user.errorMesage.mobile[0].toString()
+                                     )
+                                     user.errorMesage?.email != null -> makeToast(
+                                         context!!,
+                                         user.errorMesage.email[0].toString()
+                                     )
+                                     user.errorMesage?.name != null -> makeToast(
+                                         context!!,
+                                         user.errorMesage.name[0].toString()
+                                     )
+                                 }*/
                         }
                     } else
                         makeToast(context!!, resources.getString(R.string.error))

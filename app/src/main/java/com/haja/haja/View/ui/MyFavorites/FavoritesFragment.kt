@@ -51,6 +51,8 @@ class FavoritesFragment : Fragment(), OnProductItemClicked {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.categoriesBarBack?.visibility = View.VISIBLE
+        activity?.categoriesBarMenu?.visibility = View.GONE
     }
 
     override fun onResume() {

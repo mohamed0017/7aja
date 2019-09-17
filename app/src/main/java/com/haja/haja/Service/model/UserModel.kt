@@ -10,12 +10,9 @@ data class UserModel(
     @field:SerializedName("data")
 	val data: UserDataModel? = null,
 
-    @field:SerializedName("success")
-	val success: SuccessModel? = null,
-
     @field:SerializedName("error_mesage")
-    val errorMesage: ErrorMesageModel? = null,
+    val errorMesage: String? = null,
 
     @field:SerializedName("error_mesage_en")
-    val errorMesageEn: ErrorMesageEnModel? = null
+    val errorMesageEn: String? = null
 )

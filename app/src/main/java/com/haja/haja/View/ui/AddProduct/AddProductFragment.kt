@@ -133,6 +133,9 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.appBarTitle?.text = resources.getString(R.string.addProduct)
+        activity?.categoriesBarBack?.visibility = View.GONE
+        activity?.categoriesBarMenu?.visibility = View.VISIBLE
+        activity?.catBarSearch?.visibility = View.GONE
 
         viewModel = ViewModelProviders.of(this).get(AddProductViewModel::class.java)
         categoriesAdapter = AddProductCatAdapter(this)

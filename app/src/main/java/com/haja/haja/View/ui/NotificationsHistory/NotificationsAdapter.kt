@@ -1,29 +1,17 @@
 package com.haja.haja.View.ui.NotificationsHistory
 
-import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import com.haja.haja.OnProductItemClicked
 import com.haja.haja.R
-import com.haja.haja.Service.ApiService
 import com.haja.haja.Service.model.NotificationData
-import com.haja.haja.Service.model.NotificationsResponse
-import com.haja.haja.Service.model.ProductData
-import com.haja.haja.View.ui.MyFavorites.FavoritesFragment
-import com.haja.haja.View.ui.ProductDetails.ProductDetailsActivity
-import com.haja.haja.View.ui.Products.ProductsAdapter
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.notification_item.view.*
-import kotlinx.android.synthetic.main.product_item.view.*
 
-class NotificationsAdapter (private val notifications: ArrayList<NotificationData?>?)
+class NotificationsAdapter(
+    private val notifications: ArrayList<NotificationData?>?)
     : RecyclerView.Adapter<NotificationsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(

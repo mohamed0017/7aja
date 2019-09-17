@@ -43,15 +43,15 @@ interface ApiService {
     fun getProducts(
         @Path("lang") lang: String,
         @Path("id") parentId: Int,
-        @Query("user_id") userId : Int
+        @Query("user_id") userId: Int
     ): Call<ProductsModel>
 
     @Headers("Accept: application/json")
     @GET("/api/products/{id}")
     fun getSingleProduct(
         @Path("id") orderId: Int,
-        @Query("lang") lang : String,
-        @Query("user_id") userId : Int
+        @Query("lang") lang: String,
+        @Query("user_id") userId: Int
     ): Call<ProductsModel>
 
     @Headers("Accept: application/json")
@@ -145,4 +145,23 @@ interface ApiService {
     @Headers("Accept: application/json")
     @GET("/api/contact-details")
     fun getContactDetails(): Call<ContactDetailsModel>
+
+    @Headers("Accept: application/json")
+    @GET("/api/advertising/t/ar/3")
+    fun getMainSliderImages(): Call<SliderImgesModel>
+
+    // chat
+    @Headers("Accept: application/json")
+    @POST("/api/chat_users")
+    fun addChatMessage(@QueryMap messageMap: HashMap<String, String>): Call<DefultResponse>
+
+    @Headers("Accept: application/json")
+    @GET("/api/chat_users/get/users")
+    fun getAllChats(): Call<ChatsModel>
+
+    @Headers("Accept: application/json")
+    @GET("/api/chat_users/t/{user_id}")
+    fun getUserChat(@Path("user_id") userId: Int): Call<UserChatModel>
+
+
 }

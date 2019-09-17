@@ -31,6 +31,9 @@ data class UserDataModel(
 	@field:SerializedName("user_type")
 	val userType: Int? = null,
 
+	@field:SerializedName("token")
+	val token: String? = null,
+
 	@field:SerializedName("nationality")
 	val nationality: String? = null,
 

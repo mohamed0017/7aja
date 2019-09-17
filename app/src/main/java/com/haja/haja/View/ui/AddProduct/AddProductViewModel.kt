@@ -2,6 +2,7 @@ package com.haja.haja.View.ui.AddProduct
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.haja.haja.Service.model.AddProAttributesModel
 import com.haja.haja.Service.model.AddProductResponse
@@ -19,7 +20,7 @@ class AddProductViewModel(application: Application) : AndroidViewModel(applicati
 
     private val token = SharedPreferenceUtil(getApplication()).getString(TOKEN, "")
     private val repository = AppRepository(token.toString())
-    private lateinit var categories: SingleLiveEvent2<CategoriesModel>
+    private lateinit var categories: MutableLiveData<CategoriesModel>
     private val productRepository = ProductRepository(token.toString())
 
     private var parentID = 0
@@ -32,7 +33,7 @@ class AddProductViewModel(application: Application) : AndroidViewModel(applicati
         parentID = id
     }
 
-    fun getCategories(): SingleLiveEvent2<CategoriesModel> {
+    fun getCategories(): MutableLiveData<CategoriesModel> {
 
         categories = repository.getCategories(parentID, "$lang")
         return categories

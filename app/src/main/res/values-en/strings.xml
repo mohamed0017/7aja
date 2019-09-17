@@ -4,7 +4,7 @@
     <string name="title_activity_ad">AdActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="ad">advertisement</string>
+    <string name="ad">Ads</string>
     <string name="error">some thing went wrong</string>
     <string name="home"> Home </string>
     <string name="logOut"> Log Out</string>
@@ -89,4 +89,5 @@
     <string name="message">message</string>
     <string name="title_home">home</string>
     <string name="title_notifications">notifications</string>
+    <string name="chatWith">chat with</string>
 </resources>
