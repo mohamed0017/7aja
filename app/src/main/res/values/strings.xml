@@ -94,4 +94,16 @@
     <string name="productDetails">product details</string>
     <string name="ads">اعلانات</string>
     <string name="chatWith">chat with</string>
+    <string name="search">ادخل كلمة البحث</string>
+    <string name="priceFrom">السعر من</string>
+    <string name="priceTo">السعر الي</string>
+    <string name="search_but_title">ابحث</string>
+    <string name="delete_message">هل تريد مسح الرسالة</string>
+    <string name="delete">حذف</string>
+    <string name="free_add_product">يمكنك اضافة اعلانك مجانا لفترة محدودة</string>
+    <string name="cancel">الغاء</string>
+    <string name="done">تم</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="exit_message">هل تريد الخروج من التطبيق ؟</string>
 </resources>

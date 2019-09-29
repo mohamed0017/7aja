@@ -10,6 +10,15 @@ data class AdsData(
 	@field:SerializedName("img")
 	val img: String? = null,
 
+	@field:SerializedName("is_like")
+	val isLike: String? = null,
+
+	@field:SerializedName("likes")
+	val likes: String? = null,
+
+	@field:SerializedName("num_views")
+	val numViews: String? = null,
+
 	@field:SerializedName("name")
 	val name: String? = null,
 

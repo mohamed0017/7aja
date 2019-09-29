@@ -112,14 +112,14 @@ class ProductDetailsActivity : AppCompatActivity() {
             }
         }
         productFav.setOnClickListener {
-            val userId = SharedPreferenceUtil(this).getString(USERID, "")?.toInt()
+            val userId = SharedPreferenceUtil(this).getString(USERID, "0")?.toInt()
             if (userId == 0) {
                 makeToast(this, resources.getString(R.string.login_first))
             } else
                 addProductToFav(product)
         }
         productReport.setOnClickListener {
-            val userId = SharedPreferenceUtil(this).getString(USERID, "")?.toInt()
+            val userId = SharedPreferenceUtil(this).getString(USERID, "0")?.toInt()
             if (userId == 0) {
                 makeToast(this, resources.getString(R.string.login_first))
 
@@ -131,10 +131,15 @@ class ProductDetailsActivity : AppCompatActivity() {
                 shareAd(product.imgs[0]?.img!!, product.name!!)
         }
         productMessage.setOnClickListener {
-            val intent = Intent(this, ChatActivity::class.java)
-            intent.putExtra("user2_id" , product.user?.id.toString())
-            intent.putExtra("user2_name" , product.user?.name.toString())
-            startActivity(intent)
+            val userId = SharedPreferenceUtil(this).getString(USERID, "0")?.toInt()
+            if (userId == 0) {
+                makeToast(this, resources.getString(R.string.login_first))
+            } else{
+                val intent = Intent(this, ChatActivity::class.java)
+                intent.putExtra("user2_id" , product.user?.id.toString())
+                intent.putExtra("user2_name" , product.user?.name.toString())
+                startActivity(intent)
+            }
         }
     }
 

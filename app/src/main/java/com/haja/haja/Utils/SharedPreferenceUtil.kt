@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 
 class SharedPreferenceUtil(context: Context) {
 
-    private val sharedPreference: SharedPreferences? = context.getSharedPreferences("ApplicationInfo", 0)
+    private val sharedPreference: SharedPreferences? = context.getSharedPreferences("ApplicationData", 0)
 
     fun putString(key: String, value: String?) {
         val editor = sharedPreference?.edit()

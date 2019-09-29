@@ -56,9 +56,9 @@ class AppRepository(token: String) {
         return result
     }
 
-    fun getStartupAd( language: String): SingleLiveEvent2<AdsModel> {
+    fun getStartupAd( language: String, userId: Int): SingleLiveEvent2<AdsModel> {
         val result = SingleLiveEvent2<AdsModel>()
-        val call = apiService?.getStartupAd(lang = language)
+        val call = apiService?.getStartupAd(lang = language , userId = userId)
         call?.enqueue {
             onResponse = { response ->
                 Log.i("getStartupAd", response.code().toString())
@@ -170,9 +170,9 @@ class AppRepository(token: String) {
         return result
     }
 
-    fun getMainSliderImages(): MutableLiveData<SliderImgesModel> {
+    fun getMainSliderImages(userId: Int): MutableLiveData<SliderImgesModel> {
         val result = MutableLiveData<SliderImgesModel>()
-        val call = apiService?.getMainSliderImages()
+        val call = apiService?.getMainSliderImages(userId)
         call?.enqueue {
             onResponse = { response ->
                 Log.i("getMainSlider", response.code().toString())

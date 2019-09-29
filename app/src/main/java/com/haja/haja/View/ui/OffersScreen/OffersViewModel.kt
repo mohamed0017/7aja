@@ -4,12 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.haja.haja.Service.model.OffersCategoriesModel
 import com.haja.haja.Service.model.ProductsModel
-import com.haja.haja.Service.repository.CategoriesRepository
 import com.haja.haja.Service.repository.OffersRepository
-import com.haja.haja.Utils.LANG
-import com.haja.haja.Utils.SharedPreferenceUtil
-import com.haja.haja.Utils.SingleLiveEvent2
-import com.haja.haja.Utils.TOKEN
+import com.haja.haja.Utils.*
 
 class OffersViewModel (application: Application) : AndroidViewModel(application) {
 
@@ -22,6 +18,7 @@ class OffersViewModel (application: Application) : AndroidViewModel(application)
     }
 
     fun getOfferts(categoryId : Int): SingleLiveEvent2<ProductsModel> {
-        return repository.getOffers(categoryId,"$lang")
+         val userId = SharedPreferenceUtil(getApplication()).getString(USERID, "0")
+        return repository.getOffers(categoryId,"$lang", userId.toString())
     }
 }

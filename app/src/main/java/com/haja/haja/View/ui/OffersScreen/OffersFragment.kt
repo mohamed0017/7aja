@@ -2,6 +2,7 @@ package com.haja.haja.View.ui.OffersScreen
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,34 +25,11 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 class OffersFragment : Fragment(), OnItemClick {
 
     var lastItemPossion = 0
-    override fun onClick(position: Int, itemData: OfferCategoriesData) {
-        resetLastItemColor(position)
-        setupSelectedView(position)
+    override fun onClick(
+        itemData: OfferCategoriesData,
+        position: Int
+    ) {
         getOffers(itemData.id!!)
-    }
-
-    private fun setupSelectedView(position: Int) {
-        val view = offersCategoriesList.layoutManager?.findViewByPosition(position)
-        val catTitle = view?.findViewById(R.id.offerCatName) as TextView
-        catTitle.setTextColor(resources.getColor(com.haja.haja.R.color.colorPrimaryDark))
-        catTitle.background = resources.getDrawable(com.haja.haja.R.drawable.rounded_corners)
-    }
-
-    private fun resetLastItemColor(position: Int) {
-
-        offersCategoriesList.getLayoutManager()?.scrollToPosition(lastItemPossion)
-        offersCategoriesList.postDelayed(
-            Runnable {
-                val view = offersCategoriesList.findViewHolderForAdapterPosition(lastItemPossion)?.itemView
-                val catTitle = view?.findViewById(R.id.offerCatName) as TextView
-                catTitle.setTextColor(resources.getColor(R.color.white))
-                catTitle.background = null
-                lastItemPossion = position
-                offersCategoriesList.getLayoutManager()?.scrollToPosition(position)
-
-            },
-            50
-        )
     }
 
     companion object {
@@ -70,13 +48,17 @@ class OffersFragment : Fragment(), OnItemClick {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
         activity?.appBarTitle?.text = resources.getString(R.string.offers)
         activity?.categoriesBarBack?.visibility = View.GONE
         activity?.categoriesBarMenu?.visibility = View.VISIBLE
         activity?.catBarSearch?.visibility = View.GONE
 
         viewModel = ViewModelProviders.of(this).get(OffersViewModel::class.java)
-         progress = CustomProgressBar.showProgressBar(context!!)
+        progress = CustomProgressBar.showProgressBar(context!!)
         progress?.show()
         val childAdsLayoutManager = LinearLayoutManager(
             context, LinearLayout.HORIZONTAL, false

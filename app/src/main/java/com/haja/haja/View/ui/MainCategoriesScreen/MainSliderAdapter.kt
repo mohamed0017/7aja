@@ -26,9 +26,12 @@ class MainSliderAdapter(private val context: Context, private val images : List<
     override fun onBindViewHolder(viewHolder: MainSliderAdapterVH, position: Int) {
         viewHolder.itemView.setOnClickListener {
             val intent = Intent(context, AdActivity::class.java)
+            intent.putExtra("offerId", images[position].id.toString())
+            intent.putExtra("offerLikes", images[position].likes)
             intent.putExtra("offerName", images[position].name)
-            intent.putExtra("numViews", "0")
+            intent.putExtra("numViews",  images[position].numViews)
             intent.putExtra("offerImage", images[position].img)
+            intent.putExtra("isLike", images[position].isLike)
             context.startActivity(intent)
         }
         if (!images.isEmpty()) {

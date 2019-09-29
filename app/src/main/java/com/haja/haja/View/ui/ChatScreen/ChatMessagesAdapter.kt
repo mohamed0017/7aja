@@ -5,17 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.haja.haja.OnItemClickWithId
 import com.haja.haja.R
 import com.haja.haja.Service.model.ChatMessagesDataModel
 import com.haja.haja.Utils.SharedPreferenceUtil
 import com.haja.haja.Utils.USERID
 import kotlinx.android.synthetic.main.chat_message_item.view.*
 
-class ChatMessagesAdapter (private val context: Context) :
+class ChatMessagesAdapter(
+    private val context: Context,
+    private val onItemClick: OnItemClickWithId
+) :
     RecyclerView.Adapter<ChatMessagesAdapter.ViewHolder>() {
 
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
-    private var messages: ArrayList<ChatMessagesDataModel>? =  ArrayList()
+    private var messages: ArrayList<ChatMessagesDataModel>? = ArrayList()
 
     // inflates the row layout from xml when needed
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -47,24 +51,32 @@ class ChatMessagesAdapter (private val context: Context) :
         messages?.add(message)
     }
 
+    fun removeMessage(position: Int) {
+        messages?.removeAt(position)
+    }
 
     inner class ViewHolder constructor(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         fun bind(data: ChatMessagesDataModel?) {
-            val userId = SharedPreferenceUtil(context).getString(USERID, "")
+            val userId = SharedPreferenceUtil(context).getString(USERID, "0")
             if (data?.userId == userId)
                 initMessageItemIfReplyFromStudent()
-             else
+            else
                 initMessageItemIfReplyFromAdmin()
 
             itemView.messageComment.text = data?.message
+            itemView.setOnLongClickListener {
+                if (data?.userId == userId)
+                    onItemClick.onClick(data?.id!!, adapterPosition)
+                true
+            }
         }
 
         private fun initMessageItemIfReplyFromAdmin() {
             itemView.messageComment.background = context.resources.getDrawable(R.drawable.rounded_react_gray)
             itemView.messageComment.setTextColor(context.resources.getColor(R.color.colorPrimaryDark))
             itemView.messageCorner.background = context.resources.getDrawable(R.drawable.corner_gray)
-         //   itemView.userIcon.setImageResource(R.drawable.logo_message)
+            //   itemView.userIcon.setImageResource(R.drawable.logo_message)
             itemView.layoutDirection = View.LAYOUT_DIRECTION_LTR
         }
 
@@ -72,7 +84,7 @@ class ChatMessagesAdapter (private val context: Context) :
             itemView.messageComment.background = context.resources.getDrawable(R.drawable.rounded_react)
             itemView.messageCorner.background = context.resources.getDrawable(R.drawable.corner)
             itemView.messageComment.setTextColor(context.resources.getColor(R.color.white))
-           // itemView.userIcon.setImageResource(R.drawable.profile)
+            // itemView.userIcon.setImageResource(R.drawable.profile)
             itemView.layoutDirection = View.LAYOUT_DIRECTION_RTL
         }
     }

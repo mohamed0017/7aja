@@ -36,9 +36,9 @@ class OffersRepository(token:String){
         return result
     }
 
-    fun getOffers(parentId:Int, language: String): SingleLiveEvent2<ProductsModel> {
+    fun getOffers(parentId: Int, language: String, userId: String): SingleLiveEvent2<ProductsModel> {
         val result = SingleLiveEvent2<ProductsModel>()
-        val call = apiService?.getOffers(parentId = parentId, lang = language)
+        val call = apiService?.getOffers(parentId = parentId, lang = language, userId = userId.toInt() )
         call?.enqueue {
             onResponse = { response ->
                 Log.i("getOffers", response.code().toString())

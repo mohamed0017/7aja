@@ -33,4 +33,8 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     fun getUserChat(userId: Int): SingleLiveEvent2<UserChatModel> {
         return repository.getUserChat(userId)
     }
+
+    fun deleteMessage(messageId: Int): SingleLiveEvent2<DefultResponse> {
+        return repository.deleteMessageChat(messageId)
+    }
 }

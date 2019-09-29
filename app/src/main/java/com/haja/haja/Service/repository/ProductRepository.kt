@@ -54,6 +54,26 @@ class ProductRepository(token: String) {
         return result
     }
 
+
+    fun advertisingView(productId: Int): SingleLiveEvent2<DefultResponse> {
+        val result = SingleLiveEvent2<DefultResponse>()
+        val call = apiService?.advertisingView(productId)
+        call?.enqueue {
+            onResponse = { response ->
+                Log.i("advertisingView", response.code().toString())
+                if (response.code() / 100 == 2)
+                    result.value = response.body()
+                else
+                    result.value = null
+            }
+            onFailure = { t ->
+                Log.i("advertisingView/Failure", t!!.message + "..")
+                result.value = null
+            }
+        }
+        return result
+    }
+
     fun addProduct(
         map: HashMap<String, String>,
         parts: List<MultipartBody.Part>,
@@ -157,4 +177,44 @@ class ProductRepository(token: String) {
         return result
 
     }
+
+    fun likeAdvertisement(type: Int, productId:Int): SingleLiveEvent2<DefultResponse> {
+        val result = SingleLiveEvent2<DefultResponse>()
+        val call = apiService?. likeAd(type, productId)
+        call?.enqueue {
+            onResponse = { response ->
+                Log.i("likeAdvertisement", response.code().toString())
+                if (response.code() / 100 == 2)
+                    result.value = response.body()
+                else
+                    result.value = null
+            }
+            onFailure = { t ->
+                Log.i("likeAdv/Failure", t!!.message +"..")
+                result.value = null
+            }
+        }
+        return result
+    }
+
+    fun searchProducts( language: String , search:SearchRequest): SingleLiveEvent2<ProductsModel> {
+        val result = SingleLiveEvent2<ProductsModel>()
+        val call = apiService?.searchProducts( lang = language ,searchData = search)
+        call?.enqueue {
+            onResponse = { response ->
+                Log.i("searchProducts/url" , call.request().url().toString())
+                Log.i("searchProducts", response.code().toString())
+                if (response.code() / 100 == 2)
+                    result.value = response.body()
+                else
+                    result.value = null
+            }
+            onFailure = { t ->
+                Log.i("searchProducts/Failure", t!!.message +"..")
+                result.value = null
+            }
+        }
+        return result
+    }
+
 }

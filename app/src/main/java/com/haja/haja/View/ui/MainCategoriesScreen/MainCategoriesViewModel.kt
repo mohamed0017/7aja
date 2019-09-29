@@ -6,10 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.haja.haja.Service.model.AdsModel
 import com.haja.haja.Service.model.SliderImgesModel
 import com.haja.haja.Service.repository.AppRepository
-import com.haja.haja.Utils.LANG
-import com.haja.haja.Utils.SharedPreferenceUtil
-import com.haja.haja.Utils.SingleLiveEvent2
-import com.haja.haja.Utils.TOKEN
+import com.haja.haja.Utils.*
 import com.haja.haja.model.CategoriesData
 import com.haja.haja.model.CategoriesModel
 
@@ -38,7 +35,8 @@ class MainCategoriesViewModel(application: Application) : AndroidViewModel(appli
 
 
     fun getMainSliderImages(): MutableLiveData<SliderImgesModel> {
-        return  repository.getMainSliderImages()
+        val userId = SharedPreferenceUtil(getApplication()).getString(USERID, "0")
+        return  repository.getMainSliderImages(userId!!.toInt())
     }
 
     fun getAds(parentId : Int?): SingleLiveEvent2<AdsModel> {
@@ -46,6 +44,7 @@ class MainCategoriesViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun getStartupAd(): SingleLiveEvent2<AdsModel> {
-        return  repository.getStartupAd( "$lang")
+        val userId = SharedPreferenceUtil(getApplication()).getString(USERID, "0")
+        return  repository.getStartupAd( "$lang", userId!!.toInt())
     }
 }

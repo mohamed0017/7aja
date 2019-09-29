@@ -90,4 +90,16 @@
     <string name="title_home">home</string>
     <string name="title_notifications">notifications</string>
     <string name="chatWith">chat with</string>
+    <string name="search">Search</string>
+    <string name="priceFrom">Price from</string>
+    <string name="priceTo"> price to</string>
+    <string name="search_but_title">search</string>
+    <string name="delete_message">Are you want to delete message ?</string>
+    <string name="delete">delete</string>
+    <string name="free_add_product"> Now you can add your Ad for free</string>
+    <string name="cancel">cancel</string>
+    <string name="done">done</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="exit_message"> Are you want to close the app ?</string>
 </resources>

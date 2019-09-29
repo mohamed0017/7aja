@@ -29,7 +29,8 @@ interface ApiService {
     @Headers("Accept: application/json")
     @GET("/api/advertising/t/{lang}/0")
     fun getStartupAd(
-        @Path("lang") lang: String
+        @Path("lang") lang: String,
+        @Query("user_id") userId: Int
     ): Call<AdsModel>
 
     @Headers("Accept: application/json")
@@ -47,6 +48,13 @@ interface ApiService {
     ): Call<ProductsModel>
 
     @Headers("Accept: application/json")
+    @POST("/api/products/search/{lang}/1")
+    fun searchProducts(
+        @Path("lang") lang: String,
+        @Body searchData: SearchRequest
+    ): Call<ProductsModel>
+
+    @Headers("Accept: application/json")
     @GET("/api/products/{id}")
     fun getSingleProduct(
         @Path("id") orderId: Int,
@@ -58,7 +66,8 @@ interface ApiService {
     @GET("/api/products/t/{lang}/2/{id}")
     fun getOffers(
         @Path("lang") lang: String,
-        @Path("id") parentId: Int
+        @Path("id") parentId: Int,
+        @Query("user_id") userId: Int
     ): Call<ProductsModel>
 
     @Headers("Accept: application/json")
@@ -123,6 +132,10 @@ interface ApiService {
     fun productView(@Path("id") id: Int): Call<DefultResponse>
 
     @Headers("Accept: application/json")
+    @GET("/api/advertising/num_views/{id}")
+    fun advertisingView(@Path("id") id: Int): Call<DefultResponse>
+
+    @Headers("Accept: application/json")
     @GET("/api/notifications/t/ar/0/{id}/0")
     fun getNotifications(@Path("id") id: Int): Call<NotificationsResponse>
 
@@ -148,7 +161,7 @@ interface ApiService {
 
     @Headers("Accept: application/json")
     @GET("/api/advertising/t/ar/3")
-    fun getMainSliderImages(): Call<SliderImgesModel>
+    fun getMainSliderImages(@Query("user_id") userId: Int): Call<SliderImgesModel>
 
     // chat
     @Headers("Accept: application/json")
@@ -162,6 +175,15 @@ interface ApiService {
     @Headers("Accept: application/json")
     @GET("/api/chat_users/t/{user_id}")
     fun getUserChat(@Path("user_id") userId: Int): Call<UserChatModel>
+
+    @Headers("Accept: application/json")
+    @DELETE("/api/chat_users/{message_id}")
+    fun deleteChat(@Path("message_id") messageId: Int): Call<DefultResponse>
+
+    @Headers("Accept: application/json")
+    @POST("/api/user_likes")
+    fun likeAd(@Query("type") type: Int,
+               @Query("like_id") adId: Int): Call<DefultResponse>
 
 
 }

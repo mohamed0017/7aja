@@ -55,7 +55,6 @@ class CategoriesRepository(token:String){
         return result
     }
 
-
     fun removeProductFromFavorite(productId:Int): SingleLiveEvent2<FavoriteModel> {
         val result = SingleLiveEvent2<FavoriteModel>()
         val call = apiService?.removeFormFavorite(productId)

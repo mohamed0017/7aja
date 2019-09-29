@@ -2,6 +2,7 @@ package com.haja.haja.View.ui.OffersScreen
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,22 +50,29 @@ class OffiersAdapter(
         holder: ViewHolder,
         position: Int
     ) {
-        val cat = products?.get(position)
-        holder.title.text = cat?.name
-        holder.description.text = cat?.description
+        val product = products?.get(position)
+        holder.title.text = product?.name
+        holder.description.text = product?.description
 
-        if (cat?.imgs?.isNotEmpty()!!) {
-            Picasso.get().load(ApiService.IMAGEBASEURL + cat.imgs[0]?.img)
+        if (product?.imgs?.isNotEmpty()!!) {
+            Picasso.get().load(ApiService.IMAGEBASEURL + product.imgs[0]?.img)
                 .placeholder(context.resources.getDrawable(R.drawable.placeholder))
                 .error(context.resources.getDrawable(R.drawable.placeholder)).into(holder.imageView)
         }
 
         holder.itemView.setOnClickListener {
-            if (cat.imgs.isNotEmpty()) {
+            if (product.imgs.isNotEmpty()) {
                 val intent = Intent(context, AdActivity::class.java)
-                intent.putExtra("offerName", cat.name)
-                intent.putExtra("numViews", cat.numViews.toString())
-                intent.putExtra("offerImage", cat.imgs[0]?.img)
+                intent.putExtra("offerId", product.id.toString())
+                intent.putExtra("offerLikes", product.likes.toString())
+                intent.putExtra("offerName", product.name)
+                intent.putExtra("numViews", product.numViews.toString())
+                intent.putExtra("isLike", product.isLike)
+                Log.i("isLike",  product.isLike.toString())
+                Log.i("isLike",  product.name.toString())
+                Log.i("isLike",  product.id.toString())
+                intent.putExtra("offerImage", product.imgs[0]?.img)
+                intent.putExtra("fromOffersScreen", true)
                 context.startActivity(intent)
             }
 

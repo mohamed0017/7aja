@@ -1,11 +1,12 @@
 package com.haja.haja.View.ui.MainCategoriesActivity
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.Window
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -23,9 +24,12 @@ import com.haja.haja.View.ui.MyFavorites.FavoritesFragment
 import com.haja.haja.View.ui.NotificationsHistory.NotificationsListFragment
 import com.haja.haja.View.ui.OffersScreen.OffersFragment
 import com.haja.haja.View.ui.Register.RegisterFragment
+import com.haja.haja.View.ui.SearchScreen.SearchFragment
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
 import kotlinx.android.synthetic.main.activity_main_categories.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.dialog_exit.*
+import kotlinx.android.synthetic.main.dialog_message.*
 
 class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -42,7 +46,7 @@ class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationI
         toggle.syncState()
         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         nav_view.setNavigationItemSelectedListener(this)
-0
+
         supportFragmentManager.inTransaction {
             add(R.id.mainContainer, MainCategoriesFragment.newInstance())
         }
@@ -52,13 +56,36 @@ class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationI
         categoriesBarBack.setOnClickListener {
             onBackPressed()
         }
+        catBarSearch.setOnClickListener {
+            performSearch()
+        }
+    }
+
+    private fun performSearch() {
+        supportFragmentManager.inTransaction {
+            replace(R.id.mainContainer, SearchFragment.newInstance()).addToBackStack("mainScreen")
+        }
     }
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            if(supportFragmentManager.backStackEntryCount == 0){
+                val dialog = Dialog(this)
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialog.setCancelable(true)
+                dialog.setContentView(R.layout.dialog_exit)
+                dialog.yes.setOnClickListener {
+                    dialog.dismiss()
+                    super.onBackPressed()
+                }
+                dialog.no.setOnClickListener {
+                    dialog.dismiss()
+                }
+                dialog.show()
+            }else
+                super.onBackPressed()
         }
     }
 
@@ -99,7 +126,7 @@ class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 if (userId == 0) {
                     makeToast(this, resources.getString(R.string.login_first))
                     supportFragmentManager.inTransaction {
-                        replace(R.id.mainContainer, LoginFragment.newInstance())
+                        replace(R.id.mainContainer, LoginFragment.newInstance()).addToBackStack("mainScreen")
                     }
                 } else
                     supportFragmentManager.inTransaction {
@@ -114,7 +141,7 @@ class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 if (userId == 0) {
                     makeToast(this, resources.getString(R.string.login_first))
                     supportFragmentManager.inTransaction {
-                        replace(R.id.mainContainer, LoginFragment.newInstance())
+                        replace(R.id.mainContainer, LoginFragment.newInstance()).addToBackStack("mainScreen")
                     }
                 } else
                     supportFragmentManager.inTransaction {
@@ -157,10 +184,17 @@ class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 SharedPreferenceUtil(this).putString(TOKEN, "")
                 SharedPreferenceUtil(this).putString(USERID, "0")
                 supportFragmentManager.inTransaction {
-                    replace(R.id.mainContainer, LoginFragment.newInstance())
+                    replace(R.id.mainContainer, LoginFragment.newInstance()).addToBackStack("mainScreen")
                 }
             }
             R.id.nav_profile -> {
+                val userId = SharedPreferenceUtil(this).getString(USERID, "0")?.toInt()
+                if (userId == 0) {
+                    makeToast(this, resources.getString(R.string.login_first))
+                    supportFragmentManager.inTransaction {
+                        replace(R.id.mainContainer, LoginFragment.newInstance()).addToBackStack("mainScreen")
+                    }
+                } else
                 supportFragmentManager.inTransaction {
                     replace(R.id.mainContainer, FavoritesFragment.newInstance()).addToBackStack("FavoritesFragment")
                 }

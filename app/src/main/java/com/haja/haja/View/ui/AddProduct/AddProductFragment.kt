@@ -20,13 +20,16 @@ import android.view.animation.AnimationUtils
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import android.content.Intent
 import android.app.Activity.RESULT_OK
+import android.app.Dialog
 import android.location.Geocoder
 import android.util.Log
+import android.view.Window
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.easywaylocation.EasyWayLocation
 import com.example.easywaylocation.Listener
 import com.haja.haja.Service.model.AttributeData
+import com.haja.haja.Service.model.ProductData
 import com.haja.haja.Utils.SharedPreferenceUtil
 import com.haja.haja.Utils.USERID
 import com.haja.haja.Utils.inTransaction
@@ -42,6 +45,8 @@ import com.karumi.dexter.listener.single.PermissionListener
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.dialog_message.*
+import kotlinx.android.synthetic.main.report_dialog.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -132,6 +137,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        showDialog()
         activity?.appBarTitle?.text = resources.getString(R.string.addProduct)
         activity?.categoriesBarBack?.visibility = View.GONE
         activity?.categoriesBarMenu?.visibility = View.VISIBLE
@@ -183,6 +189,17 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
         }
     }
 
+    private fun showDialog() {
+        val dialog = Dialog(context!!)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.dialog_message)
+        dialog.done.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
     private fun getProductData(): HashMap<String, String> {
         val map = HashMap<String, String>()
         map["name"] = addProNameAr.text.toString()
@@ -205,14 +222,17 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
     }
 
     private fun isValidProductData(): Boolean {
-        return if (selectedImages.isNullOrEmpty()) {
-            makeToast(context!!, resources.getString(R.string.select_img))
-            false
-        } else if (selectedCategory == 0) {
-            makeToast(context!!, resources.getString(R.string.select_cat))
-            false
-        } else
-            true
+        return when {
+            selectedImages.isNullOrEmpty() -> {
+                makeToast(context!!, resources.getString(R.string.select_img))
+                false
+            }
+            selectedCategory == 0 -> {
+                makeToast(context!!, resources.getString(R.string.select_cat))
+                false
+            }
+            else -> true
+        }
     }
 
     private fun getSelectedImages(): List<MultipartBody.Part> {

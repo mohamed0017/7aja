@@ -9,10 +9,7 @@ import com.haja.haja.Service.model.AddProductResponse
 import com.haja.haja.Service.model.AdsModel
 import com.haja.haja.Service.repository.AppRepository
 import com.haja.haja.Service.repository.ProductRepository
-import com.haja.haja.Utils.LANG
-import com.haja.haja.Utils.SharedPreferenceUtil
-import com.haja.haja.Utils.SingleLiveEvent2
-import com.haja.haja.Utils.TOKEN
+import com.haja.haja.Utils.*
 import com.haja.haja.model.CategoriesModel
 import okhttp3.MultipartBody
 
@@ -82,6 +79,7 @@ class AddProductViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun getStartupAd(): SingleLiveEvent2<AdsModel> {
-        return repository.getStartupAd("$lang")
+         val userId = SharedPreferenceUtil(getApplication()).getString(USERID, "0")
+        return repository.getStartupAd("$lang",userId!!.toInt())
     }
 }

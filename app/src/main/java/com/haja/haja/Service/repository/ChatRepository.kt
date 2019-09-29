@@ -58,7 +58,6 @@ class ChatRepository(token: String) {
 
     }
 
-
     fun getUserChat(userId : Int): SingleLiveEvent2<UserChatModel> {
         val result = SingleLiveEvent2<UserChatModel>()
         val call = apiService?.getUserChat(userId)
@@ -72,6 +71,26 @@ class ChatRepository(token: String) {
             }
             onFailure = { t ->
                 Log.i("getUserChat/Failure", t!!.message + "..")
+                result.value = null
+            }
+        }
+        return result
+
+    }
+
+    fun deleteMessageChat(messageId : Int ): SingleLiveEvent2<DefultResponse> {
+        val result = SingleLiveEvent2<DefultResponse>()
+        val call = apiService?.deleteChat(messageId)
+        call?.enqueue {
+            onResponse = { response ->
+                Log.i("deleteChat", response.code().toString())
+                if (response.code() / 100 == 2)
+                    result.value = response.body()
+                else
+                    result.value = null
+            }
+            onFailure = { t ->
+                Log.i("deleteChat/Failure", t!!.message + "..")
                 result.value = null
             }
         }

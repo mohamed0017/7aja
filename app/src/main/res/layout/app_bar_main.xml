@@ -20,15 +20,15 @@
         <ImageView
                 android:visibility="gone"
                 android:id="@+id/categoriesBarBack"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
+                android:layout_width="@dimen/_38sdp"
+                android:layout_height="@dimen/_28sdp"
                 android:gravity="start"
                 app:srcCompat="@drawable/back"/>
 
         <ImageView
                 android:id="@+id/categoriesBarMenu"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_22sdp"
                 android:gravity="start"
                 android:src="@mipmap/menu"/>
 

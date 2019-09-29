@@ -65,6 +65,9 @@ data class ProductData(
 	@field:SerializedName("name")
 	val name: String? = null,
 
+	@field:SerializedName("likes")
+	val likes: Int? = null,
+
 	@field:SerializedName("description")
 	val description: String? = null,
 
@@ -73,6 +76,9 @@ data class ProductData(
 
 	@field:SerializedName("is_favorite")
 	var isFavorite: Int? = null,
+
+	@field:SerializedName("is_like")
+	val isLike: String? = null,
 
 	@field:SerializedName("attributes")
 	val attributes: List<AttributesModel?>? = null,

@@ -7,6 +7,15 @@ data class ImgesDataModel(
 	@field:SerializedName("with_id")
 	val withId: String? = null,
 
+	@field:SerializedName("likes")
+	val likes: String? = null,
+
+	@field:SerializedName("is_like")
+	val isLike: String? = null,
+
+	@field:SerializedName("num_views")
+	val numViews: String? = null,
+
 	@field:SerializedName("img")
 	val img: String? = null,
 

@@ -1,13 +1,16 @@
 package com.haja.haja.View.ui.ChatScreen
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.haja.haja.OnItemClickWithId
 import com.haja.haja.R
 import com.haja.haja.Service.model.ChatMessagesDataModel
 import com.haja.haja.Utils.ApplicationLanguageHelper
@@ -16,9 +19,10 @@ import com.haja.haja.Utils.SharedPreferenceUtil
 import com.haja.haja.Utils.USERID
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.delete_message.*
 import java.util.*
 
-class ChatActivity : AppCompatActivity() {
+class ChatActivity : AppCompatActivity(), OnItemClickWithId {
 
     private lateinit var viewModel: ChatViewModel
     private var adapter: ChatMessagesAdapter? = null
@@ -39,7 +43,7 @@ class ChatActivity : AppCompatActivity() {
             onBackPressed()
         }
         val userName = intent?.extras?.getString("user2_name")
-        chatBarTitle.text = "${resources.getString(R.string.chatWith) } $userName"
+        chatBarTitle.text = "${resources.getString(R.string.chatWith)} $userName"
     }
 
     private fun checkForNewMessages() {
@@ -58,7 +62,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun getLastMessages() {
-        adapter = ChatMessagesAdapter(this)
+        adapter = ChatMessagesAdapter(this, this)
         messageRecyclerView.layoutManager = LinearLayoutManager(this)
         messageRecyclerView.adapter = adapter
 
@@ -81,7 +85,7 @@ class ChatActivity : AppCompatActivity() {
 
     private fun sendMessage() {
         val user2Id = intent?.extras?.getString("user2_id")
-        val userId = SharedPreferenceUtil(this).getString(USERID, "")
+        val userId = SharedPreferenceUtil(this).getString(USERID, "0")
 
         sendButton.setOnClickListener {
             if (isValidMessage()) {
@@ -107,6 +111,38 @@ class ChatActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    override fun onClick(id: Int, position: Int) {
+        buildDialog(id, position)
+    }
+
+    private fun buildDialog(id: Int, position: Int) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.delete_message)
+
+        dialog.deleteMessageBut.setOnClickListener {
+            dialog.deleteProgress.visibility = View.VISIBLE
+            dialog.deleteMessageBut.visibility = View.GONE
+            viewModel.deleteMessage(id).observe(this, Observer { result ->
+                dialog.deleteProgress.visibility = View.GONE
+                dialog.deleteMessageBut.visibility = View.VISIBLE
+                if (result != null) {
+                    if (result.result == true) {
+                        dialog.dismiss()
+                        adapter?.removeMessage(position)
+                        adapter?.notifyDataSetChanged()
+                    }
+                    makeToast(this, result.errorMesage.toString())
+                } else
+                    makeToast(this, resources.getString(R.string.error))
+            })
+
+        }
+        dialog.show()
+
     }
 
     private fun getMessage(): HashMap<String, String> {

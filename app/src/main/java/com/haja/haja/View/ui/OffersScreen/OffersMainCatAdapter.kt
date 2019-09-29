@@ -16,6 +16,8 @@ class OffersMainCatAdapter(
     private val offersFragment: OffersFragment
 ) : RecyclerView.Adapter<OffersMainCatAdapter.ViewHolder>() {
 
+    var lastItemPossion = 0
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -36,17 +38,24 @@ class OffersMainCatAdapter(
     ) {
         val cat = offersCategories?.get(position)
         holder.title.text = cat?.name
-        if (position == 0){
+        if (lastItemPossion == position) {
             holder.title.background = context.resources.getDrawable(R.drawable.rounded_corners)
             holder.title.setTextColor(context.resources.getColor(R.color.colorPrimaryDark))
+        } else {
+            holder.title.background = null
+            holder.title.setTextColor(context.resources.getColor(R.color.white))
         }
+
         holder.itemView.setOnClickListener {
-            cat?.let { it1 -> offersFragment.onClick(position, it1) }
+            lastItemPossion = position
+            notifyDataSetChanged()
+                cat?.let { it1 -> offersFragment.onClick( it1, position) }
         }
     }
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.offerCatName
+
     }
 }
