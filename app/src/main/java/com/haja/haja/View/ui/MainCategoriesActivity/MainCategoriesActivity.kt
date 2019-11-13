@@ -23,13 +23,11 @@ import com.haja.haja.View.ui.MoreScreen.MoreFragment
 import com.haja.haja.View.ui.MyFavorites.FavoritesFragment
 import com.haja.haja.View.ui.NotificationsHistory.NotificationsListFragment
 import com.haja.haja.View.ui.OffersScreen.OffersFragment
-import com.haja.haja.View.ui.Register.RegisterFragment
 import com.haja.haja.View.ui.SearchScreen.SearchFragment
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
 import kotlinx.android.synthetic.main.activity_main_categories.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.dialog_exit.*
-import kotlinx.android.synthetic.main.dialog_message.*
 
 class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
