@@ -2,39 +2,35 @@ package com.haja.haja.View.ui.AddProduct
 
 import android.Manifest
 import android.annotation.SuppressLint
-import androidx.lifecycle.ViewModelProviders
+import android.app.Activity.RESULT_OK
+import android.app.Dialog
+import android.content.Intent
+import android.location.Geocoder
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.haja.haja.OnCategoryItemClick
-import com.haja.haja.R
-import com.haja.haja.model.CategoriesData
-import kotlinx.android.synthetic.main.add_product_fragment.*
-import kotlinx.android.synthetic.main.add_products_categories.view.*
-import androidx.recyclerview.widget.RecyclerView
-import android.view.animation.AnimationUtils
-import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
-import android.content.Intent
-import android.app.Activity.RESULT_OK
-import android.app.Dialog
-import android.location.Geocoder
-import android.util.Log
 import android.view.Window
+import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.easywaylocation.EasyWayLocation
 import com.example.easywaylocation.Listener
+import com.haja.haja.OnCategoryItemClick
+import com.haja.haja.R
 import com.haja.haja.Service.model.AttributeData
-import com.haja.haja.Service.model.ProductData
 import com.haja.haja.Utils.SharedPreferenceUtil
 import com.haja.haja.Utils.USERID
 import com.haja.haja.Utils.inTransaction
-import com.haja.haja.View.ui.AboutusScreen.AboutFragment
 import com.haja.haja.View.ui.MyAdsScreen.MyAdsFragment
+import com.haja.haja.View.ui.Payment.PaymentActivity
+import com.haja.haja.model.CategoriesData
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
 import com.karumi.dexter.Dexter
@@ -44,10 +40,12 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.PermissionListener
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
+import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
+import kotlinx.android.synthetic.main.add_product_fragment.*
+import kotlinx.android.synthetic.main.add_products_categories.view.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.dialog_message.*
-import kotlinx.android.synthetic.main.report_dialog.*
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -137,7 +135,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        showDialog()
+       // showDialog()
         activity?.appBarTitle?.text = resources.getString(R.string.addProduct)
         activity?.categoriesBarBack?.visibility = View.GONE
         activity?.categoriesBarMenu?.visibility = View.VISIBLE
@@ -155,7 +153,8 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
         selectCategory.setOnClickListener {
             selectedCategoriesCount = 0
             categoriesDialog.show(context!!)
-            categoriesDialog.getDialogView().addProductCategoriesList.layoutManager = LinearLayoutManager(context!!)
+            categoriesDialog.getDialogView().addProductCategoriesList.layoutManager =
+                LinearLayoutManager(context!!)
             categoriesDialog.getDialogView().addProductCategoriesList.adapter = categoriesAdapter
             viewModel.setParentId(0)
             viewModel.getCategories().observe(this, Observer { categories ->
@@ -170,23 +169,30 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
 
         addProductBut.setOnClickListener {
             if (isValidProductData()) {
-                progress.show()
-                viewModel.setProductAttributes(attributesAdapter.getEnteredAttributesData())
-                viewModel.setImages(getSelectedImages())
-                viewModel.setProductData(getProductData())
-                viewModel.addProduct().observe(this, Observer { products ->
-                    progress.dismiss()
-                    if (products != null) {
-                        makeToast(context!!, products.errorMesage.toString())
-                        fragmentManager?.inTransaction {
-                            replace(R.id.mainContainer, MyAdsFragment.newInstance())
-                        }
-                    } else {
-                        makeToast(context!!, resources.getString(R.string.error))
-                    }
-                })
+                val intent = Intent(context!!, PaymentActivity::class.java)
+                intent.putExtra(PaymentActivity.PAYMENT_AMOUNT, "500")
+                startActivityForResult(intent, PaymentActivity.PAYMENT_REQUEST_CODE)
             }
         }
+    }
+
+    private fun uploadProduct() {
+        val progress = CustomProgressBar.showProgressBar(context!!)
+        progress.show()
+        viewModel.setProductAttributes(attributesAdapter.getEnteredAttributesData())
+        viewModel.setImages(getSelectedImages())
+        viewModel.setProductData(getProductData())
+        viewModel.addProduct().observe(this, Observer { products ->
+            progress.dismiss()
+            if (products != null) {
+                makeToast(context!!, products.errorMesage.toString())
+                fragmentManager?.inTransaction {
+                    replace(R.id.mainContainer, MyAdsFragment.newInstance())
+                }
+            } else {
+                makeToast(context!!, resources.getString(R.string.error))
+            }
+        })
     }
 
     private fun showDialog() {
@@ -194,6 +200,18 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
         dialog.setContentView(R.layout.dialog_message)
+        dialog.done.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun showDialog(message : String) {
+        val dialog = Dialog(context!!)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.dialog_message)
+        dialog.dialogMessage.text = message
         dialog.done.setOnClickListener {
             dialog.dismiss()
         }
@@ -239,7 +257,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
         val images = ArrayList<MultipartBody.Part>()
         for (index in selectedImages.indices) {
             val file = File(selectedImages[index].path)
-            val imageBody = RequestBody.create(MediaType.parse("image/*"), file)
+            val imageBody = RequestBody.create("image/*".toMediaTypeOrNull(), file)
             images.add(MultipartBody.Part.createFormData("img[]", file.name, imageBody))
         }
         return images
@@ -260,7 +278,12 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
         }
         when (requestCode) {
             EasyWayLocation.LOCATION_SETTING_REQUEST_CODE -> easyWayLocation?.onActivityResult(resultCode)
+            PaymentActivity.PAYMENT_REQUEST_CODE -> if (data != null) {
+                if (data.getBooleanExtra("payment_succeed", false)) uploadProduct()
+                else showDialog(resources.getString(R.string.payment_failed_msg))
+            }
         }
+
         super.onActivityResult(requestCode, resultCode, data)  // You MUST have this line to be here
         // so ImagePicker can work with fragment mode
     }
@@ -295,15 +318,14 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
             if (categories != null) {
                 categoriesAdapter.setCategoriesList(categories.data as ArrayList<CategoriesData>)
                 runLayoutAnimation(categoriesDialog.getDialogView().addProductCategoriesList)
-            } else {
-
             }
         })
     }
 
     private fun runLayoutAnimation(recyclerView: RecyclerView) {
         val context = recyclerView.context
-        val controller = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_slide_right)
+        val controller =
+            AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_slide_right)
         recyclerView.layoutAnimation = controller
         recyclerView.adapter!!.notifyDataSetChanged()
         recyclerView.scheduleLayoutAnimation()
@@ -321,7 +343,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
                         selectCategoryToShowAtt.visibility = View.VISIBLE
                         selectCategoryToShowAtt.text = resources.getString(R.string.no_att)
                     }
-                } else{
+                } else {
                     attributesAdapter.clearAttributes()
                     attributesAdapter.notifyDataSetChanged()
                     makeToast(context!!, attributes.errorMesage.toString())

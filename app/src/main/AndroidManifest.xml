@@ -47,7 +47,11 @@
                 android:screenOrientation="portrait"
                 android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
-
+        <activity
+                android:name=".View.ui.Payment.PaymentActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
         <provider
                 android:name="androidx.core.content.FileProvider"
                 android:authorities="com.haja.haja.fileprovider"

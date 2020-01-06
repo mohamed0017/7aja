@@ -35,6 +35,9 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 androidExtensions {
     experimental = true
@@ -74,6 +77,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-storage'
     implementation 'com.google.firebase:firebase-auth'
+
+    //payment sdk
+    implementation 'com.github.Tap-Payments:goSellSDK-AndroidX:3.2.8'
 
     // Firebase UI
     implementation 'com.firebaseui:firebase-ui-database:4.2.0'

@@ -102,4 +102,5 @@
     <string name="yes">نعم</string>
     <string name="no">لا</string>
     <string name="exit_message">هل تريد الخروج من التطبيق ؟</string>
+    <string name="payment_failed_msg">  لم تتم عملية الدفع حاول مرة اخري</string>
 </resources>

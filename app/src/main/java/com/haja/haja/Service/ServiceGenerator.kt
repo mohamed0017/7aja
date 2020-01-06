@@ -13,7 +13,7 @@ class ServiceGenerator(token:String) {
         private val okHttpClient = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 var request = chain.request()
-                var httpUrl = request.url()
+                var httpUrl = request.url
 
                 httpUrl = httpUrl.newBuilder()
                     .addQueryParameter("", "")

@@ -124,7 +124,7 @@ class ProductRepository(token: String) {
         call?.enqueue {
             onResponse = { response ->
                 Log.i("getSingleProduct", response.code().toString())
-                Log.i("getSingleProduct/url", call.request().url().toString())
+                Log.i("getSingleProduct/url", call.request().url.toString())
                 if (response.code() / 100 == 2) {
                     Log.i("getSingleProduct", response.body()?.errorMesage.toString())
                     result.value = response.body()
@@ -202,7 +202,7 @@ class ProductRepository(token: String) {
         val call = apiService?.searchProducts( lang = language ,searchData = search)
         call?.enqueue {
             onResponse = { response ->
-                Log.i("searchProducts/url" , call.request().url().toString())
+                Log.i("searchProducts/url" , call.request().url.toString())
                 Log.i("searchProducts", response.code().toString())
                 if (response.code() / 100 == 2)
                     result.value = response.body()
