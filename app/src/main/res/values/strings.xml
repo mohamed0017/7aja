@@ -107,4 +107,15 @@
     <string name="no">لا</string>
     <string name="exit_message">هل تريد الخروج من التطبيق ؟</string>
     <string name="payment_failed_msg">لم تتم عملية الدفع</string>
+    <string name="address">Address</string>
+    <string name="whats_app">Whats App Number</string>
+    <string name="max_letters">600 / 0 حرف</string>
+    <string name="letter">letters</string>
+    <string name="acceptPolicy">اوافق علي الشروط والاحكام</string>
+    <string name="activate_account">Account Activation</string>
+    <string name="resend">Resend Activation Code ?</string>
+    <string name="resend_code_done">تم ارسال كود التفعيل بنجاح</string>
+    <string name="enter_code_msg">ادخل كود التفعيل الذي تم ارساله الي رقم الهاتف</string>
+    <string name="forget_pass_msg">ادخل رقم الهاتف و سوف يتم ارسال رقم مرور جديد اليك</string>
+    <string name="twitter">twitter</string>
 </resources>

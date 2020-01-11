@@ -3,6 +3,7 @@ package com.haja.haja.View.ui.LoginScreen
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.haja.haja.Service.model.DefultResponse
 import com.haja.haja.Service.model.UserModel
 import com.haja.haja.Service.repository.AuthRepository
 import com.haja.haja.Utils.SharedPreferenceUtil
@@ -18,4 +19,7 @@ class LoginViewModel (application: Application) : AndroidViewModel(application){
         return authRepository.login(map)
     }
 
+    fun forgetPass(mobile : String): MutableLiveData<DefultResponse> {
+        return authRepository.forgetPass(mobile)
+    }
 }

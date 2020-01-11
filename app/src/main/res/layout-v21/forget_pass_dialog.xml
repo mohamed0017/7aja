@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_250sdp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/_8sdp">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_24sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:gravity="center"
+            android:padding="@dimen/_8sdp"
+            android:text="@string/forget_pass_msg"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/_12ssp" />
+
+    <LinearLayout
+            android:id="@+id/phoneLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="90dp"
+            android:layoutDirection="ltr"
+            android:background="@drawable/border"
+            app:layout_constraintTop_toBottomOf="@+id/loginLogo"
+            android:layout_margin="@dimen/_8sdp">
+
+        <EditText
+                android:id="@+id/forgetPassPhoneCode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="965"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:background="@android:color/transparent"
+                android:padding="@dimen/_4sdp"
+                android:textSize="@dimen/_12ssp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:layoutDirection="ltr"
+                android:hint="@string/phone"
+                android:padding="@dimen/_4sdp"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true">
+
+            <EditText
+                    android:id="@+id/forgetProgressPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:inputType="phone"
+                    android:padding="@dimen/_4sdp"
+                    android:textSize="@dimen/_12ssp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+    <ProgressBar
+            android:id="@+id/forgetProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_margin="@dimen/_40sdp"
+            android:padding="@dimen/_4sdp" />
+
+    <Button
+            android:id="@+id/forgerPassBut"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_40sdp"
+            android:background="@color/colorPrimaryDark"
+            android:padding="@dimen/_4sdp"
+            android:text="@string/send"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+</LinearLayout>

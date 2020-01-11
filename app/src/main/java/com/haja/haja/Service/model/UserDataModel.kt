@@ -10,6 +10,9 @@ data class UserDataModel(
 	@field:SerializedName("date_birth")
 	val dateBirth: String? = null,
 
+	@field:SerializedName("activitation_code")
+	var activitationCode: String? = null,
+
 	@field:SerializedName("img")
 	val img: String? = null,
 

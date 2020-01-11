@@ -3,11 +3,13 @@ package com.haja.haja.Service
 import com.google.gson.GsonBuilder
 import com.haja.haja.Service.ApiService.Companion.BASEURL
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.URLDecoder
 
 class ServiceGenerator(token:String) {
         private val okHttpClient = OkHttpClient.Builder()
@@ -16,13 +18,29 @@ class ServiceGenerator(token:String) {
                 var httpUrl = request.url
 
                 httpUrl = httpUrl.newBuilder()
-                    .addQueryParameter("", "")
                     .build()
 
-                request = request.newBuilder().url(httpUrl)
-                    .addHeader("Authorization" , "Bearer $token").build()
+                request = if (token != "")
+                    request.newBuilder().url(httpUrl)
+                        .addHeader("Authorization" , "Bearer $token").build()
+                else
+                    request.newBuilder().url(httpUrl).build()
+
                 chain.proceed(request)
             }.build()
+
+    private val okHttpClientForSms = OkHttpClient.Builder()
+        .addInterceptor { chain ->
+            val request = chain.request()
+
+            var string = request.url.toString()
+
+            val newRequest =  Request.Builder()
+                .url(string)
+                .build()
+            chain.proceed(newRequest)
+        }.build()
+
         private val gson = GsonBuilder()
                 .setLenient()
                 .create()
@@ -31,9 +49,15 @@ class ServiceGenerator(token:String) {
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
 
+    private val builderForSms = Retrofit.Builder()
+        .baseUrl("http://www.kwtsms.com/")
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+
         private val retrofit = builder.build()
 
         val createService = retrofit.create(ApiService::class.java)
+        val createServiceForSms = builderForSms.build().create(ApiService::class.java)
 }
 
 //enqueue  extension

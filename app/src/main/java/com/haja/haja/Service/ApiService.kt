@@ -3,6 +3,7 @@ package com.haja.haja.Service
 import com.haja.haja.Service.model.*
 import com.haja.haja.model.CategoriesModel
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -185,5 +186,21 @@ interface ApiService {
     fun likeAd(@Query("type") type: Int,
                @Query("like_id") adId: Int): Call<DefultResponse>
 
+    @Headers("Accept: application/json")
+    @GET("/api/setting_app/1")
+    fun getAdPrice(): Call<AdPriceModel>
+
+    @GET("/API/send/?username=hajakw&password=Zx123Zx123&sender=hajaq8-MESSAGE&lang=3")
+    fun sendSms(@Query("mobile") mobile : String,
+                @Query("message") message : String): Call<ResponseBody>
+
+    @Headers("Accept: application/json")
+    @POST("/api/activate_account")
+    fun accountActivation(@Query("activitation_code") code : String,
+                          @Header("Authorization") token: String): Call<DefultResponse>
+
+    @Headers("Accept: application/json")
+    @POST("/api/forget_pass_user")
+    fun forgetPass(@Query("mobile") mobile : String): Call<DefultResponse>
 
 }

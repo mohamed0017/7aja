@@ -1,6 +1,5 @@
 package com.haja.haja.Service.repository
 
-import android.util.JsonToken
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.haja.haja.Service.ApiService
@@ -9,13 +8,37 @@ import com.haja.haja.Service.enqueue
 import com.haja.haja.Service.model.*
 import com.haja.haja.Utils.SingleLiveEvent2
 import com.haja.haja.model.CategoriesModel
+import okhttp3.ResponseBody
+import java.net.URLEncoder
 
 class AppRepository(token: String) {
 
     private var apiService: ApiService? = null
+    private var apiServiceForSms: ApiService? = null
 
     init {
         apiService = ServiceGenerator(token).createService
+        apiServiceForSms = ServiceGenerator(token).createServiceForSms
+    }
+
+    fun sendSms(mobile:String,  message: String): MutableLiveData<ResponseBody> {
+        val result = MutableLiveData<ResponseBody>()
+        val call = apiServiceForSms?.sendSms("201004$mobile",message)
+        call?.enqueue {
+            onResponse = { response ->
+                Log.i("sendSms/url", call.request().url.toString())
+                Log.i("sendSms", response.code().toString())
+                if (response.code() / 100 == 2)
+                    result.value = response.body()
+                else
+                    result.value = null
+            }
+            onFailure = { t ->
+                Log.i("sendSms/Failure", t!!.message)
+                result.value = null
+            }
+        }
+        return result
     }
 
     fun getCategories(parentId:Int, language: String): MutableLiveData<CategoriesModel> {

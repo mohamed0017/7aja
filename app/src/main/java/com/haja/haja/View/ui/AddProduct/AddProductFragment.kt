@@ -1,27 +1,23 @@
 package com.haja.haja.View.ui.AddProduct
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.Intent
-import android.location.Geocoder
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.easywaylocation.EasyWayLocation
-import com.example.easywaylocation.Listener
 import com.haja.haja.OnCategoryItemClick
 import com.haja.haja.R
 import com.haja.haja.Service.model.AttributeData
@@ -33,11 +29,6 @@ import com.haja.haja.View.ui.Payment.PaymentActivity
 import com.haja.haja.model.CategoriesData
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.single.PermissionListener
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
@@ -52,13 +43,13 @@ import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
+class AddProductFragment : Fragment(), OnCategoryItemClick {
 
-    override fun locationCancelled() {
-    }
+    /* override fun locationCancelled() {
+     }
 
-    override fun locationOn() {
-        easyWayLocation?.beginUpdates()
+     override fun locationOn() {
+         *//*easyWayLocation?.beginUpdates()
         try {
             lati = easyWayLocation?.latitude
             longi = easyWayLocation?.longitude
@@ -67,8 +58,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
                 cityName.text = getAreaName()
         } catch (e: Exception) {
             e.printStackTrace()
-        }
-
+        }*//*
     }
 
     override fun onPositionChanged() {
@@ -84,8 +74,9 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
         }
 
     }
+*/
 
-    private fun getAreaName(): String {
+/*    private fun getAreaName(): String {
         val geocoder = Geocoder(context, Locale.getDefault());
         val addresses = geocoder.getFromLocation(lati!!, longi!!, 1);
         val cityName = addresses.get(0).getAddressLine(0);
@@ -93,7 +84,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
         // val countryName = addresses.get(0).getAddressLine(2);
 
         return "$cityName  "
-    }
+    }*/
 
     override fun onClick(possion: Int, itemData: CategoriesData) {
         selectedCategoriesCount++
@@ -118,14 +109,14 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
     private lateinit var viewModel: AddProductViewModel
     private lateinit var categoriesAdapter: AddProductCatAdapter
     private var attributesAdapter = AddProductAttributesAdapter()
-    private var easyWayLocation: EasyWayLocation? = null
-    private var lati: Double? = null
-    private var longi: Double? = null
+    /*    private var easyWayLocation: EasyWayLocation? = null
+        private var lati: Double? = null
+        private var longi: Double? = null*/
     private val categoriesDialog = AddProductCategoriesDialog()
     private var selectedImages = ArrayList<Image>()
     private var selectedCategory = 0
     private var selectedCategoriesCount = 0
-
+    private var advPrice = "0"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -135,7 +126,8 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-       // showDialog()
+        // showDialog()
+        initDescriptionLettersCount()
         activity?.appBarTitle?.text = resources.getString(R.string.addProduct)
         activity?.categoriesBarBack?.visibility = View.GONE
         activity?.categoriesBarMenu?.visibility = View.VISIBLE
@@ -143,9 +135,8 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
 
         viewModel = ViewModelProviders.of(this).get(AddProductViewModel::class.java)
         categoriesAdapter = AddProductCatAdapter(this)
-        configLocationPremation()
-        val progress = CustomProgressBar.showProgressBar(context!!)
-
+        // configLocationPremation()
+        getAdPrice()
         uploadImages.setOnClickListener {
             openGallery()
         }
@@ -170,10 +161,38 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
         addProductBut.setOnClickListener {
             if (isValidProductData()) {
                 val intent = Intent(context!!, PaymentActivity::class.java)
-                intent.putExtra(PaymentActivity.PAYMENT_AMOUNT, "500")
+                intent.putExtra(PaymentActivity.PAYMENT_AMOUNT, advPrice)
                 startActivityForResult(intent, PaymentActivity.PAYMENT_REQUEST_CODE)
             }
         }
+    }
+
+    private fun initDescriptionLettersCount() {
+        addProDescriptionAr.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                lettersNumber.text = "600/${s?.length} ${resources.getString(R.string.letter)}"
+                if (s?.length == 6000) {
+                    lettersNumber.setTextColor(resources.getColor(R.color.red))
+                }
+            }
+
+        })
+    }
+
+    private fun getAdPrice() {
+        viewModel.getAdPrice().observe(this, Observer { adPrice ->
+            if (adPrice != null) {
+                if (adPrice.result == true)
+                    if (adPrice.adPricedata?.priceAdv != null)
+                        advPrice = adPrice.adPricedata.priceAdv
+            }
+        })
     }
 
     private fun uploadProduct() {
@@ -206,7 +225,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
         dialog.show()
     }
 
-    private fun showDialog(message : String) {
+    private fun showDialog(message: String) {
         val dialog = Dialog(context!!)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
@@ -221,18 +240,19 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
     private fun getProductData(): HashMap<String, String> {
         val map = HashMap<String, String>()
         map["name"] = addProNameAr.text.toString()
-        map["name_en"] = addProNameEn.text.toString()
+        //   map["name_en"] = addProNameEn.text.toString()
         map["price"] = addProPrice.text.toString()
         //  map["discount"] = addProDiscount.text.toString()
         // map["quantity"] = addProQuantity.text.toString()
         map["description"] = addProDescriptionAr.text.toString()
-        map["description_en"] = addProDescriptionEn.text.toString()
+        // map["description_en"] = addProDescriptionEn.text.toString()
         //    map["tags"] = addProTagsAr.text.toString()
         //  map["tags_en"] = addProTags.text.toString()
         map["cat_id"] = selectedCategory.toString()
         map["mobile"] = proPhone.text.toString()
-        map["latitude"] = lati.toString()
-        map["longitude"] = longi.toString()
+        map["whatsapp"] = proWhatsApp.text.toString()
+        /*      map["latitude"] = lati.toString()
+              map["longitude"] = longi.toString()*/
         map["type"] = "1"
         map["is_special"] = "0"
         map["user_id"] = SharedPreferenceUtil(context!!).getString(USERID, "0").toString()
@@ -277,7 +297,9 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
 
         }
         when (requestCode) {
-            EasyWayLocation.LOCATION_SETTING_REQUEST_CODE -> easyWayLocation?.onActivityResult(resultCode)
+            /* EasyWayLocation.LOCATION_SETTING_REQUEST_CODE -> easyWayLocation?.onActivityResult(
+                 resultCode
+             )*/
             PaymentActivity.PAYMENT_REQUEST_CODE -> if (data != null) {
                 if (data.getBooleanExtra("payment_succeed", false)) uploadProduct()
                 else showDialog(resources.getString(R.string.payment_failed_msg))
@@ -354,39 +376,39 @@ class AddProductFragment : Fragment(), OnCategoryItemClick, Listener {
         })
     }
 
-    private fun configLocationPremation() {
-        Dexter.withActivity(activity)
-            .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-            .withListener(object : PermissionListener {
-                override fun onPermissionRationaleShouldBeShown(
-                    permission: com.karumi.dexter.listener.PermissionRequest?,
-                    token: PermissionToken?
-                ) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
+    /* private fun configLocationPremation() {
+         Dexter.withActivity(activity)
+             .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+             .withListener(object : PermissionListener {
+                 override fun onPermissionRationaleShouldBeShown(
+                     permission: com.karumi.dexter.listener.PermissionRequest?,
+                     token: PermissionToken?
+                 ) {
+                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                 }
 
-                @SuppressLint("MissingPermission")
-                override fun onPermissionGranted(response: PermissionGrantedResponse) {
-                    easyWayLocation = EasyWayLocation(context!!)
-                    easyWayLocation?.setListener(this@AddProductFragment)
-                }
+                 @SuppressLint("MissingPermission")
+                 override fun onPermissionGranted(response: PermissionGrantedResponse) {
+                     easyWayLocation = EasyWayLocation(context!!)
+                     easyWayLocation?.setListener(this@AddProductFragment)
+                 }
 
-                override fun onPermissionDenied(response: PermissionDeniedResponse) {
-                    Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show();
-                }
+                 override fun onPermissionDenied(response: PermissionDeniedResponse) {
+                     Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show();
+                 }
 
-            }).check()
-    }
+             }).check()
+     }
 
-    override fun onResume() {
-        super.onResume()
-        // make the device update its location
-        easyWayLocation?.beginUpdates()
-    }
+     override fun onResume() {
+         super.onResume()
+         // make the device update its location
+         easyWayLocation?.beginUpdates()
+     }
 
-    override fun onPause() {
-        // stop location updates (saves battery)
-        easyWayLocation?.endUpdates()
-        super.onPause()
-    }
+     override fun onPause() {
+         // stop location updates (saves battery)
+         easyWayLocation?.endUpdates()
+         super.onPause()
+     }*/
 }

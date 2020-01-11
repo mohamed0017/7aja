@@ -7,6 +7,7 @@ import com.haja.haja.Service.ApiService
 import com.haja.haja.Service.ServiceGenerator
 import com.haja.haja.Service.model.UserModel
 import com.haja.haja.Service.enqueue
+import com.haja.haja.Service.model.DefultResponse
 
 class AuthRepository(token:String){
 
@@ -76,6 +77,59 @@ class AuthRepository(token:String){
             }
             onFailure = { t ->
                 Log.e("register", t!!.message)
+                result.value = null
+            }
+        }
+        return result
+    }
+
+    fun accountActivation(code : String, token: String): MutableLiveData<DefultResponse> {
+        val result = MutableLiveData<DefultResponse>()
+        val call = apiService?.accountActivation(code, "Bearer $token")
+        call?.enqueue {
+            Log.e("accountActivation/url", call.request().url.toString())
+            Log.e("accountActivation/header", call.request().header("Authorization").toString())
+            onResponse = { response ->
+                Log.i("accountActivation", response.code().toString())
+                when (response.code() / 100) {
+                    2 -> {
+                        result.value = response.body()
+                        Log.i("accountActivation/body", response.body().toString())
+                    }
+                    else -> {
+                        Log.i("accountActivation/error", response.errorBody()?.string())
+                        result.value = null
+                    }
+                }
+            }
+            onFailure = { t ->
+                Log.e("accountActive/onFailure", t!!.message)
+                result.value = null
+            }
+        }
+        return result
+    }
+
+    fun forgetPass(mobile : String): MutableLiveData<DefultResponse> {
+        val result = MutableLiveData<DefultResponse>()
+        val call = apiService?.forgetPass(mobile)
+        call?.enqueue {
+            Log.e("forgetPass/url", call.request().url.toString())
+            onResponse = { response ->
+                Log.i("forgetPass", response.code().toString())
+                when (response.code() / 100) {
+                    2 -> {
+                        result.value = response.body()
+                        Log.i("forgetPass/body", response.body().toString())
+                    }
+                    else -> {
+                        Log.i("forgetPass/error", response.errorBody()?.string())
+                        result.value = null
+                    }
+                }
+            }
+            onFailure = { t ->
+                Log.e("forgetPass/onFailure", t!!.message)
                 result.value = null
             }
         }

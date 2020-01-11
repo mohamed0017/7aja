@@ -36,6 +36,7 @@
                 android:layout_margin="@dimen/_16sdp"
                 android:gravity="center"
                 android:text="@string/city"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/selectCategory"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -94,7 +95,7 @@
                     android:id="@+id/proNameAr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/pro_name_ar"
+                    android:hint="@string/address"
                     app:layout_constraintTop_toBottomOf="@id/productInfoTitle">
                 <EditText
                         android:id="@+id/addProNameAr"
@@ -108,6 +109,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/pro_name_en"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/proNameAr">
                 <EditText
                         android:id="@+id/addProNameEn"
@@ -117,11 +119,39 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/proUserPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/phone_contact"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    app:layout_constraintTop_toBottomOf="@id/proNameEn">
+                <EditText
+                        android:id="@+id/proPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/proUserWhatsApp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/whats_app"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    app:layout_constraintTop_toBottomOf="@id/proUserPhone">
+                <EditText
+                        android:id="@+id/proWhatsApp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/proPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/pro_price"
-                    app:layout_constraintTop_toBottomOf="@id/proNameEn">
+                    app:layout_constraintTop_toBottomOf="@id/proUserWhatsApp">
                 <EditText
                         android:id="@+id/addProPrice"
                         android:layout_width="match_parent"
@@ -195,8 +225,18 @@
                         android:id="@+id/addProDescriptionAr"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"/>
+                        android:inputType="textMultiLine"
+                        android:maxLength="600"
+                        android:lines="4"
+                        android:gravity="top"/>
             </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                    android:id="@+id/lettersNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/max_letters"
+                    android:layout_marginBottom="@dimen/_24sdp"
+                    app:layout_constraintTop_toBottomOf="@id/proDescriptionAr"/>
 
             <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/proDescriptionEn"
@@ -204,36 +244,26 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/pro_description_en"
                     android:layout_marginBottom="@dimen/_8sdp"
-                    app:layout_constraintTop_toBottomOf="@id/proDescriptionAr">
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/lettersNumber">
                 <EditText
                         android:id="@+id/addProDescriptionEn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"/>
+                        android:inputType="textMultiLine"
+                        android:lines="4"
+                        android:maxLines="4"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/proUserPhone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/phone_contact"
-                    android:layout_marginBottom="@dimen/_8sdp"
-                    app:layout_constraintTop_toBottomOf="@id/proDescriptionEn">
-                <EditText
-                        android:id="@+id/proPhone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="phone"/>
-            </com.google.android.material.textfield.TextInputLayout>
             <TextView
                     android:id="@+id/addProductAttributesTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/product_attributes"
-                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
                     android:textSize="@dimen/_14ssp"
                     android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@+id/proUserPhone"/>
+                    app:layout_constraintTop_toBottomOf="@+id/proDescriptionAr"/>
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/addProductAttributes"
@@ -254,6 +284,15 @@
                     android:gravity="center"
                     app:layout_constraintTop_toBottomOf="@+id/addProductAttributes"/>
 
+            <CheckBox
+                    android:id="@+id/AdvPolicy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/acceptPolicy"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:textSize="@dimen/_14ssp"
+                    app:layout_constraintTop_toBottomOf="@+id/selectCategoryToShowAtt"/>
+
             <Button
                     android:id="@+id/addProductBut"
                     android:layout_width="match_parent"
@@ -262,7 +301,7 @@
                     android:background="@drawable/rounded_but"
                     android:textColor="@color/white"
                     android:layout_margin="@dimen/_20sdp"
-                    app:layout_constraintTop_toBottomOf="@+id/selectCategoryToShowAtt"/>
+                    app:layout_constraintTop_toBottomOf="@+id/AdvPolicy"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

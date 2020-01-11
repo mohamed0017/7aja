@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.haja.haja.R
+import com.haja.haja.Service.ApiService.Companion.IMAGEBASEURL
 import com.haja.haja.Service.model.SocialMediasModel
 import com.haja.haja.Utils.SharedPreferenceUtil
 import com.haja.haja.Utils.USERID
@@ -23,6 +24,7 @@ import com.haja.haja.View.ui.MyAdsScreen.MyAdsFragment
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.more_fragment.*
 
@@ -108,6 +110,10 @@ class MoreFragment : Fragment() {
     }
 
     private fun initSocialMedia(socialMedias: List<SocialMediasModel?>?) {
+        Picasso.get().load( IMAGEBASEURL + socialMedias?.get(0)?.img).into(facebookImg)
+        Picasso.get().load( IMAGEBASEURL + socialMedias?.get(1)?.img).into(twitterImg)
+        Picasso.get().load( IMAGEBASEURL + socialMedias?.get(2)?.img).into(instagramImg)
+
         facebook.setOnClickListener {
             val url = socialMedias?.get(0)?.urlL
             if (url?.contains("http")!!) {
@@ -117,7 +123,7 @@ class MoreFragment : Fragment() {
         }
 
         youtube.setOnClickListener {
-            val url = socialMedias?.get(4)?.urlL
+            val url = socialMedias?.get(1)?.urlL
             if (url?.contains("http")!!) {
                 val openUrlIntent = Intent(ACTION_VIEW, Uri.parse(url))
                 startActivity(openUrlIntent)
@@ -125,7 +131,7 @@ class MoreFragment : Fragment() {
         }
 
         instagram.setOnClickListener {
-            val url = socialMedias?.get(3)?.urlL
+            val url = socialMedias?.get(2)?.urlL
             if (url?.contains("http")!!) {
                 val openUrlIntent = Intent(ACTION_VIEW, Uri.parse(url))
                 startActivity(openUrlIntent)

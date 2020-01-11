@@ -217,4 +217,23 @@ class ProductRepository(token: String) {
         return result
     }
 
+    fun getAdPrice(): SingleLiveEvent2<AdPriceModel> {
+        val result = SingleLiveEvent2<AdPriceModel>()
+        val call = apiService?.getAdPrice()
+        call?.enqueue {
+            onResponse = { response ->
+                Log.i("getAdPrice/url" , call.request().url.toString())
+                Log.i("getAdPrice", response.code().toString())
+                if (response.code() / 100 == 2)
+                    result.value = response.body()
+                else
+                    result.value = null
+            }
+            onFailure = { t ->
+                Log.i("getAdPrice/Failure", t!!.message +"..")
+                result.value = null
+            }
+        }
+        return result
+    }
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.haja.haja.Service.model.AdPriceModel
 import com.haja.haja.Service.model.AddProAttributesModel
 import com.haja.haja.Service.model.AddProductResponse
 import com.haja.haja.Service.model.AdsModel
@@ -34,6 +35,10 @@ class AddProductViewModel(application: Application) : AndroidViewModel(applicati
 
         categories = repository.getCategories(parentID, "$lang")
         return categories
+    }
+
+    fun getAdPrice(): SingleLiveEvent2<AdPriceModel> {
+        return productRepository.getAdPrice()
     }
 
     fun setProductAttributes(attributes : HashMap<String, String>){

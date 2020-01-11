@@ -2,34 +2,35 @@ package com.haja.haja.View.ui.Register
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.haja.haja.R
-import com.haja.haja.Utils.ValidationUtils.*
-import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
-import kotlinx.android.synthetic.main.register_fragment.*
-import android.widget.Toast
 import com.example.easywaylocation.EasyWayLocation
+import com.example.easywaylocation.EasyWayLocation.LOCATION_SETTING_REQUEST_CODE
+import com.example.easywaylocation.Listener
+import com.haja.haja.R
+import com.haja.haja.Service.model.UserDataModel
+import com.haja.haja.Utils.ValidationUtils.*
+import com.haja.haja.Utils.inTransaction
+import com.haja.haja.View.ui.AccountActivation.AccountActivationFragment
+import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.PermissionListener
-import com.example.easywaylocation.Listener
-import com.example.easywaylocation.EasyWayLocation.LOCATION_SETTING_REQUEST_CODE
-import android.content.Intent
-import android.util.Log
-import com.haja.haja.Utils.SharedPreferenceUtil
-import com.haja.haja.Utils.TOKEN
-import com.haja.haja.Utils.USERID
-import com.haja.haja.Utils.inTransaction
-import com.haja.haja.View.ui.MainCategoriesScreen.MainCategoriesFragment
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.register_fragment.*
+import java.util.*
+import kotlin.collections.HashMap
+
 
 class RegisterFragment : Fragment(), Listener {
 
@@ -41,7 +42,7 @@ class RegisterFragment : Fragment(), Listener {
     var easyWayLocation: EasyWayLocation? = null
     private var lati: Double? = null
     private var longi: Double? = null
-
+    private var generatedCode = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,25 +53,26 @@ class RegisterFragment : Fragment(), Listener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
-       // activity?.bottomNavigation?.visibility = View.GONE
-        activity?.appBarTitle?.text = resources.getString(R.string.register)
+        // activity?.bottomNavigation?.visibility = View.GONE
+        activity?.appBarTitle?.text = resources.getString(R.string.registerNew)
         activity?.categoriesBarBack?.visibility = View.VISIBLE
         activity?.categoriesBarMenu?.visibility = View.GONE
         activity?.catBarSearch?.visibility = View.GONE
 
+        registerPhoneCode.keyListener = null
         configLocationPremation()
         registerBut.setOnClickListener {
             if (isValidUserInputs()) {
-                Log.e("latandLang", "$lati + $longi")
+                registerProgress.visibility = View.VISIBLE
+                registerBut.visibility = View.GONE
                 viewModel.register(userRegistrationInfo()).observe(this, Observer { user ->
+                    registerProgress.visibility = View.GONE
+                    registerBut.visibility = View.VISIBLE
                     if (user != null) {
                         if (user.result == true) {
-                            user.data?.id?.let { it1 -> SharedPreferenceUtil(context!!).putString(USERID, "$it1") }
-                            SharedPreferenceUtil(context!!).putString("userName", user.data?.name.toString())
-                            SharedPreferenceUtil(context!!).putString("userPhone", user.data?.mobile.toString())
-                            storeUserToken(user.data?.token)
-                            makeToast(context!!, resources.getString(R.string.success))
-                            goToActivationAccount()
+                            user.data?.activitationCode = generatedCode
+                            sendSmsWithCodeToUser(user.data?.mobile.toString())
+                            goToActivationAccount(user.data)
                         } else {
                             makeToast(context!!, user.errorMesage.toString())
                             /*     when {
@@ -100,15 +102,12 @@ class RegisterFragment : Fragment(), Listener {
     }
 
     override fun locationOn() {
-        Toast.makeText(context!!, "Location ON", Toast.LENGTH_SHORT).show()
         easyWayLocation?.beginUpdates()
         lati = easyWayLocation?.latitude
         longi = easyWayLocation?.longitude
     }
 
     override fun onPositionChanged() {
-        Toast.makeText(context!!, "onPositionChanged", Toast.LENGTH_SHORT).show()
-
         easyWayLocation?.beginUpdates()
         lati = easyWayLocation?.latitude
         longi = easyWayLocation?.longitude
@@ -121,15 +120,21 @@ class RegisterFragment : Fragment(), Listener {
         }
     }
 
-    private fun goToActivationAccount() {
+    private fun goToActivationAccount(user: UserDataModel?) {
         fragmentManager?.inTransaction {
-            replace(R.id.mainContainer, MainCategoriesFragment.newInstance())
+            replace(R.id.mainContainer, AccountActivationFragment.newInstance(user))
         }
     }
 
-    private fun storeUserToken(token: String?) {
-        SharedPreferenceUtil(context!!).putString(TOKEN , token)
+    private fun sendSmsWithCodeToUser(mobile: String) {
+        var sss = " تم التسجيل في تطبيق حاجة كود التفعيل هو : $generatedCode"
+        //sss = sss.replace(" ", "+")
+        viewModel.sendSms(mobile,sss)
+            .observe(this, Observer {
+
+        })
     }
+
     private fun isValidUserInputs(): Boolean {
         val name = registerName.text.toString()
         val phone = registerPhone.text.toString()
@@ -160,14 +165,22 @@ class RegisterFragment : Fragment(), Listener {
     private fun userRegistrationInfo(): HashMap<String, String> {
         val map = HashMap<String, String>()
         map["name"] = registerName.text.toString()
-        map["mobile"] = registerPhone.text.toString()
+        map["mobile"] = "965${registerPhone.text}"
         map["email"] = registerEmail.text.toString()
         map["password"] = `registerPassُ`.text.toString()
         map["c_password"] = `registerConfirmPassُ`.text.toString()
+        map["activitation_code"] = generateCode()
         map["onesignal_id"] = "test"  //TODO replace onesignal_id when setup onsignal project
         map["latitude"] = lati.toString()
         map["longitude"] = longi.toString()
         return map
+    }
+
+    private fun generateCode(): String {
+        val random = Random()
+         generatedCode = String.format(Locale.ENGLISH,"%04d", random.nextInt(10000))
+        Log.i("generateCode", generatedCode)
+        return generatedCode
     }
 
     private fun configLocationPremation() {

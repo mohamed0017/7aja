@@ -53,7 +53,7 @@
     <string name="pro_tags">علامات المنتج</string>
     <string name="pro_tags_en">علامات المنتج</string>
     <string name="pro_tags_ar">علامات المنتج</string>
-    <string name="pro_description_ar">التفاصيل</string>
+    <string name="pro_description_ar">الوصف </string>
     <string name="pro_description_en">تفاصيل المنتج باللغة الانجليزية</string>
     <string name="product_attributes"> خصائص المنتج</string>
     <string name="add_pro"> اعلانك </string>
@@ -103,4 +103,15 @@
     <string name="no">لا</string>
     <string name="exit_message">هل تريد الخروج من التطبيق ؟</string>
     <string name="payment_failed_msg">  لم تتم عملية الدفع حاول مرة اخري</string>
+    <string name="address">العنوان</string>
+    <string name="whats_app"> واتساب (اختياري)</string>
+    <string name="max_letters">600 / 0 حرف</string>
+    <string name="letter">حرف</string>
+    <string name="acceptPolicy">اوافق علي الشروط والاحكام</string>
+    <string name="activate_account">تفعيل الحساب </string>
+    <string name="resend"> اعادة ارسال كود التفعيل ؟</string>
+    <string name="resend_code_done">تم ارسال كود التفعيل بنجاح</string>
+    <string name="enter_code_msg">ادخل كود التفعيل الذي تم ارساله الي رقم الهاتف</string>
+    <string name="forget_pass_msg">ادخل رقم الهاتف و سوف يتم ارسال رقم مرور جديد اليك</string>
+    <string name="twitter">twitter</string>
 </resources>

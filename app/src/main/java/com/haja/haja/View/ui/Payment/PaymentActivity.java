@@ -72,7 +72,7 @@ public class PaymentActivity extends AppCompatActivity implements SessionDelegat
      * Configure SDK with your Secret API key and App Bundle name registered with tap company.
      */
     private void configureApp() {
-        GoSellSDK.init(this, "sk_test_HAMINOYUQKnVl6aBqTCLt8ho", "com.haja.haja");  // to be replaced by merchant, you can contact tap support team to get you credentials
+        GoSellSDK.init(this, "sk_test_jFqQdwLnoOE4KbAthisuBrSC", "com.haja.haja");  // to be replaced by merchant, you can contact tap support team to get you credentials
         GoSellSDK.setLocale("ar");//  if you dont pass locale then default locale EN will be used
     }
 
