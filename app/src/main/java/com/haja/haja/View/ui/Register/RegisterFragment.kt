@@ -3,6 +3,7 @@ package com.haja.haja.View.ui.Register
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,8 @@ import com.example.easywaylocation.EasyWayLocation.LOCATION_SETTING_REQUEST_CODE
 import com.example.easywaylocation.Listener
 import com.haja.haja.R
 import com.haja.haja.Service.model.UserDataModel
+import com.haja.haja.Utils.LANG
+import com.haja.haja.Utils.SharedPreferenceUtil
 import com.haja.haja.Utils.ValidationUtils.*
 import com.haja.haja.Utils.inTransaction
 import com.haja.haja.View.ui.AccountActivation.AccountActivationFragment
@@ -26,6 +29,7 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.PermissionListener
+import kotlinx.android.synthetic.main.activity_main_categories.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.register_fragment.*
 import java.util.*
@@ -73,8 +77,14 @@ class RegisterFragment : Fragment(), Listener {
                             user.data?.activitationCode = generatedCode
                             sendSmsWithCodeToUser(user.data?.mobile.toString())
                             goToActivationAccount(user.data)
+                            activity?.nav_view?.menu?.findItem(R.id.nav_logOut)?.isVisible = true
                         } else {
-                            makeToast(context!!, user.errorMesage.toString())
+                            val lang = SharedPreferenceUtil(context!!).getString(LANG, "")
+                            if (lang == "ar")
+                                makeToast(context!!, user.errorMesage.toString())
+                            else
+                                makeToast(context!!, user.errorMesageEn.toString())
+
                             /*     when {
                                      user.errorMesage?.mobile != null -> makeToast(
                                          context!!,
@@ -129,10 +139,10 @@ class RegisterFragment : Fragment(), Listener {
     private fun sendSmsWithCodeToUser(mobile: String) {
         var sss = " تم التسجيل في تطبيق حاجة كود التفعيل هو : $generatedCode"
         //sss = sss.replace(" ", "+")
-        viewModel.sendSms(mobile,sss)
+        viewModel.sendSms(mobile, sss)
             .observe(this, Observer {
 
-        })
+            })
     }
 
     private fun isValidUserInputs(): Boolean {
@@ -165,6 +175,7 @@ class RegisterFragment : Fragment(), Listener {
     private fun userRegistrationInfo(): HashMap<String, String> {
         val map = HashMap<String, String>()
         map["name"] = registerName.text.toString()
+       // map["mobile"] = "${registerPhone.text}" // TODO just for debug
         map["mobile"] = "965${registerPhone.text}"
         map["email"] = registerEmail.text.toString()
         map["password"] = `registerPassُ`.text.toString()
@@ -178,7 +189,7 @@ class RegisterFragment : Fragment(), Listener {
 
     private fun generateCode(): String {
         val random = Random()
-         generatedCode = String.format(Locale.ENGLISH,"%04d", random.nextInt(10000))
+        generatedCode = String.format(Locale.ENGLISH, "%04d", random.nextInt(10000))
         Log.i("generateCode", generatedCode)
         return generatedCode
     }

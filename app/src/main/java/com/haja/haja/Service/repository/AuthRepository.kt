@@ -67,10 +67,10 @@ class AuthRepository(token:String){
                         val errorResponse =
                             gson.fromJson(errors, UserModel::class.java)
                         result.value = errorResponse
-                        Log.i("register/body", errors)
+                        Log.i("register/errors", errors)
                     }
                     else -> {
-                        Log.i("register/body", response.errorBody()?.string())
+                        Log.i("register/errors", response.errorBody()?.string())
                         result.value = null
                     }
                 }
@@ -130,6 +130,58 @@ class AuthRepository(token:String){
             }
             onFailure = { t ->
                 Log.e("forgetPass/onFailure", t!!.message)
+                result.value = null
+            }
+        }
+        return result
+    }
+
+    fun getProfile(id : Int): MutableLiveData<UserModel> {
+        val result = MutableLiveData<UserModel>()
+        val call = apiService?.getProfile(id)
+        call?.enqueue {
+            Log.e("getProfile/url", call.request().url.toString())
+            onResponse = { response ->
+                Log.i("getProfile", response.code().toString())
+                when (response.code() / 100) {
+                    2 -> {
+                        result.value = response.body()
+                        Log.i("getProfile/body", response.body().toString())
+                    }
+                    else -> {
+                        Log.i("getProfile/error", response.errorBody()?.string())
+                        result.value = null
+                    }
+                }
+            }
+            onFailure = { t ->
+                Log.e("getProfile/onFailure", t!!.message)
+                result.value = null
+            }
+        }
+        return result
+    }
+
+    fun editProfile(id : Int): MutableLiveData<UserModel> {
+        val result = MutableLiveData<UserModel>()
+        val call = apiService?.editProfile(id)
+        call?.enqueue {
+            Log.e("editProfile/url", call.request().url.toString())
+            onResponse = { response ->
+                Log.i("editProfile", response.code().toString())
+                when (response.code() / 100) {
+                    2 -> {
+                        result.value = response.body()
+                        Log.i("editProfile/body", response.body().toString())
+                    }
+                    else -> {
+                        Log.i("editProfile/error", response.errorBody()?.string())
+                        result.value = null
+                    }
+                }
+            }
+            onFailure = { t ->
+                Log.e("editProfile/onFailure", t!!.message)
                 result.value = null
             }
         }

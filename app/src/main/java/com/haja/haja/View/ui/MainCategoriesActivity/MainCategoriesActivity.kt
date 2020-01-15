@@ -29,7 +29,8 @@ import kotlinx.android.synthetic.main.activity_main_categories.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.dialog_exit.*
 
-class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainCategoriesActivity : AppCompatActivity(),
+    NavigationView.OnNavigationItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +45,10 @@ class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationI
         toggle.syncState()
         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         nav_view.setNavigationItemSelectedListener(this)
+        if (SharedPreferenceUtil(this).getString(TOKEN, "") != "") {
+            val menu = nav_view.menu.findItem(R.id.nav_logOut)
+            menu.isVisible = true
+        }
 
         supportFragmentManager.inTransaction {
             add(R.id.mainContainer, MainCategoriesFragment.newInstance())
@@ -69,7 +74,7 @@ class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationI
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            if(supportFragmentManager.backStackEntryCount == 0){
+            if (supportFragmentManager.backStackEntryCount == 0) {
                 val dialog = Dialog(this)
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 dialog.setCancelable(true)
@@ -82,7 +87,7 @@ class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationI
                     dialog.dismiss()
                 }
                 dialog.show()
-            }else
+            } else
                 super.onBackPressed()
         }
     }
@@ -101,65 +106,70 @@ class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationI
     }
 
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigationHome -> {
-                supportFragmentManager.popBackStackImmediate()
-                supportFragmentManager.inTransaction {
-                    replace(R.id.mainContainer, MainCategoriesFragment.newInstance())
+    private val mOnNavigationItemSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigationHome -> {
+                    supportFragmentManager.popBackStackImmediate()
+                    supportFragmentManager.inTransaction {
+                        replace(R.id.mainContainer, MainCategoriesFragment.newInstance())
+                    }
+                    return@OnNavigationItemSelectedListener true
                 }
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigationOffers -> {
-                supportFragmentManager.popBackStackImmediate()
-                supportFragmentManager.inTransaction {
-                    replace(R.id.mainContainer, OffersFragment.newInstance())
+                R.id.navigationOffers -> {
+                    supportFragmentManager.popBackStackImmediate()
+                    supportFragmentManager.inTransaction {
+                        replace(R.id.mainContainer, OffersFragment.newInstance())
+                    }
+                    return@OnNavigationItemSelectedListener true
                 }
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigationMessages -> {
+                R.id.navigationMessages -> {
 
-                supportFragmentManager.popBackStackImmediate()
-                val userId = SharedPreferenceUtil(this).getString(USERID, "0")?.toInt()
-                if (userId == 0) {
-                    makeToast(this, resources.getString(R.string.login_first))
-                    supportFragmentManager.inTransaction {
-                        replace(R.id.mainContainer, LoginFragment.newInstance()).addToBackStack("mainScreen")
-                    }
-                } else
-                    supportFragmentManager.inTransaction {
-                        replace(R.id.mainContainer, AddProductFragment.newInstance())
-                    }
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigationNotifications -> {
-
-                supportFragmentManager.popBackStackImmediate()
-                val userId = SharedPreferenceUtil(this).getString(USERID, "0")?.toInt()
-                if (userId == 0) {
-                    makeToast(this, resources.getString(R.string.login_first))
-                    supportFragmentManager.inTransaction {
-                        replace(R.id.mainContainer, LoginFragment.newInstance()).addToBackStack("mainScreen")
-                    }
-                } else
-                    supportFragmentManager.inTransaction {
-                        replace(
-                            R.id.mainContainer
-                            , NotificationsListFragment.newInstance()
-                        )
-                    }
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigationMore -> {
-
-                supportFragmentManager.inTransaction {
-                    replace(R.id.mainContainer, MoreFragment.newInstance())
+                    supportFragmentManager.popBackStackImmediate()
+                    val userId = SharedPreferenceUtil(this).getString(USERID, "0")?.toInt()
+                    if (userId == 0) {
+                        makeToast(this, resources.getString(R.string.login_first))
+                        supportFragmentManager.inTransaction {
+                            replace(R.id.mainContainer, LoginFragment.newInstance()).addToBackStack(
+                                "mainScreen"
+                            )
+                        }
+                    } else
+                        supportFragmentManager.inTransaction {
+                            replace(R.id.mainContainer, AddProductFragment.newInstance())
+                        }
+                    return@OnNavigationItemSelectedListener true
                 }
-                return@OnNavigationItemSelectedListener true
+                R.id.navigationNotifications -> {
+
+                    supportFragmentManager.popBackStackImmediate()
+                    val userId = SharedPreferenceUtil(this).getString(USERID, "0")?.toInt()
+                    if (userId == 0) {
+                        makeToast(this, resources.getString(R.string.login_first))
+                        supportFragmentManager.inTransaction {
+                            replace(R.id.mainContainer, LoginFragment.newInstance()).addToBackStack(
+                                "mainScreen"
+                            )
+                        }
+                    } else
+                        supportFragmentManager.inTransaction {
+                            replace(
+                                R.id.mainContainer
+                                , NotificationsListFragment.newInstance()
+                            )
+                        }
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.navigationMore -> {
+
+                    supportFragmentManager.inTransaction {
+                        replace(R.id.mainContainer, MoreFragment.newInstance())
+                    }
+                    return@OnNavigationItemSelectedListener true
+                }
             }
+            false
         }
-        false
-    }
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -179,10 +189,17 @@ class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationI
             }
             R.id.nav_logOut -> {
                 supportFragmentManager.popBackStackImmediate()
-                SharedPreferenceUtil(this).putString(TOKEN, "")
-                SharedPreferenceUtil(this).putString(USERID, "0")
+                SharedPreferenceUtil(this).apply {
+                    putString(USERID, "0")
+                    putString(TOKEN, "")
+                    putString("userName", "")
+                    putString("userPhone", "")
+                }
                 supportFragmentManager.inTransaction {
-                    replace(R.id.mainContainer, LoginFragment.newInstance()).addToBackStack("mainScreen")
+                    replace(
+                        R.id.mainContainer,
+                        LoginFragment.newInstance()
+                    ).addToBackStack("mainScreen")
                 }
             }
             R.id.nav_profile -> {
@@ -190,26 +207,40 @@ class MainCategoriesActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 if (userId == 0) {
                     makeToast(this, resources.getString(R.string.login_first))
                     supportFragmentManager.inTransaction {
-                        replace(R.id.mainContainer, LoginFragment.newInstance()).addToBackStack("mainScreen")
+                        replace(
+                            R.id.mainContainer,
+                            LoginFragment.newInstance()
+                        ).addToBackStack("mainScreen")
                     }
                 } else
-                supportFragmentManager.inTransaction {
-                    replace(R.id.mainContainer, FavoritesFragment.newInstance()).addToBackStack("FavoritesFragment")
-                }
+                    supportFragmentManager.inTransaction {
+                        replace(R.id.mainContainer, FavoritesFragment.newInstance()).addToBackStack(
+                            "FavoritesFragment"
+                        )
+                    }
             }
             R.id.nav_about -> {
                 supportFragmentManager.inTransaction {
-                    replace(R.id.mainContainer, AboutFragment.newInstance(1)).addToBackStack("staticContent")
+                    replace(
+                        R.id.mainContainer,
+                        AboutFragment.newInstance(1)
+                    ).addToBackStack("staticContent")
                 }
             }
             R.id.nav_policy -> {
                 supportFragmentManager.inTransaction {
-                    replace(R.id.mainContainer, AboutFragment.newInstance(2)).addToBackStack("staticContent")
+                    replace(
+                        R.id.mainContainer,
+                        AboutFragment.newInstance(2)
+                    ).addToBackStack("staticContent")
                 }
             }
             R.id.nav_conditions -> {
                 supportFragmentManager.inTransaction {
-                    replace(R.id.mainContainer, AboutFragment.newInstance(3)).addToBackStack("staticContent")
+                    replace(
+                        R.id.mainContainer,
+                        AboutFragment.newInstance(3)
+                    ).addToBackStack("staticContent")
                 }
             }
         }

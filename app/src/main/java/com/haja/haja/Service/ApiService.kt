@@ -203,4 +203,11 @@ interface ApiService {
     @POST("/api/forget_pass_user")
     fun forgetPass(@Query("mobile") mobile : String): Call<DefultResponse>
 
+    @Headers("Accept: application/json")
+    @GET("/api/profile/{id}")
+    fun getProfile(@Path("id") id: Int): Call<UserModel>
+
+    @Headers("Accept: application/json")
+    @POST("/api/update_profile/{id}")
+    fun editProfile(@Path("id") id: Int): Call<UserModel>
 }

@@ -1,6 +1,7 @@
 package com.haja.haja.View.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import com.haja.haja.R;
 import com.haja.haja.Service.ApiService;
 import com.haja.haja.Service.model.ProductImgs;
+import com.haja.haja.View.ui.ProductDetails.ImageFullScreenActivity;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -34,6 +36,12 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
         Picasso.get().load(ApiService.IMAGEBASEURL + images.get(position).getImg())
                 .placeholder(context.getResources().getDrawable(R.drawable.placeholder))
                 .error(context.getResources().getDrawable(R.drawable.placeholder)).into(viewHolder.imageViewBackground);
+
+        viewHolder.imageViewBackground.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ImageFullScreenActivity.class);
+            intent.putExtra("fullScreenImg", images.get(position).getImg());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -52,6 +60,7 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
             imageViewBackground = itemView.findViewById(R.id.imgSlider);
             // textViewDescription = itemView.findViewById(R.id.tv_auto_image_slider);
             this.itemView = itemView;
+
         }
     }
 }

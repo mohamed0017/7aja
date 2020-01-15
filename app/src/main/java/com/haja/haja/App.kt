@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.util.Log
-import com.haja.haja.View.ui.ProductDetails.ProductDetailsActivity
 import com.haja.haja.View.ui.SplashScreen.SplashActivity
 import com.onesignal.OneSignal
 
@@ -26,9 +25,10 @@ class App : Application() {
                 if (data.getInt("type") == 1) {
                     val productId = data.getString("id")
                     val intent = Intent(applicationContext, SplashActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent.putExtra("productId", productId.toInt())
-                    intent.putExtra("fromNotification", true)
+                    intent.putExtra("product_Id", productId)
+                    intent.putExtra("from_Notification", true)
+                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+                    intent.addFlags(FLAG_ACTIVITY_SINGLE_TOP)
                     startActivity(intent)
                 } else {
                     val intent = Intent(this, SplashActivity::class.java)

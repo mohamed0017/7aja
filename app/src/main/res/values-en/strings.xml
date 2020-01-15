@@ -114,4 +114,5 @@
     <string name="enter_code_msg">ادخل كود التفعيل الذي تم ارساله الي رقم الهاتف</string>
     <string name="forget_pass_msg">ادخل رقم الهاتف و سوف يتم ارسال رقم مرور جديد اليك</string>
     <string name="twitter">twitter</string>
+    <string name="balance_msg">الاعلانات التي تم نشرها منذ اشتراكك في تطبيق حاجة</string>
 </resources>

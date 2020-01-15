@@ -170,6 +170,6 @@ class ChatActivity : AppCompatActivity(), OnItemClickWithId {
 
     override fun attachBaseContext(newBase: Context?) {
         val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
-        super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase!!, "$lang"))
+        super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase, "$lang"))
     }
 }

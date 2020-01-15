@@ -23,7 +23,7 @@ class AppRepository(token: String) {
 
     fun sendSms(mobile:String,  message: String): MutableLiveData<ResponseBody> {
         val result = MutableLiveData<ResponseBody>()
-        val call = apiServiceForSms?.sendSms("201004$mobile",message)
+        val call = apiServiceForSms?.sendSms( mobile,message)
         call?.enqueue {
             onResponse = { response ->
                 Log.i("sendSms/url", call.request().url.toString())

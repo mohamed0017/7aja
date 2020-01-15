@@ -14,6 +14,7 @@ import com.haja.haja.View.ui.MainCategoriesScreen.MainCategoriesFragment
 import com.haja.haja.View.ui.Register.RegisterFragment
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
+import kotlinx.android.synthetic.main.activity_main_categories.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.forget_pass_dialog.*
 import kotlinx.android.synthetic.main.login_fragment.*
@@ -44,10 +45,7 @@ class LoginFragment : Fragment() {
 
         loginPhoneCode.keyListener = null
         loginBut.setOnClickListener {
-            if (isValidUserInputs()) {
                 login()
-            }
-
         }
 
         registerLogin.setOnClickListener {
@@ -72,7 +70,8 @@ class LoginFragment : Fragment() {
                     user.data?.id?.let { it1 -> SharedPreferenceUtil(context!!).putString(USERID, "$it1") }
                     SharedPreferenceUtil(context!!).putString("userName", user.data?.name.toString())
                     SharedPreferenceUtil(context!!).putString("userPhone", user.data?.mobile.toString())
-                    makeToast(context!!, resources.getString(R.string.success))
+                    //makeToast(context!!, resources.getString(R.string.success))
+                    activity?.nav_view?.menu?.findItem(R.id.nav_logOut)?.isVisible = true
                     goToActivationAccount()
                 } else {
                     makeToast(context!!, user.errorMesage.toString())
@@ -107,6 +106,7 @@ class LoginFragment : Fragment() {
     private fun getLoginCradentioals(): HashMap<String, String> {
         val map = HashMap<String, String>()
         map["mobile"] = "965${loginPhone.text}"
+      //  map["mobile"] = "${loginPhone.text}" // TODO just for debug
         map["password"] = loginPass.text.toString()
         return map
     }
