@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_80sdp"
+        android:layout_marginBottom="@dimen/_16sdp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_8sdp"
+            android:background="@drawable/border"
+            android:hint="@string/name"
+            android:padding="@dimen/_4sdp"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/profileName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:inputType="text"
+                android:padding="@dimen/_4sdp"
+                android:textSize="@dimen/_12ssp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/phoneLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="90dp"
+            android:layoutDirection="ltr"
+            android:background="@drawable/border"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            android:layout_margin="@dimen/_8sdp">
+
+            <EditText
+                android:id="@+id/profilePhoneCode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="965"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:background="@android:color/transparent"
+                android:padding="@dimen/_4sdp"
+                android:textSize="@dimen/_12ssp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:layoutDirection="ltr"
+                android:hint="@string/phone"
+                android:padding="@dimen/_4sdp"
+                app:hintAnimationEnabled="true"
+                app:hintEnabled="true">
+
+                <EditText
+                    android:id="@+id/profilePhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:inputType="phone"
+                    android:padding="@dimen/_4sdp"
+                    android:textSize="@dimen/_12ssp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_8sdp"
+            android:background="@drawable/border"
+            android:hint="@string/email"
+            android:padding="@dimen/_4sdp"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/phoneLayout">
+
+            <EditText
+                android:id="@+id/profileEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:inputType="textEmailAddress"
+                android:padding="@dimen/_4sdp"
+                android:textSize="@dimen/_12ssp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_8sdp"
+            android:background="@drawable/border"
+            android:hint="@string/pass"
+            android:padding="@dimen/_4sdp"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/email">
+
+            <EditText
+                android:id="@+id/profilePassُ"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:inputType="textPassword"
+                android:padding="@dimen/_4sdp"
+                android:textSize="@dimen/_12ssp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirmPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_8sdp"
+            android:background="@drawable/border"
+            android:hint="@string/confirm_pass"
+            android:padding="@dimen/_4sdp"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/pass">
+
+            <EditText
+                android:id="@+id/profileConfirmPassُ"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:inputType="textPassword"
+                android:padding="@dimen/_4sdp"
+                android:textSize="@dimen/_12ssp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/profileBut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_but"
+            android:layout_margin="@dimen/_30sdp"
+            app:layout_constraintTop_toBottomOf="@id/confirmPass"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_16ssp"
+            android:text="@string/btn_title_save"/>
+
+        <ProgressBar
+            android:id="@+id/profileProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_30sdp"
+            android:text="@string/profile"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_16ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/confirmPass" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

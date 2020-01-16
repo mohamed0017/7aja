@@ -119,4 +119,5 @@
     <string name="forget_pass_msg">ادخل رقم الهاتف و سوف يتم ارسال رقم مرور جديد اليك</string>
     <string name="twitter">twitter</string>
     <string name="balance_msg">الاعلانات التي تم نشرها منذ اشتراكك في تطبيق حاجة</string>
+    <string name="edit_profile">تعديل الملف الشخصي</string>
 </resources>

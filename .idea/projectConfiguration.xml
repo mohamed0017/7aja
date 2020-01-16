@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectConfiguration">
-    <option name="json" value="{&quot;result&quot;:true,&quot;error_mesage&quot;:&quot;&quot;,&quot;error_mesage_en&quot;:&quot;&quot;,&quot;AdPricedata&quot;:{&quot;id&quot;:1,&quot;num_free_advs&quot;:&quot;10&quot;,&quot;price_adv&quot;:&quot;2&quot;}}" />
-    <option name="rootClassNameTextField" value="AdPrice" />
-  </component>
-</project>

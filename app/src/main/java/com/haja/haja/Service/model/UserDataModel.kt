@@ -49,6 +49,9 @@ data class UserDataModel(
 	@field:SerializedName("email")
 	val email: String? = null,
 
+	@field:SerializedName("products_count")
+	val productsCount: String? = null,
+
 	@field:SerializedName("longitude")
 	val longitude: Int? = null
 ) : Parcelable

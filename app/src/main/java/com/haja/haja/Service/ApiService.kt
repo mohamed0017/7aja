@@ -209,5 +209,6 @@ interface ApiService {
 
     @Headers("Accept: application/json")
     @POST("/api/update_profile/{id}")
-    fun editProfile(@Path("id") id: Int): Call<UserModel>
+    fun editProfile(@Path("id") id: Int,
+                    @QueryMap messageMap: HashMap<String, String>): Call<DefultResponse>
 }

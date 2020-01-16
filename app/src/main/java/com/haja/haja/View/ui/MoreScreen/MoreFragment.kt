@@ -23,6 +23,7 @@ import com.haja.haja.View.ui.ContactUs.ContactUsFragment
 import com.haja.haja.View.ui.DelegatesScreen.DelegatesFragment
 import com.haja.haja.View.ui.LoginScreen.LoginFragment
 import com.haja.haja.View.ui.MyAdsScreen.MyAdsFragment
+import com.haja.haja.View.ui.profile.ProfileFragment
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
@@ -53,13 +54,22 @@ class MoreFragment : Fragment() {
         activity?.categoriesBarMenu?.visibility = View.VISIBLE
         activity?.catBarSearch?.visibility = View.GONE
 
-        if (viewModel == null)
-            viewModel = ViewModelProviders.of(this).get(MoreViewModel::class.java)
+         viewModel = ViewModelProviders.of(this).get(MoreViewModel::class.java)
 
-        myBalance.setOnClickListener {
-            openBalanceDialog()
+        val userId = SharedPreferenceUtil(context!!).getString(USERID, "0")?.toInt()
+        if (userId == 0)
+            myProfile.visibility = View.GONE
+        else {
+            myProfile.visibility = View.VISIBLE
+            myProfile.setOnClickListener {
+                fragmentManager?.inTransaction {
+                    replace(
+                        R.id.mainContainer,
+                        ProfileFragment.newInstance(userId!!.toInt())
+                    ).addToBackStack("MoreFragment")
+                }
+            }
         }
-
         myAds.setOnClickListener {
             val userId = SharedPreferenceUtil(context!!).getString(USERID, "0")?.toInt()
             if (userId == 0) {
@@ -107,17 +117,12 @@ class MoreFragment : Fragment() {
             }
 
         }
+        getUserInfo()
         getContactDetails()
-
-        profileUserName.text = SharedPreferenceUtil(context!!).getString("userName", "")
-        profilePhone.text = SharedPreferenceUtil(context!!).getString("userPhone", "")
     }
 
     private fun getContactDetails() {
-        val progress = CustomProgressBar.showProgressBar(context!!)
-        progress.show()
-        viewModel?.getContactDetails()?.observe(this, Observer { result ->
-            progress.dismiss()
+        viewModel?.getContactDetails()?.observe(viewLifecycleOwner, Observer { result ->
             if (result != null) {
                 initSocialMedia(result.data?.socialMedias)
                 supportUS.setOnClickListener {
@@ -165,15 +170,34 @@ class MoreFragment : Fragment() {
     }
 
 
-    private fun openBalanceDialog() {
+    private fun openBalanceDialog(adsCount: String?) {
         val dialog = Dialog(context!!)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
         dialog.setContentView(R.layout.balance_dialog)
-        dialog.adsBalance.text = ""
+        dialog.adsBalance.text = adsCount
         dialog.ok.setOnClickListener {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun getUserInfo() {
+        val progress = CustomProgressBar.showProgressBar(context!!)
+        progress.show()
+        val userId = SharedPreferenceUtil(context!!).getString(USERID, "0")
+        viewModel?.getProfile(userId!!.toInt())?.observe(viewLifecycleOwner, Observer { result ->
+            progress.dismiss()
+            if (result != null) {
+                if (result.result == true) {
+                    profileUserName.text = result.data?.name
+                    profilePhone.text = result.data?.mobile
+                    myBalance.setOnClickListener {
+                        openBalanceDialog(result.data?.productsCount)
+                    }
+                }
+            } else
+                makeToast(context!!, resources.getString(R.string.error))
+        })
     }
 }

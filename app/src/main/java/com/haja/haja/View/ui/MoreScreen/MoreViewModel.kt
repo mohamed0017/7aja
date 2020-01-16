@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.haja.haja.Service.model.ContactDetailsModel
+import com.haja.haja.Service.model.UserModel
 import com.haja.haja.Service.repository.AppRepository
 import com.haja.haja.Service.repository.AuthRepository
 import com.haja.haja.Utils.SharedPreferenceUtil
@@ -25,7 +26,7 @@ class MoreViewModel(application: Application) : AndroidViewModel(application) {
             contactDetailsModel
     }
 
-    fun getUserInfo(){
-
+    fun getProfile(id : Int): MutableLiveData<UserModel> {
+        return authRepository.getProfile(id)
     }
 }

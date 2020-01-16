@@ -8,6 +8,7 @@ import com.haja.haja.Service.ServiceGenerator
 import com.haja.haja.Service.model.UserModel
 import com.haja.haja.Service.enqueue
 import com.haja.haja.Service.model.DefultResponse
+import retrofit2.http.QueryMap
 
 class AuthRepository(token:String){
 
@@ -162,9 +163,9 @@ class AuthRepository(token:String){
         return result
     }
 
-    fun editProfile(id : Int): MutableLiveData<UserModel> {
-        val result = MutableLiveData<UserModel>()
-        val call = apiService?.editProfile(id)
+    fun editProfile(id : Int, messageMap: HashMap<String, String>): MutableLiveData<DefultResponse> {
+        val result = MutableLiveData<DefultResponse>()
+        val call = apiService?.editProfile(id,messageMap)
         call?.enqueue {
             Log.e("editProfile/url", call.request().url.toString())
             onResponse = { response ->
