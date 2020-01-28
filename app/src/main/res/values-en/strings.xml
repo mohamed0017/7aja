@@ -110,10 +110,10 @@
     <string name="acceptPolicy">I agree to the terms and conditions</string>
     <string name="activate_account">Account Activation</string>
     <string name="resend">Resend Activation Code ?</string>
-    <string name="resend_code_done">تم ارسال كود التفعيل بنجاح</string>
-    <string name="enter_code_msg">ادخل كود التفعيل الذي تم ارساله الي رقم الهاتف</string>
-    <string name="forget_pass_msg">ادخل رقم الهاتف و سوف يتم ارسال رقم مرور جديد اليك</string>
+    <string name="resend_code_done">Code Activation send Successfully</string>
+    <string name="enter_code_msg">Enter the Code that send to your phone</string>
+    <string name="forget_pass_msg">Enter your phone number to send new password</string>
     <string name="twitter">twitter</string>
     <string name="balance_msg">الاعلانات التي تم نشرها منذ اشتراكك في تطبيق حاجة</string>
-    <string name="edit_profile">تعديل الملف الشخصي</string>
+    <string name="edit_profile"> Edit Profile</string>
 </resources>

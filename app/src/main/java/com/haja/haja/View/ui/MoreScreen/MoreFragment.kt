@@ -1,8 +1,10 @@
 package com.haja.haja.View.ui.MoreScreen
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,7 +27,6 @@ import com.haja.haja.View.ui.LoginScreen.LoginFragment
 import com.haja.haja.View.ui.MyAdsScreen.MyAdsFragment
 import com.haja.haja.View.ui.profile.ProfileFragment
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
-import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -54,7 +55,7 @@ class MoreFragment : Fragment() {
         activity?.categoriesBarMenu?.visibility = View.VISIBLE
         activity?.catBarSearch?.visibility = View.GONE
 
-         viewModel = ViewModelProviders.of(this).get(MoreViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(MoreViewModel::class.java)
 
         val userId = SharedPreferenceUtil(context!!).getString(USERID, "0")?.toInt()
         if (userId == 0)
@@ -71,7 +72,6 @@ class MoreFragment : Fragment() {
             }
         }
         myAds.setOnClickListener {
-            val userId = SharedPreferenceUtil(context!!).getString(USERID, "0")?.toInt()
             if (userId == 0) {
                 makeToast(context!!, resources.getString(R.string.login_first))
                 fragmentManager?.inTransaction {
@@ -98,7 +98,6 @@ class MoreFragment : Fragment() {
             }
         }
         moreMessages.setOnClickListener {
-            val userId = SharedPreferenceUtil(context!!).getString(USERID, "0")?.toInt()
             if (userId != 0)
                 fragmentManager?.inTransaction {
                     replace(
@@ -107,7 +106,7 @@ class MoreFragment : Fragment() {
                     ).addToBackStack("MoreFragment")
                 }
             else {
-                SnackAndToastUtil.makeToast(context!!, resources.getString(R.string.login_first))
+                makeToast(context!!, resources.getString(R.string.login_first))
                 fragmentManager?.inTransaction {
                     replace(
                         R.id.mainContainer,
@@ -117,7 +116,8 @@ class MoreFragment : Fragment() {
             }
 
         }
-        getUserInfo()
+        if (userId != 0)
+            getUserInfo(userId!!)
         getContactDetails()
     }
 
@@ -148,7 +148,8 @@ class MoreFragment : Fragment() {
             val url = socialMedias?.get(0)?.urlL
             if (url?.contains("http")!!) {
                 val openUrlIntent = Intent(ACTION_VIEW, Uri.parse(url))
-                startActivity(openUrlIntent)
+                openUrlIntent.flags = FLAG_ACTIVITY_NEW_TASK
+                activity?.startActivity(openUrlIntent)
             }
         }
 
@@ -156,7 +157,8 @@ class MoreFragment : Fragment() {
             val url = socialMedias?.get(1)?.urlL
             if (url?.contains("http")!!) {
                 val openUrlIntent = Intent(ACTION_VIEW, Uri.parse(url))
-                startActivity(openUrlIntent)
+                openUrlIntent.flags = FLAG_ACTIVITY_NEW_TASK
+                context?.startActivity(openUrlIntent)
             }
         }
 
@@ -164,6 +166,7 @@ class MoreFragment : Fragment() {
             val url = socialMedias?.get(2)?.urlL
             if (url?.contains("http")!!) {
                 val openUrlIntent = Intent(ACTION_VIEW, Uri.parse(url))
+                openUrlIntent.flags = FLAG_ACTIVITY_NEW_TASK
                 startActivity(openUrlIntent)
             }
         }
@@ -182,19 +185,15 @@ class MoreFragment : Fragment() {
         dialog.show()
     }
 
-    private fun getUserInfo() {
+    private fun getUserInfo(userId: Int) {
         val progress = CustomProgressBar.showProgressBar(context!!)
         progress.show()
-        val userId = SharedPreferenceUtil(context!!).getString(USERID, "0")
-        viewModel?.getProfile(userId!!.toInt())?.observe(viewLifecycleOwner, Observer { result ->
+        viewModel?.getProfile(userId)?.observe(viewLifecycleOwner, Observer { result ->
             progress.dismiss()
             if (result != null) {
                 if (result.result == true) {
                     profileUserName.text = result.data?.name
                     profilePhone.text = result.data?.mobile
-                    myBalance.setOnClickListener {
-                        openBalanceDialog(result.data?.productsCount)
-                    }
                 }
             } else
                 makeToast(context!!, resources.getString(R.string.error))

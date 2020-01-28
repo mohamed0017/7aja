@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/_16ssp"
-                    android:text="@string/name"/>
+                    />
 
             <TextView
                     android:id="@+id/profilePhone"
@@ -51,7 +51,7 @@
                     android:textSize="@dimen/_12ssp"
                     android:textColor="@color/white_gray"
                     android:layout_marginBottom="@dimen/_20sdp"
-                    android:text="@string/name"/>
+                   />
         </LinearLayout>
 
         <LinearLayout
@@ -97,6 +97,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     android:orientation="vertical"
                     android:gravity="center">
                 <ImageView
