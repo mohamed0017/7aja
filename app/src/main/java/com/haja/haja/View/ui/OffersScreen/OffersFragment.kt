@@ -46,12 +46,13 @@ class OffersFragment : Fragment(), OnItemClick {
         return inflater.inflate(R.layout.offers_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
     override fun onResume() {
         super.onResume()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        Log.e("onResume","onResume")
         activity?.appBarTitle?.text = resources.getString(R.string.offers)
         activity?.categoriesBarBack?.visibility = View.GONE
         activity?.categoriesBarMenu?.visibility = View.VISIBLE

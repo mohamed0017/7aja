@@ -16,8 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".View.ui.WebviewActivity"></activity>
-        <activity android:name=".View.ui.ProductDetails.ImageFullScreenActivity" />
+        <activity android:name=".View.ui.EditProduct.EditProductActivity"></activity>
+        <activity android:name=".View.ui.WebviewActivity" />
+        <activity android:name=".View.ui.ProductDetails.ImageFullScreenActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".View.ui.ChatScreen.ChatActivity"
             android:screenOrientation="portrait"

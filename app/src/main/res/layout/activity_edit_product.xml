@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/off_white"
+    tools:context=".View.ui.EditProduct.EditProductActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/editSelectCategory"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"
+            android:background="@drawable/border"
+            android:layout_margin="@dimen/_16sdp"
+            android:gravity="center"
+            android:textSize="@dimen/_18sdp"
+            android:textColor="@color/colorPrimaryDark"
+            android:drawableStart="@drawable/back_gray"
+            android:paddingEnd="@dimen/_12sdp"
+            android:paddingStart="@dimen/_12sdp"
+            android:drawablePadding="@dimen/_8sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/select_cat"/>
+
+        <TextView
+            android:id="@+id/cityName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_16sdp"
+            android:gravity="center"
+            android:text="@string/city"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/editSelectCategory"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/uploadImagesText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_16sdp"
+            app:layout_constraintTop_toBottomOf="@id/cityName"
+            android:text="@string/upload_img"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/editUploadImages"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            app:layout_constraintTop_toBottomOf="@id/uploadImagesText"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:src="@drawable/addphoto"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/addNewProImagesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_16sdp"
+            app:layout_constraintTop_toBottomOf="@id/editUploadImages"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/editProImagesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_16sdp"
+            app:layout_constraintTop_toBottomOf="@id/addNewProImagesList"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/editProInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_16sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_16sdp"
+            android:paddingStart="@dimen/_16sdp"
+            app:layout_constraintTop_toBottomOf="@id/editProImagesList">
+
+            <TextView
+                android:id="@+id/productInfoTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/product_info"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:textSize="@dimen/_14ssp"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proNameAr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/address"
+                app:layout_constraintTop_toBottomOf="@id/productInfoTitle">
+                <EditText
+                    android:id="@+id/editProNameAr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proNameEn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pro_name_en"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/proNameAr">
+                <EditText
+                    android:id="@+id/editProNameEn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proUserPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/phone_contact"
+                android:layout_marginBottom="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/proNameEn">
+                <EditText
+                    android:id="@+id/proPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proUserWhatsApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/whats_app"
+                android:layout_marginBottom="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@id/proUserPhone">
+                <EditText
+                    android:id="@+id/proWhatsApp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pro_price"
+                app:layout_constraintTop_toBottomOf="@id/proUserWhatsApp">
+                <EditText
+                    android:id="@+id/editProPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proDiscount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pro_discount"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/proPrice">
+                <EditText
+                    android:id="@+id/editProDiscount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proQuantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pro_quantity"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/proDiscount">
+                <EditText
+                    android:id="@+id/editProQuantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proTagsAr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pro_tags_ar"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/proQuantity">
+                <EditText
+                    android:id="@+id/editProTagsAr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proTags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pro_tags"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/proTagsAr">
+                <EditText
+                    android:id="@+id/editProTags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proDescriptionAr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pro_description_ar"
+                app:layout_constraintTop_toBottomOf="@id/proTags">
+                <EditText
+                    android:id="@+id/editProDescriptionAr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:maxLength="600"
+                    android:lines="4"
+                    android:gravity="top"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/lettersNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/max_letters"
+                android:layout_marginBottom="@dimen/_24sdp"
+                app:layout_constraintTop_toBottomOf="@id/proDescriptionAr"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proDescriptionEn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/pro_description_en"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/lettersNumber">
+                <EditText
+                    android:id="@+id/editProDescriptionEn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:lines="4"
+                    android:maxLines="4"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/editProductAttributesTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/product_attributes"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:textSize="@dimen/_14ssp"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/proDescriptionAr"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/editProductAttributes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_16sdp"
+                app:layout_constraintTop_toBottomOf="@id/editProductAttributesTitle"/>
+
+            <TextView
+                android:id="@+id/selectCategoryToShowAtt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/selectCategoryToShowAtt"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:textSize="@dimen/_14ssp"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/editProductAttributes"/>
+
+            <CheckBox
+                android:id="@+id/AdvPolicy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/acceptPolicy"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:textSize="@dimen/_14ssp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/selectCategoryToShowAtt"/>
+
+            <Button
+                android:id="@+id/editProductBut"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/update_pro"
+                android:background="@drawable/rounded_but"
+                android:textColor="@color/white"
+                android:layout_margin="@dimen/_20sdp"
+                app:layout_constraintTop_toBottomOf="@+id/AdvPolicy"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

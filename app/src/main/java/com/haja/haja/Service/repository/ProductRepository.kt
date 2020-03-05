@@ -98,6 +98,32 @@ class ProductRepository(token: String) {
         return result
     }
 
+    fun editProduct(
+        productId: Int,
+        map: HashMap<String, String>,
+        parts: List<MultipartBody.Part>,
+        productAttributes: HashMap<String, String>
+    ): SingleLiveEvent2<AddProductResponse> {
+        val result = SingleLiveEvent2<AddProductResponse>()
+        val call = apiService?.editProduct(productId,map, parts, productAttributes)
+        call?.enqueue {
+            onResponse = { response ->
+                Log.i("editProduct", response.code().toString())
+                if (response.code() / 100 == 2) {
+                    result.value = response.body()
+                    Log.i("editProduct/body", response.body().toString())
+                } else
+                    result.value = null
+            }
+            onFailure = { t ->
+                Log.i("editProduct/Failure", t!!.message + "..")
+                result.value = null
+            }
+        }
+        return result
+    }
+
+
     fun productReport(map: HashMap<String, String>): SingleLiveEvent2<ProductReportResponse> {
         val result = SingleLiveEvent2<ProductReportResponse>()
         val call = apiService?.productReport(map)
@@ -133,6 +159,27 @@ class ProductRepository(token: String) {
             }
             onFailure = { t ->
                 Log.i("SingleProduct/Failure", t!!.message + "..")
+                result.value = null
+            }
+        }
+        return result
+    }
+
+    fun deleteProductImg(productId: Int, imageId : Int): SingleLiveEvent2<DefultResponse> {
+        val result = SingleLiveEvent2<DefultResponse>()
+        val call = apiService?.deleteProductImg(productId, imageId)
+        call?.enqueue {
+            onResponse = { response ->
+                Log.i("deleteProductImg", response.code().toString())
+                Log.i("deleteProductImg/url", call.request().url.toString())
+                if (response.code() / 100 == 2) {
+                    Log.i("deleteProductImg", response.body()?.errorMesage.toString())
+                    result.value = response.body()
+                } else
+                    result.value = null
+            }
+            onFailure = { t ->
+                Log.i("deleteProductImg/Failur", t!!.message + "..")
                 result.value = null
             }
         }
@@ -217,9 +264,9 @@ class ProductRepository(token: String) {
         return result
     }
 
-    fun getAdPrice(): SingleLiveEvent2<AdPriceModel> {
+    fun getAdPrice(userId: String): SingleLiveEvent2<AdPriceModel> {
         val result = SingleLiveEvent2<AdPriceModel>()
-        val call = apiService?.getAdPrice()
+        val call = apiService?.getAdPrice(userId)
         call?.enqueue {
             onResponse = { response ->
                 Log.i("getAdPrice/url" , call.request().url.toString())

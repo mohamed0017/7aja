@@ -44,6 +44,9 @@ data class ProductData(
 	@field:SerializedName("prev_page_url")
 	val prevPageUrl: String? = null,
 
+	@field:SerializedName("whatsapp")
+	val whatsapp: String? = null,
+
 	@field:SerializedName("current_page")
 	val currentPage: Int? = null,
 

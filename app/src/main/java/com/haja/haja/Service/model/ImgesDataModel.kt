@@ -13,6 +13,9 @@ data class ImgesDataModel(
 	@field:SerializedName("is_like")
 	val isLike: String? = null,
 
+	@field:SerializedName("mobile")
+	val mobile: String? = null,
+
 	@field:SerializedName("num_views")
 	val numViews: String? = null,
 

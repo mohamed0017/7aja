@@ -1,6 +1,6 @@
-package com.haja.haja.View.ui.AddProduct
+package com.haja.haja.View.ui.EditProduct
 
-import android.app.Activity.RESULT_OK
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -22,72 +22,109 @@ import com.haja.haja.OnCategoryItemClick
 import com.haja.haja.R
 import com.haja.haja.Service.model.AdPricedataModel
 import com.haja.haja.Service.model.AttributeData
+import com.haja.haja.Service.model.ProductImgs
 import com.haja.haja.Utils.SharedPreferenceUtil
 import com.haja.haja.Utils.USERID
 import com.haja.haja.Utils.inTransaction
+import com.haja.haja.View.ui.AddProduct.*
 import com.haja.haja.View.ui.MyAdsScreen.MyAdsFragment
-import com.haja.haja.View.ui.Payment.PaymentActivity
 import com.haja.haja.model.CategoriesData
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
-import kotlinx.android.synthetic.main.add_product_fragment.*
+import kotlinx.android.synthetic.main.activity_edit_product.*
+import kotlinx.android.synthetic.main.activity_edit_product.proPhone
+import kotlinx.android.synthetic.main.activity_edit_product.proWhatsApp
 import kotlinx.android.synthetic.main.add_products_categories.view.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.dialog_message.*
-import kotlinx.android.synthetic.main.dialog_message.done
 import kotlinx.android.synthetic.main.dialog_message_price.*
+import kotlinx.android.synthetic.main.dialog_message_price.done
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.HashMap
 
-class AddProductFragment : Fragment(), OnCategoryItemClick {
+class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
 
-    /* override fun locationCancelled() {
-     }
-
-     override fun locationOn() {
-         *//*easyWayLocation?.beginUpdates()
-        try {
-            lati = easyWayLocation?.latitude
-            longi = easyWayLocation?.longitude
-
-            if (lati != null && longi != null)
-                cityName.text = getAreaName()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }*//*
+    companion object {
+        fun newInstance(id: Int) = EditProductActivity().apply {
+            arguments = Bundle().apply {
+                putInt("productId", id)
+            }
+        }
     }
 
-    override fun onPositionChanged() {
-        easyWayLocation?.beginUpdates()
-        try {
-            lati = easyWayLocation?.latitude
-            longi = easyWayLocation?.longitude
+    private lateinit var viewModel: EditProductViewModel
+    private lateinit var categoriesAdapter: AddProductCatAdapter
+    private var attributesAdapter = AddProductAttributesAdapter()
+    private val categoriesDialog = AddProductCategoriesDialog()
+    private var selectedImages = ArrayList<Image>()
+    private var selectedCategory = 0
+    private var selectedCategoriesCount = 0
+    private var advPrice = "0"
+    private var adPricedata: AdPricedataModel? = null
 
-            if (lati != null && longi != null)
-                cityName.text = getAreaName()
-        } catch (e: Exception) {
-            e.printStackTrace()
+    private val adapter = EditProductImagesAdapter(this)
+    var productId = 0
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.activity_edit_product, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        productId = arguments?.getInt("productId")!!
+        viewModel = ViewModelProviders.of(this).get(EditProductViewModel::class.java)
+        addNewProImagesList.layoutManager = GridLayoutManager(context!!, 4)
+        editProImagesList.layoutManager = GridLayoutManager(context!!, 4)
+        activity?.appBarTitle?.text = resources.getString(R.string.edit_ad)
+
+        editUploadImages.setOnClickListener {
+            openGallery()
         }
 
+        editProductBut.setOnClickListener {
+            uploadProduct()
+        }
+        initDescriptionLettersCount()
+        val userId = SharedPreferenceUtil(context!!).getString(USERID, "0")
+        viewModel.getProduct(productId, userId!!.toInt())
+            .observe(this, Observer { product ->
+                if (product != null) {
+                    editSelectCategory.text = product.data?.catName
+                    editProNameAr.setText(product.data?.name)
+                    editProPrice.setText(product.data?.price)
+                    proPhone.setText(product.data?.mobile)
+                    proWhatsApp.setText(product.data?.whatsapp)
+                    editProDescriptionAr.setText(product.data?.description)
+                    selectedCategory = product.data?.catId!!
+                    setupAttributesList(selectedCategory)
+                    addNewProImagesList.adapter = adapter
+                    if (!product.data.imgs.isNullOrEmpty())
+                        adapter.setImagesAndNotifyList(product.data.imgs as ArrayList<ProductImgs?>?)
+                } else
+                    makeToast(context!!, resources.getString(R.string.error))
+            })
     }
-*/
 
-/*    private fun getAreaName(): String {
-        val geocoder = Geocoder(context, Locale.getDefault());
-        val addresses = geocoder.getFromLocation(lati!!, longi!!, 1);
-        val cityName = addresses.get(0).getAddressLine(0);
-        val stateName = addresses.get(0).getAddressLine(1);
-        // val countryName = addresses.get(0).getAddressLine(2);
+    override fun onDeleteImage(img: ProductImgs?) {
+        viewModel.deleteImage(productId, img?.idImg!!).observe(this, Observer { result ->
+            if (result != null) {
+                if (result.result == true)
+                    adapter.removeImageAndNotifyList(img)
+                makeToast(context!!, result.errorMesage.toString())
+            } else
+                makeToast(context!!, resources.getString(R.string.error))
+        })
+    }
 
-        return "$cityName  "
-    }*/
 
     override fun onClick(possion: Int, itemData: CategoriesData) {
         selectedCategoriesCount++
@@ -96,7 +133,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         }
         if (itemData.countSubCat == 0) {
             selectedCategory = itemData.id!!
-            selectCategory.text = itemData.name
+            editSelectCategory.text = itemData.name
             categoriesDialog.dismiss()
             categoriesAdapter.clearCategoriesList()
             categoriesAdapter.notifyDataSetChanged()
@@ -105,89 +142,16 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
             getNextCategories(itemData.id!!)
     }
 
-    companion object {
-        fun newInstance() = AddProductFragment()
-    }
 
-    private lateinit var viewModel: AddProductViewModel
-    private lateinit var categoriesAdapter: AddProductCatAdapter
-    private var attributesAdapter = AddProductAttributesAdapter()
-    /*    private var easyWayLocation: EasyWayLocation? = null
-        private var lati: Double? = null
-        private var longi: Double? = null*/
-    private val categoriesDialog = AddProductCategoriesDialog()
-    private var selectedImages = ArrayList<Image>()
-    private var selectedCategory = 0
-    private var selectedCategoriesCount = 0
-    private var advPrice = "0"
-    private var is_published = "Y"
-    private var adPricedata: AdPricedataModel? = null
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.add_product_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        // showDialog()
-        initDescriptionLettersCount()
-        activity?.appBarTitle?.text = resources.getString(R.string.addProduct)
-        activity?.categoriesBarBack?.visibility = View.GONE
-        activity?.categoriesBarMenu?.visibility = View.VISIBLE
-        activity?.catBarSearch?.visibility = View.GONE
-
-        viewModel = ViewModelProviders.of(this).get(AddProductViewModel::class.java)
-        categoriesAdapter = AddProductCatAdapter(this)
-        // configLocationPremation()
-        getAdPrice()
-        uploadImages.setOnClickListener {
-            openGallery()
-        }
-
-        notPublishProductBut.setOnClickListener {
-            if (isValidProductData()) {
-                is_published = "N"
-                uploadProduct()
-            }
-        }
-        selectCategory.setOnClickListener {
-            selectedCategoriesCount = 0
-            categoriesDialog.show(context!!)
-            categoriesDialog.getDialogView().addProductCategoriesList.layoutManager =
-                LinearLayoutManager(context!!)
-            categoriesDialog.getDialogView().addProductCategoriesList.adapter = categoriesAdapter
-            viewModel.setParentId(0)
-            viewModel.getCategories().observe(this, Observer { categories ->
-                if (categories != null) {
-                    categoriesAdapter.setCategoriesList(categories.data as ArrayList<CategoriesData>)
-                    runLayoutAnimation(categoriesDialog.getDialogView().addProductCategoriesList)
-                } else {
-
-                }
-            })
-        }
-
-        addProductBut.setOnClickListener {
-            if (isValidProductData()) {
-                is_published = "Y"
-                showPriceDialog()
-            }
-        }
-
-        advStared()
-    }
-
-    private fun advStared() {
-        AdvStared.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
+/*    private fun advStared() {
+        editAdvStared.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
                 showStaredDialog()
-            } else {
+            }else{
 
             }
         }
-    }
+    }*/
 
     private fun showStaredDialog() {
         val dialog = Dialog(context!!)
@@ -201,7 +165,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
     }
 
     private fun initDescriptionLettersCount() {
-        addProDescriptionAr.addTextChangedListener(object : TextWatcher {
+        editProDescriptionAr.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -236,7 +200,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         viewModel.setProductAttributes(attributesAdapter.getEnteredAttributesData())
         viewModel.setImages(getSelectedImages())
         viewModel.setProductData(getProductData())
-        viewModel.addProduct().observe(this, Observer { products ->
+        viewModel.editProduct(productId).observe(this, Observer { products ->
             progress.dismiss()
             if (products != null) {
                 makeToast(context!!, products.errorMesage.toString())
@@ -278,19 +242,19 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         dialog.setCancelable(true)
         dialog.setContentView(R.layout.dialog_message_price)
         if (adPricedata?.userFreeAds!! <= 0) {
-            dialog.adsFreeCount.text = "$advPrice ${resources.getString(R.string.kwd)}"
+            dialog.adsFreeCount.text = advPrice
             dialog.adsFreeMsg.text = resources.getString(R.string.no_free_ads)
-        } else
+        }else
             dialog.adsFreeCount.text = adPricedata?.userFreeAds.toString()
 
         dialog.done.setOnClickListener {
-            if (adPricedata?.userFreeAds!! > 0) {
+         //   if (adPricedata?.userFreeAds!! > 0) {
                 uploadProduct()
-            } else {
+           /* } else {
                 val intent = Intent(context!!, PaymentActivity::class.java)
                 intent.putExtra(PaymentActivity.PAYMENT_AMOUNT, advPrice)
                 startActivityForResult(intent, PaymentActivity.PAYMENT_REQUEST_CODE)
-            }
+            }*/
             dialog.dismiss()
         }
         dialog.show()
@@ -298,12 +262,12 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
 
     private fun getProductData(): HashMap<String, String> {
         val map = HashMap<String, String>()
-        map["name"] = addProNameAr.text.toString()
+        map["name"] = editProNameAr.text.toString()
         //   map["name_en"] = addProNameEn.text.toString()
-        map["price"] = addProPrice.text.toString()
+        map["price"] = editProPrice.text.toString()
         //  map["discount"] = addProDiscount.text.toString()
         // map["quantity"] = addProQuantity.text.toString()
-        map["description"] = addProDescriptionAr.text.toString()
+        map["description"] = editProDescriptionAr.text.toString()
         // map["description_en"] = addProDescriptionEn.text.toString()
         //    map["tags"] = addProTagsAr.text.toString()
         //  map["tags_en"] = addProTags.text.toString()
@@ -314,7 +278,6 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
               map["longitude"] = longi.toString()*/
         map["type"] = "1"
         map["is_special"] = "0"
-        map["is_published"] = is_published
         map["user_id"] = SharedPreferenceUtil(context!!).getString(USERID, "0").toString()
         return map
     }
@@ -344,29 +307,29 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == Config.RC_PICK_IMAGES && resultCode == RESULT_OK && data != null) {
+        if (requestCode == Config.RC_PICK_IMAGES && resultCode == Activity.RESULT_OK && data != null) {
             val images = data.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
             // do your logic here...
             selectedImages = images
             val adapter = SelectedImagesAdapter(context!!)
             Log.i("onActivityResult", images[0].path + "...")
-            selectedImagesList.layoutManager = GridLayoutManager(context!!, 4)
-            selectedImagesList.adapter = adapter
+            editProImagesList.layoutManager = GridLayoutManager(context!!, 4)
+            editProImagesList.adapter = adapter
             adapter.setImages(images)
             adapter.notifyDataSetChanged()
 
         }
-        when (requestCode) {
-            /* EasyWayLocation.LOCATION_SETTING_REQUEST_CODE -> easyWayLocation?.onActivityResult(
+       /* when (requestCode) {
+            *//* EasyWayLocation.LOCATION_SETTING_REQUEST_CODE -> easyWayLocation?.onActivityResult(
                  resultCode
-             )*/
+             )*//*
             PaymentActivity.PAYMENT_REQUEST_CODE -> if (data != null) {
                 if (data.getBooleanExtra("payment_succeed", false)) uploadProduct()
                 else showDialog(resources.getString(R.string.payment_failed_msg))
             }
-        }
+        }*/
 
-        super.onActivityResult(requestCode, resultCode, data)  // You MUST have this line to be here
+        super.onActivityResult(requestCode, resultCode, data)  // You MUST have context!! line to be here
         // so ImagePicker can work with fragment mode
     }
 
@@ -414,12 +377,12 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
     }
 
     private fun setupAttributesList(catId: Int?) {
-        addProductAttributes.layoutManager = LinearLayoutManager(context!!)
+        editProductAttributes.layoutManager = LinearLayoutManager(context!!)
         viewModel.getCategoryAttributes(catId).observe(this, Observer { attributes ->
             if (attributes != null) {
                 selectCategoryToShowAtt.visibility = View.GONE
                 if (attributes.result == true) {
-                    addProductAttributes.adapter = attributesAdapter
+                    editProductAttributes.adapter = attributesAdapter
                     attributesAdapter.setAttributes(attributes.data as ArrayList<AttributeData>)
                     if (attributes.data.isEmpty()) {
                         selectCategoryToShowAtt.visibility = View.VISIBLE
@@ -436,39 +399,4 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         })
     }
 
-    /* private fun configLocationPremation() {
-         Dexter.withActivity(activity)
-             .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-             .withListener(object : PermissionListener {
-                 override fun onPermissionRationaleShouldBeShown(
-                     permission: com.karumi.dexter.listener.PermissionRequest?,
-                     token: PermissionToken?
-                 ) {
-                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                 }
-
-                 @SuppressLint("MissingPermission")
-                 override fun onPermissionGranted(response: PermissionGrantedResponse) {
-                     easyWayLocation = EasyWayLocation(context!!)
-                     easyWayLocation?.setListener(this@AddProductFragment)
-                 }
-
-                 override fun onPermissionDenied(response: PermissionDeniedResponse) {
-                     Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show();
-                 }
-
-             }).check()
-     }
-
-     override fun onResume() {
-         super.onResume()
-         // make the device update its location
-         easyWayLocation?.beginUpdates()
-     }
-
-     override fun onPause() {
-         // stop location updates (saves battery)
-         easyWayLocation?.endUpdates()
-         super.onPause()
-     }*/
 }

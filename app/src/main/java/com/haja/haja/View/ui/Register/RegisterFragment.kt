@@ -162,10 +162,10 @@ class RegisterFragment : Fragment(), Listener {
             `registerPassُ`.error = resources.getString(R.string.correct_pass)
             false
 
-        } else if (!isValidEmail(email)) {
+        }/* else if (!isValidEmail(email)) {
             registerEmail.error = resources.getString(R.string.correct_email)
             false
-        } else if (pass != confirmPass) {
+        }*/ else if (pass != confirmPass) {
             `registerConfirmPassُ`.error = resources.getString(R.string.mismatch_pass)
             false
         } else
@@ -175,7 +175,7 @@ class RegisterFragment : Fragment(), Listener {
     private fun userRegistrationInfo(): HashMap<String, String> {
         val map = HashMap<String, String>()
         map["name"] = registerName.text.toString()
-       // map["mobile"] = "${registerPhone.text}" // TODO just for debug
+      //  map["mobile"] = "${registerPhone.text}" // TODO just for debug
         map["mobile"] = "965${registerPhone.text}"
         map["email"] = registerEmail.text.toString()
         map["password"] = `registerPassُ`.text.toString()
@@ -201,9 +201,7 @@ class RegisterFragment : Fragment(), Listener {
                 override fun onPermissionRationaleShouldBeShown(
                     permission: com.karumi.dexter.listener.PermissionRequest?,
                     token: PermissionToken?
-                ) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
+                ) {}
 
                 @SuppressLint("MissingPermission")
                 override fun onPermissionGranted(response: PermissionGrantedResponse) {

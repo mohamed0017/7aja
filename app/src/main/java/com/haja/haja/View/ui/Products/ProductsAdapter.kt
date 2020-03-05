@@ -13,8 +13,12 @@ import com.haja.haja.OnProductItemClicked
 import com.haja.haja.R
 import com.haja.haja.Service.ApiService
 import com.haja.haja.Service.model.ProductData
+import com.haja.haja.Utils.PRODUCTID
+import com.haja.haja.Utils.inTransaction
+import com.haja.haja.View.ui.EditProduct.EditProductActivity
 import com.haja.haja.View.ui.MyAdsScreen.MyAdsFragment
 import com.haja.haja.View.ui.MyFavorites.FavoritesFragment
+import com.haja.haja.View.ui.OffersScreen.OffersFragment
 import com.haja.haja.View.ui.ProductDetails.ProductDetailsActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.product_item.view.*
@@ -101,8 +105,14 @@ class ProductsAdapter(
         {
             holder.favIcon.visibility = View.GONE
             holder.deleteIcon.visibility = View.VISIBLE
+            holder.editItem.visibility = View.VISIBLE
             holder.deleteIcon.setOnClickListener {
                 productsFragment.onClick(position, product, holder.favIcon)
+            }
+            holder.editItem.setOnClickListener {
+                fragmentManager?.inTransaction {
+                    replace(R.id.mainContainer, EditProductActivity.newInstance(product.id!!)).addToBackStack("dd")
+                }
             }
         }
     }
@@ -126,6 +136,7 @@ class ProductsAdapter(
         val imageView: ImageView = itemView.productItemImg
         val favIcon = itemView.productItemFav
         val deleteIcon = itemView.productItemDelete
+        val editItem = itemView.productItemEdit
 
     }
 }

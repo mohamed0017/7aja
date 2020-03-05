@@ -2,6 +2,7 @@ package com.haja.haja.View.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.haja.haja.View.ui.ProductDetails.ImageFullScreenActivity;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample.SliderAdapterVH> {
@@ -39,7 +41,7 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
 
         viewHolder.imageViewBackground.setOnClickListener(v -> {
             Intent intent = new Intent(context, ImageFullScreenActivity.class);
-            intent.putExtra("fullScreenImg", images.get(position).getImg());
+            intent.putParcelableArrayListExtra("fullScreenImg", (ArrayList<? extends Parcelable>) images);
             context.startActivity(intent);
         });
     }

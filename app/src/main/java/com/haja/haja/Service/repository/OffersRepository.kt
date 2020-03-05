@@ -23,6 +23,7 @@ class OffersRepository(token:String){
         call?.enqueue {
             onResponse = { response ->
                 Log.i("getOfferCategories", response.code().toString())
+                Log.i("getOfferCategories/url", call.request().url.toString())
                 if (response.code() / 100 == 2)
                     result.value = response.body()
                 else
@@ -42,6 +43,7 @@ class OffersRepository(token:String){
         call?.enqueue {
             onResponse = { response ->
                 Log.i("getOffers", response.code().toString())
+                Log.i("getOffers/url", call.request().url.toString())
                 if (response.code() / 100 == 2)
                     result.value = response.body()
                 else

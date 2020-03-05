@@ -32,6 +32,7 @@ class MainSliderAdapter(private val context: Context, private val images : List<
             intent.putExtra("numViews",  images[position].numViews)
             intent.putExtra("offerImage", images[position].img)
             intent.putExtra("isLike", images[position].isLike)
+            intent.putExtra("mobile", images[position].mobile)
             context.startActivity(intent)
         }
         if (!images.isEmpty()) {

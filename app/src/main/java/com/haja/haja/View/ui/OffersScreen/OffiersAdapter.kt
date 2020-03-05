@@ -68,6 +68,7 @@ class OffiersAdapter(
                 intent.putExtra("offerName", product.name)
                 intent.putExtra("numViews", product.numViews.toString())
                 intent.putExtra("isLike", product.isLike)
+                intent.putExtra("mobile", product.mobile)
                 Log.i("isLike",  product.isLike.toString())
                 Log.i("isLike",  product.name.toString())
                 Log.i("isLike",  product.id.toString())

@@ -50,8 +50,8 @@ class DelegatesAdapter(
 
         if (delegate.img != null) {
             Picasso.get().load(ApiService.IMAGEBASEURL + delegate.img)
-                .placeholder(context.resources.getDrawable(R.mipmap.splash_logo))
-                .error(context.resources.getDrawable(R.mipmap.splash_logo)).into(holder.delegateImg)
+                .placeholder(context.resources.getDrawable(R.drawable.app_icon))
+                .error(context.resources.getDrawable(R.drawable.app_icon)).into(holder.delegateImg)
         }
     }
 

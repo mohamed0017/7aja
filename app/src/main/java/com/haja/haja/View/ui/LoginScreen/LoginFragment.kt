@@ -105,8 +105,8 @@ class LoginFragment : Fragment() {
 
     private fun getLoginCradentioals(): HashMap<String, String> {
         val map = HashMap<String, String>()
-        map["mobile"] = "965${loginPhone.text}"
-      //  map["mobile"] = "${loginPhone.text}" // TODO just for debug
+        map["user_name"] = "${loginPhone.text}"
+      //  map["user_name"] = "${loginPhone.text}" // TODO just for debug
         map["password"] = loginPass.text.toString()
         return map
     }

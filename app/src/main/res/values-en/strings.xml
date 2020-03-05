@@ -114,6 +114,13 @@
     <string name="enter_code_msg">Enter the Code that send to your phone</string>
     <string name="forget_pass_msg">Enter your phone number to send new password</string>
     <string name="twitter">twitter</string>
-    <string name="balance_msg">الاعلانات التي تم نشرها منذ اشتراكك في تطبيق حاجة</string>
+    <string name="balance_msg"> all your ads</string>
     <string name="edit_profile"> Edit Profile</string>
+    <string name="accept">Accept</string>
+    <string name="no_free_ads"> no free ads in your account, the cost of this ad is </string>
+    <string name="update_pro"> Update Ad </string>
+    <string name="phone_hint">phone or email</string>
+    <string name="kwd">KWD</string>
+    <string name="save_ad">save draft </string>
+    <string name="edit_ad"> Edit Ad</string>
 </resources>

@@ -22,7 +22,7 @@
             android:layout_marginTop="@dimen/_4sdp"
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginEnd="@dimen/_5sdp"
-            android:src="@mipmap/splash_logo"/>
+            android:src="@drawable/app_icon"/>
 
     <LinearLayout
             android:layout_width="0dp"

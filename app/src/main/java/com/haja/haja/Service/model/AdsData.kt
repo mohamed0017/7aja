@@ -22,6 +22,9 @@ data class AdsData(
 	@field:SerializedName("name")
 	val name: String? = null,
 
+	@field:SerializedName("mobile")
+	val mobile: String? = null,
+
 	@field:SerializedName("url_l")
 	val urlL: String? = null,
 

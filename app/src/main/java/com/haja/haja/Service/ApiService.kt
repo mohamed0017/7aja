@@ -64,6 +64,13 @@ interface ApiService {
     ): Call<ProductsModel>
 
     @Headers("Accept: application/json")
+    @GET("/api/products/del-img/{product_id}/{img_id}")
+    fun deleteProductImg(
+        @Path("product_id") productId: Int,
+        @Path("img_id") imgId: Int
+    ): Call<DefultResponse>
+
+    @Headers("Accept: application/json")
     @GET("/api/products/t/{lang}/2/{id}")
     fun getOffers(
         @Path("lang") lang: String,
@@ -119,6 +126,16 @@ interface ApiService {
     @Headers("Accept: application/json")
     @POST("/api/products")
     fun addProduct(
+        @QueryMap map: HashMap<String, String>,
+        @Part lang: List<MultipartBody.Part>,
+        @QueryMap productAttributes: HashMap<String, String>
+    ): Call<AddProductResponse>
+
+    @Multipart
+    @Headers("Accept: application/json")
+    @PUT("/api/products/{id}")
+    fun editProduct(
+        @Path("id") productId: Int,
         @QueryMap map: HashMap<String, String>,
         @Part lang: List<MultipartBody.Part>,
         @QueryMap productAttributes: HashMap<String, String>
@@ -188,7 +205,7 @@ interface ApiService {
 
     @Headers("Accept: application/json")
     @GET("/api/setting_app/1")
-    fun getAdPrice(): Call<AdPriceModel>
+    fun getAdPrice(@Query("user_id") id: String): Call<AdPriceModel>
 
     @GET("/API/send/?username=hajakw&password=Zx123Zx123&sender=hajaq8-MESSAGE&lang=3")
     fun sendSms(@Query("mobile") mobile : String,

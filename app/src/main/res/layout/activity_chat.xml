@@ -61,7 +61,7 @@
                 android:background="@drawable/image_circle"
                 android:scaleType="fitCenter"
                 android:padding="@dimen/_8sdp"
-                android:src="@mipmap/splash_logo"
+                android:src="@drawable/app_icon"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
                 app:layout_constraintStart_toStartOf="parent"

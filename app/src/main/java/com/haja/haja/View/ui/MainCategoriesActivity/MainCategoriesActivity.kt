@@ -38,6 +38,7 @@ class MainCategoriesActivity : AppCompatActivity(),
 
         this.bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
+        this.bottomNavigation.selectedItemId = R.id.navigationOffers
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
@@ -50,9 +51,7 @@ class MainCategoriesActivity : AppCompatActivity(),
             menu.isVisible = true
         }
 
-        supportFragmentManager.inTransaction {
-            add(R.id.mainContainer, MainCategoriesFragment.newInstance())
-        }
+
         categoriesBarMenu.setOnClickListener {
             drawer_layout.openDrawer(GravityCompat.START)
         }

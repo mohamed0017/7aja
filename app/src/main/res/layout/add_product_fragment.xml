@@ -285,23 +285,53 @@
                     app:layout_constraintTop_toBottomOf="@+id/addProductAttributes"/>
 
             <CheckBox
-                    android:id="@+id/AdvPolicy"
+                    android:id="@+id/AdvStared"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/acceptPolicy"
+                    android:text="@string/ad_stared"
                     android:layout_marginTop="@dimen/_16sdp"
                     android:textSize="@dimen/_14ssp"
                     app:layout_constraintTop_toBottomOf="@+id/selectCategoryToShowAtt"/>
 
-            <Button
+            <CheckBox
+                android:id="@+id/AdvPolicy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/acceptPolicy"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:textSize="@dimen/_14ssp"
+                app:layout_constraintTop_toBottomOf="@+id/AdvStared"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_20sdp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/AdvPolicy">
+
+                <Button
                     android:id="@+id/addProductBut"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:text="@string/addProduct"
                     android:background="@drawable/rounded_but"
                     android:textColor="@color/white"
-                    android:layout_margin="@dimen/_20sdp"
-                    app:layout_constraintTop_toBottomOf="@+id/AdvPolicy"/>
+                    android:layout_margin="@dimen/_12sdp"
+                   />
+
+                <Button
+                    android:id="@+id/notPublishProductBut"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/save_ad"
+                    android:background="@drawable/rounded_but"
+                    android:textColor="@color/white"
+                    android:layout_margin="@dimen/_12sdp" />
+
+            </LinearLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,7 +38,8 @@ class AddProductViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun getAdPrice(): SingleLiveEvent2<AdPriceModel> {
-        return productRepository.getAdPrice()
+        val userId = SharedPreferenceUtil(getApplication()).getString(USERID , "0")
+        return productRepository.getAdPrice(userId.toString())
     }
 
     fun setProductAttributes(attributes : HashMap<String, String>){

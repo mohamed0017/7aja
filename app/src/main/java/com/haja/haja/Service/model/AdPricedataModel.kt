@@ -7,6 +7,9 @@ data class AdPricedataModel(
 	@field:SerializedName("num_free_advs")
 	val numFreeAdvs: String? = null,
 
+	@field:SerializedName("user_free_ads")
+	val userFreeAds: Int? = null,
+
 	@field:SerializedName("id")
 	val id: Int? = null,
 

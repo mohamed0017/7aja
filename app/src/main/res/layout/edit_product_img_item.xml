@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="@dimen/_70sdp"
+    android:layout_height="@dimen/_80sdp"
+    android:layout_margin="@dimen/_8sdp">
+
+    <ImageView
+        android:id="@+id/editImg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/placeholder"
+        android:scaleType="fitXY" />
+
+    <ImageView
+        android:id="@+id/editImgDelete"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_gravity="end"
+        android:layout_margin="@dimen/_8sdp"
+        android:background="@color/white"
+        android:src="@drawable/cancel"/>
+</FrameLayout>

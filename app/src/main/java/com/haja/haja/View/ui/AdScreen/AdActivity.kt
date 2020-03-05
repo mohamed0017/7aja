@@ -2,6 +2,7 @@ package com.haja.haja.View.ui.AdScreen
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -34,13 +35,21 @@ class AdActivity : AppCompatActivity() {
         val likesCount = intent.getStringExtra("offerLikes")
         val offerImg = intent.getStringExtra("offerImage")
         val isLike = intent.getStringExtra("isLike")
+        val mobile = intent.getStringExtra("mobile")
         val isFromOffersScreen = intent.getBooleanExtra("fromOffersScreen", false)
 
         viewModel = ViewModelProviders.of(this).get(StartupAdViewModel::class.java)
 
+
         if (offerName != null) {
             this.isLike = isLike
             this.likesCount = likesCount.toInt()
+            if (!mobile.isNullOrEmpty()){
+                startupMobile.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", mobile, null))
+                    startActivity(intent)
+                }
+            }
             if (!isLike.isNullOrEmpty()) {
                 advLike.setImageResource(R.mipmap.like_hovmdpi)
             }
@@ -147,6 +156,13 @@ class AdActivity : AppCompatActivity() {
             Picasso.get().load(ApiService.IMAGEBASEURL + "${ad.data.get(0)?.img}")
                 .placeholder(resources.getDrawable(R.drawable.placeholder))
                 .error(resources.getDrawable(R.drawable.placeholder)).into(startupAdImg)
+
+            if (!ad.data[0]?.mobile.isNullOrEmpty()){
+                startupMobile.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", ad.data[0]?.mobile, null))
+                    startActivity(intent)
+                }
+            }
 
             advLike.setOnClickListener {
                 val userId = SharedPreferenceUtil(this).getString(USERID, "0")

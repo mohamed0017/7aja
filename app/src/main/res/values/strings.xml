@@ -120,4 +120,12 @@
     <string name="twitter">twitter</string>
     <string name="balance_msg">الاعلانات التي تم نشرها منذ اشتراكك في تطبيق حاجة</string>
     <string name="edit_profile">تعديل الملف الشخصي</string>
+    <string name="accept">موافق</string>
+    <string name="no_free_ads">لايوجد اعلانات مجلانية لديك تكلفة هذا الاعلان</string>
+    <string name="update_pro">تحديث الاعلان</string>
+    <string name="ad_stared">جعل االاعلان مميز</string>
+    <string name="phone_hint">phone or email</string>
+    <string name="kwd">دينار</string>
+    <string name="save_ad">حفظ كمسودة</string>
+    <string name="edit_ad">تعديل الاعلان</string>
 </resources>

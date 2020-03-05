@@ -16,7 +16,7 @@
         android:layout_width="@dimen/_60sdp"
         android:layout_height="@dimen/_60sdp"
         android:paddingTop="@dimen/_16sdp"
-        android:src="@mipmap/splash_logo"/>
+        android:src="@drawable/app_icon"/>
 
     <TextView
         android:id="@+id/menuUserName"
