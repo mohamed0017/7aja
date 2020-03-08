@@ -10,8 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.haja.haja.R
 import com.haja.haja.model.CategoriesData
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
@@ -53,23 +51,55 @@ class SubCategoriesFragment : Fragment() {
         if (viewModel == null)
             viewModel = ViewModelProviders.of(this).get(SubCategoriesViewModel::class.java)
 
-        viewModel?.ssetParentId(categoryId)
+        viewModel?.setParentId(categoryId)
         viewModel?.getCategories()?.observe(this, Observer { subCategories ->
             progress.dismiss()
             if (subCategories != null) {
                 if (subCategories.result == true)
-                    initRecycler(subCategories.data)
+                {
+                    subCategories.data?.let { initCategoryAds(it, categoryId) }
+                }
                 else
                     Toast.makeText(context, subCategories.errorMessage, Toast.LENGTH_SHORT).show()
             } else
-                Toast.makeText(context, resources.getString(R.string.error), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    resources.getString(R.string.error),
+                    Toast.LENGTH_SHORT
+                ).show()
+        })
+    }
+
+    private fun initCategoryAds(
+        data: List<CategoriesData?>,
+        categoryId: Int
+    ) {
+
+        viewModel?.getAds(categoryId)?.observe(this, Observer {
+            if (it != null) {
+                val newData =  ArrayList<CategoriesData?>()
+                newData.addAll(data)
+                for (i in data.indices){
+                    if ( (i / 6).toString().length == 1){
+                        Log.e("newData/length","${(i / 6).toString().length }")
+                        Log.e("newData/string","${(i / 6)}")
+                        Log.e("newData/int","$i")
+                        val catData  = CategoriesData()
+                        catData.childAds = it.data
+                        newData.add(i + 1 , catData)
+                    }
+                }
+                initRecycler(newData)
+
+            }
         })
     }
 
     private fun initRecycler(data: List<CategoriesData?>?) {
         subCategoriesList.apply {
             layoutManager = GridLayoutManager(
-                context, 3)
+                context, 3
+            )
             adapter = SubCategoriesAdapter(data as List<CategoriesData>, fragmentManager, context!!)
         }
 

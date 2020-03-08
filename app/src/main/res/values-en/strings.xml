@@ -123,4 +123,10 @@
     <string name="kwd">KWD</string>
     <string name="save_ad">save draft </string>
     <string name="edit_ad"> Edit Ad</string>
+    <string name="select_time_to_star">اختر وقت التمييز</string>
+    <string name="hours">12 ساعة</string>
+    <string name="one_day">يوم واحد</string>
+    <string name="two_day">يومين فقط</string>
+    <string name="published">Publish the ad</string>
+    <string name="dreft">مسودة</string>
 </resources>

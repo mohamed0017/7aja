@@ -40,12 +40,11 @@ class AdActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this).get(StartupAdViewModel::class.java)
 
-
         if (offerName != null) {
             this.isLike = isLike
             this.likesCount = likesCount.toInt()
-            if (!mobile.isNullOrEmpty()){
-                startupMobile.setOnClickListener {
+            if (!mobile.isNullOrEmpty()) {
+                advMobile.setOnClickListener {
                     val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", mobile, null))
                     startActivity(intent)
                 }
@@ -86,7 +85,7 @@ class AdActivity : AppCompatActivity() {
                 if (userId == "0")
                     makeToast(this, resources.getString(R.string.login_first))
                 else
-                likeAdv(0, offerId)
+                    likeAdv(0, offerId)
             }
             viewModel.incrementOfferViews(offerId.toInt()).observe(this, Observer {
 
@@ -157,9 +156,10 @@ class AdActivity : AppCompatActivity() {
                 .placeholder(resources.getDrawable(R.drawable.placeholder))
                 .error(resources.getDrawable(R.drawable.placeholder)).into(startupAdImg)
 
-            if (!ad.data[0]?.mobile.isNullOrEmpty()){
-                startupMobile.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", ad.data[0]?.mobile, null))
+            if (!ad.data[0]?.mobile.isNullOrEmpty()) {
+                advMobile.setOnClickListener {
+                    val intent =
+                        Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", ad.data[0]?.mobile, null))
                     startActivity(intent)
                 }
             }
@@ -168,28 +168,28 @@ class AdActivity : AppCompatActivity() {
                 val userId = SharedPreferenceUtil(this).getString(USERID, "0")
                 if (userId == "0")
                     makeToast(this, resources.getString(R.string.login_first))
-                else
-                {
-                    viewModel.likeAdvertisement(1, ad.data[0]?.id!!).observe(this, Observer { result ->
-                        if (result != null) {
-                            if (result.result == true) {
-                                if (ad.data[0]?.likes != null) {
-                                    if (isLike == null) {
-                                        startupAdLikes.text = (++likesCount).toString()
-                                        advLike.setImageResource(R.mipmap.like_hovmdpi)
-                                        isLike = "0"
-                                    } else {
-                                        startupAdLikes.text = (--likesCount).toString()
-                                        advLike.setImageResource(R.mipmap.like)
-                                        isLike = null
+                else {
+                    viewModel.likeAdvertisement(1, ad.data[0]?.id!!)
+                        .observe(this, Observer { result ->
+                            if (result != null) {
+                                if (result.result == true) {
+                                    if (ad.data[0]?.likes != null) {
+                                        if (isLike == null) {
+                                            startupAdLikes.text = (++likesCount).toString()
+                                            advLike.setImageResource(R.mipmap.like_hovmdpi)
+                                            isLike = "0"
+                                        } else {
+                                            startupAdLikes.text = (--likesCount).toString()
+                                            advLike.setImageResource(R.mipmap.like)
+                                            isLike = null
+                                        }
                                     }
-                                }
+                                } else
+                                    makeToast(this, result.errorMesage.toString())
                             } else
-                                makeToast(this, result.errorMesage.toString())
-                        } else
-                            makeToast(this, resources.getString(R.string.error))
+                                makeToast(this, resources.getString(R.string.error))
 
-                    })
+                        })
                 }
             }
             viewModel.incrementAdvertisementViews(ad.data[0]?.id!!).observe(this, Observer {

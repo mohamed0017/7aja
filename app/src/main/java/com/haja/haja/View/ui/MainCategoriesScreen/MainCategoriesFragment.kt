@@ -3,7 +3,6 @@ package com.haja.haja.View.ui.MainCategoriesScreen
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,13 +11,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.haja.haja.R
 import com.haja.haja.Service.ApiService
 import com.haja.haja.Service.model.AdsModel
 import com.haja.haja.Service.model.ImgesDataModel
-import com.haja.haja.View.Adapter.SliderAdapterExample
 import com.haja.haja.model.CategoriesData
 import com.haja.haja.model.CategoriesModel
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar.Companion.showProgressBar
@@ -28,7 +26,6 @@ import com.smarteist.autoimageslider.IndicatorAnimations
 import com.smarteist.autoimageslider.SliderAnimations
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_ad.*
-import kotlinx.android.synthetic.main.activity_product_details.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.main_categories_fragment.*
 
@@ -61,7 +58,7 @@ class MainCategoriesFragment : Fragment() {
         if (viewModel == null)
             viewModel = ViewModelProviders.of(this).get(MainCategoriesViewModel::class.java)
 
-        if (viewModel?.getMainCategories() == null){
+        if (viewModel?.getMainCategories() == null) {
             progress?.show()
             // get main categories
             viewModel?.getCategories(0)?.observe(this, Observer {
@@ -70,11 +67,9 @@ class MainCategoriesFragment : Fragment() {
                         categories = it.data as ArrayList<CategoriesData>
                     getChildCategories(it)
                     getChildrenAds(it)
-                } else {
-
                 }
             })
-        }else
+        } else
             initRecycler()
 
         initSliderImages()
@@ -88,9 +83,10 @@ class MainCategoriesFragment : Fragment() {
         viewModel?.getMainSliderImages()?.observe(this, Observer { images ->
             if (images != null) {
                 if (images.result == true)
-                mainImageSlider.sliderAdapter = MainSliderAdapter(context!!, images.imgesData as List<ImgesDataModel>)
-            }else
-                makeToast(context!! , resources.getString(R.string.error))
+                    mainImageSlider.sliderAdapter =
+                        MainSliderAdapter(context!!, images.imgesData as List<ImgesDataModel>)
+            } else
+                makeToast(context!!, resources.getString(R.string.error))
         })
     }
 
@@ -115,7 +111,11 @@ class MainCategoriesFragment : Fragment() {
                 else
                     Toast.makeText(context!!, ad.errorMessage, Toast.LENGTH_SHORT).show()
             } else
-                Toast.makeText(context!!, resources.getString(R.string.error), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context!!,
+                    resources.getString(R.string.error),
+                    Toast.LENGTH_SHORT
+                ).show()
         })
     }
 
@@ -174,11 +174,11 @@ class MainCategoriesFragment : Fragment() {
                     return false
                 }
             }
-            if (viewModel?.getMainCategories() == null){
+            if (viewModel?.getMainCategories() == null) {
                 viewModel?.setMainCategories(categories)
                 Log.i("kghmghjmjhjh", "gkmikghm")
 
-            }else{
+            } else {
                 Log.i("gnhgmnvb", "gkmikghm")
                 categories = viewModel?.getMainCategories()!!
             }
@@ -189,6 +189,7 @@ class MainCategoriesFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
+        progress?.dismiss()
         requestsCount = 0
     }
 }

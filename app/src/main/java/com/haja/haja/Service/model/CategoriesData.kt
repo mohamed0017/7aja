@@ -32,4 +32,5 @@ data class CategoriesData(
 
 	@field:SerializedName("type")
 	val type: Int? = null
+
 )

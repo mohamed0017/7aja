@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="@dimen/_250sdp"
+    android:layout_height="@dimen/_250sdp"
+    android:layout_gravity="center"
+    android:background="@color/white"
+    android:padding="@dimen/_8sdp"
+    android:layout_margin="@dimen/_8sdp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_time_to_star"
+        android:textSize="@dimen/_18ssp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:padding="@dimen/_8sdp"/>
+
+    <TextView
+        android:id="@+id/hours"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shadow_white_shap"
+        android:text="@string/hours"
+        android:textSize="@dimen/_16ssp"
+        android:padding="@dimen/_8sdp"/>
+
+    <TextView
+        android:id="@+id/oneDay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shadow_white_shap"
+        android:text="@string/one_day"
+        android:textSize="@dimen/_16ssp"
+        android:padding="@dimen/_8sdp"/>
+
+    <TextView
+        android:id="@+id/twoDays"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shadow_white_shap"
+        android:text="@string/two_day"
+        android:textSize="@dimen/_16ssp"
+        android:padding="@dimen/_8sdp"/>
+</LinearLayout>

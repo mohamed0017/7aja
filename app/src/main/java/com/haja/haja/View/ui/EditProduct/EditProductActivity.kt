@@ -26,7 +26,10 @@ import com.haja.haja.Service.model.ProductImgs
 import com.haja.haja.Utils.SharedPreferenceUtil
 import com.haja.haja.Utils.USERID
 import com.haja.haja.Utils.inTransaction
-import com.haja.haja.View.ui.AddProduct.*
+import com.haja.haja.View.ui.AddProduct.AddProductAttributesAdapter
+import com.haja.haja.View.ui.AddProduct.AddProductCatAdapter
+import com.haja.haja.View.ui.AddProduct.AddProductCategoriesDialog
+import com.haja.haja.View.ui.AddProduct.SelectedImagesAdapter
 import com.haja.haja.View.ui.MyAdsScreen.MyAdsFragment
 import com.haja.haja.model.CategoriesData
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
@@ -35,8 +38,6 @@ import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.activity_edit_product.*
-import kotlinx.android.synthetic.main.activity_edit_product.proPhone
-import kotlinx.android.synthetic.main.activity_edit_product.proWhatsApp
 import kotlinx.android.synthetic.main.add_products_categories.view.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.dialog_message.*
@@ -46,7 +47,12 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import java.util.HashMap
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.List
+import kotlin.collections.indices
+import kotlin.collections.isNullOrEmpty
+import kotlin.collections.set
 
 class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
 
@@ -66,8 +72,8 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
     private var selectedCategory = 0
     private var selectedCategoriesCount = 0
     private var advPrice = "0"
+    private var isPublished = "N"
     private var adPricedata: AdPricedataModel? = null
-
     private val adapter = EditProductImagesAdapter(this)
     var productId = 0
 
@@ -112,6 +118,13 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
                 } else
                     makeToast(context!!, resources.getString(R.string.error))
             })
+
+        AdvPublish.setOnCheckedChangeListener { buttonView, isChecked ->
+            isPublished = if (isChecked)
+                "Y"
+            else
+                "N"
+        }
     }
 
     override fun onDeleteImage(img: ProductImgs?) {
@@ -198,7 +211,8 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
         val progress = CustomProgressBar.showProgressBar(context!!)
         progress.show()
         viewModel.setProductAttributes(attributesAdapter.getEnteredAttributesData())
-        viewModel.setImages(getSelectedImages())
+        if (!selectedImages.isNullOrEmpty())
+            viewModel.setImages(getSelectedImages())
         viewModel.setProductData(getProductData())
         viewModel.editProduct(productId).observe(this, Observer { products ->
             progress.dismiss()
@@ -244,17 +258,17 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
         if (adPricedata?.userFreeAds!! <= 0) {
             dialog.adsFreeCount.text = advPrice
             dialog.adsFreeMsg.text = resources.getString(R.string.no_free_ads)
-        }else
+        } else
             dialog.adsFreeCount.text = adPricedata?.userFreeAds.toString()
 
         dialog.done.setOnClickListener {
-         //   if (adPricedata?.userFreeAds!! > 0) {
-                uploadProduct()
-           /* } else {
-                val intent = Intent(context!!, PaymentActivity::class.java)
-                intent.putExtra(PaymentActivity.PAYMENT_AMOUNT, advPrice)
-                startActivityForResult(intent, PaymentActivity.PAYMENT_REQUEST_CODE)
-            }*/
+            //   if (adPricedata?.userFreeAds!! > 0) {
+            uploadProduct()
+            /* } else {
+                 val intent = Intent(context!!, PaymentActivity::class.java)
+                 intent.putExtra(PaymentActivity.PAYMENT_AMOUNT, advPrice)
+                 startActivityForResult(intent, PaymentActivity.PAYMENT_REQUEST_CODE)
+             }*/
             dialog.dismiss()
         }
         dialog.show()
@@ -278,6 +292,7 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
               map["longitude"] = longi.toString()*/
         map["type"] = "1"
         map["is_special"] = "0"
+        map["is_published"] = isPublished
         map["user_id"] = SharedPreferenceUtil(context!!).getString(USERID, "0").toString()
         return map
     }
@@ -319,8 +334,8 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
             adapter.notifyDataSetChanged()
 
         }
-       /* when (requestCode) {
-            *//* EasyWayLocation.LOCATION_SETTING_REQUEST_CODE -> easyWayLocation?.onActivityResult(
+        /* when (requestCode) {
+             *//* EasyWayLocation.LOCATION_SETTING_REQUEST_CODE -> easyWayLocation?.onActivityResult(
                  resultCode
              )*//*
             PaymentActivity.PAYMENT_REQUEST_CODE -> if (data != null) {
@@ -329,7 +344,11 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
             }
         }*/
 
-        super.onActivityResult(requestCode, resultCode, data)  // You MUST have context!! line to be here
+        super.onActivityResult(
+            requestCode,
+            resultCode,
+            data
+        )  // You MUST have context!! line to be here
         // so ImagePicker can work with fragment mode
     }
 

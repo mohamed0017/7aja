@@ -3,6 +3,7 @@ package com.haja.haja.View.ui.SubCategoriesScreen
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.haja.haja.Service.model.AdsModel
 import com.haja.haja.Service.repository.AppRepository
 import com.haja.haja.Utils.LANG
 import com.haja.haja.Utils.SharedPreferenceUtil
@@ -13,11 +14,12 @@ import com.haja.haja.model.CategoriesModel
 class SubCategoriesViewModel(application: Application) : AndroidViewModel(application) {
 
     private val token = SharedPreferenceUtil(getApplication()).getString(TOKEN, "")
+    private val lang = SharedPreferenceUtil(getApplication()).getString(LANG, "ar")
     private val repository = AppRepository(token.toString())
     private var parentID = 0
     private var categories: MutableLiveData<CategoriesModel>? = null
 
-    fun ssetParentId(id: Int) {
+    fun setParentId(id: Int) {
         parentID = id
     }
 
@@ -30,4 +32,9 @@ class SubCategoriesViewModel(application: Application) : AndroidViewModel(applic
             return categories
 
     }
+
+    fun getAds(parentId : Int?): SingleLiveEvent2<AdsModel> {
+        return  repository.getAds(parentId!!, "$lang")
+    }
+
 }

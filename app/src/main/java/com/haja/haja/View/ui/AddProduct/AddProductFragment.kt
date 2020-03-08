@@ -39,6 +39,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.dialog_message.*
 import kotlinx.android.synthetic.main.dialog_message.done
 import kotlinx.android.synthetic.main.dialog_message_price.*
+import kotlinx.android.synthetic.main.dialog_stared.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -119,7 +120,11 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
     private var selectedImages = ArrayList<Image>()
     private var selectedCategory = 0
     private var selectedCategoriesCount = 0
+    private var totalAdPrice = "0"
     private var advPrice = "0"
+    private var special12h = "0"
+    private var special1day = "0"
+    private var special2day = "0"
     private var is_published = "Y"
     private var adPricedata: AdPricedataModel? = null
     override fun onCreateView(
@@ -184,7 +189,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
             if (isChecked) {
                 showStaredDialog()
             } else {
-
+                totalAdPrice = advPrice
             }
         }
     }
@@ -193,10 +198,21 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         val dialog = Dialog(context!!)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
-        dialog.setContentView(R.layout.dialog_message)
-        dialog.done.setOnClickListener {
+        dialog.setContentView(R.layout.dialog_stared)
+        totalAdPrice = special12h
+        dialog.hours.setOnClickListener {
+            totalAdPrice = special12h
             dialog.dismiss()
         }
+        dialog.oneDay.setOnClickListener {
+            totalAdPrice = special1day
+            dialog.dismiss()
+        }
+        dialog.twoDays.setOnClickListener {
+            totalAdPrice = special2day
+            dialog.dismiss()
+        }
+
         dialog.show()
     }
 
@@ -225,6 +241,10 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
                     if (adPrice.adPricedata != null) {
                         adPricedata = adPrice.adPricedata
                         advPrice = adPrice.adPricedata.priceAdv.toString()
+                        totalAdPrice = advPrice
+                        special12h = adPrice.adPricedata.special_4_12h.toString()
+                        special1day = adPrice.adPricedata.special_4_1day.toString()
+                        special2day = adPrice.adPricedata.special_4_2day.toString()
                     }
             }
         })
@@ -278,7 +298,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         dialog.setCancelable(true)
         dialog.setContentView(R.layout.dialog_message_price)
         if (adPricedata?.userFreeAds!! <= 0) {
-            dialog.adsFreeCount.text = "$advPrice ${resources.getString(R.string.kwd)}"
+            dialog.adsFreeCount.text = "$totalAdPrice ${resources.getString(R.string.kwd)}"
             dialog.adsFreeMsg.text = resources.getString(R.string.no_free_ads)
         } else
             dialog.adsFreeCount.text = adPricedata?.userFreeAds.toString()
@@ -288,7 +308,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
                 uploadProduct()
             } else {
                 val intent = Intent(context!!, PaymentActivity::class.java)
-                intent.putExtra(PaymentActivity.PAYMENT_AMOUNT, advPrice)
+                intent.putExtra(PaymentActivity.PAYMENT_AMOUNT, totalAdPrice)
                 startActivityForResult(intent, PaymentActivity.PAYMENT_REQUEST_CODE)
             }
             dialog.dismiss()

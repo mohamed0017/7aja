@@ -103,6 +103,11 @@ class ProductsAdapter(
     ) {
         if (productsFragment is MyAdsFragment)
         {
+            if (product.isPublished == "N")
+                holder.editItemDraft.visibility = View.VISIBLE
+            else
+                holder.editItemDraft.visibility = View.GONE
+
             holder.favIcon.visibility = View.GONE
             holder.deleteIcon.visibility = View.VISIBLE
             holder.editItem.visibility = View.VISIBLE
@@ -137,6 +142,7 @@ class ProductsAdapter(
         val favIcon = itemView.productItemFav
         val deleteIcon = itemView.productItemDelete
         val editItem = itemView.productItemEdit
+        val editItemDraft = itemView.productItemDraft
 
     }
 }

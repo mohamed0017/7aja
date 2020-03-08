@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.haja.haja.Service.model.ProductData
 import com.haja.haja.View.Adapter.AttributsAdapter
 import com.haja.haja.View.Adapter.SliderAdapterExample
-import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil
 import com.smarteist.autoimageslider.IndicatorAnimations
 import com.smarteist.autoimageslider.SliderAnimations
 import kotlinx.android.synthetic.main.activity_product_details.*
@@ -128,7 +127,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
         productShare.setOnClickListener {
             if (!product.imgs.isNullOrEmpty())
-                shareAd(product.imgs[0]?.img!!, product.name!!)
+                shareAd(product.imgs[0]?.img!!, product)
         }
         productMessage.setOnClickListener {
             val userId = SharedPreferenceUtil(this).getString(USERID, "0")?.toInt()
@@ -143,8 +142,8 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun shareAd(imgUrl: String, productName: String) {
-        shareImage(IMAGEBASEURL + imgUrl, this, productName)
+    private fun shareAd(imgUrl: String, product: ProductData) {
+        shareImage(IMAGEBASEURL + imgUrl, this, product)
     }
 
     private fun sendProductReport(
@@ -162,11 +161,11 @@ class ProductDetailsActivity : AppCompatActivity() {
             if (result != null) {
                 if (result.result == true) {
                     dialog.dismiss()
-                    SnackAndToastUtil.makeToast(this, resources.getString(R.string.success))
+                    makeToast(this, result.errorMesage.toString())
                 } else
-                    SnackAndToastUtil.makeToast(this, result.errorMesage.toString())
+                    makeToast(this, result.errorMesage.toString())
             } else
-                SnackAndToastUtil.makeToast(this, resources.getString(R.string.error))
+                makeToast(this, resources.getString(R.string.error))
         })
     }
 
@@ -191,13 +190,13 @@ class ProductDetailsActivity : AppCompatActivity() {
             viewModel.addToFav(product.id!!).observe(this, Observer { result ->
                 if (result != null) {
                     if (result.result == true) {
-                        SnackAndToastUtil.makeToast(this, resources.getString(R.string.added))
+                        makeToast(this, resources.getString(R.string.added))
                         productFav.setImageResource(R.mipmap.fav_hov_1mdpi)
                         product.isFavorite = result.insertID
                     } else
-                        SnackAndToastUtil.makeToast(this, result.errorMesage.toString())
+                        makeToast(this, result.errorMesage.toString())
                 } else
-                    SnackAndToastUtil.makeToast(this, resources.getString(R.string.error))
+                    makeToast(this, resources.getString(R.string.error))
             })
         } else {
             viewModel.removeFromFav(product.isFavorite!!).observe(this, Observer { result ->
@@ -206,9 +205,9 @@ class ProductDetailsActivity : AppCompatActivity() {
                         productFav.setImageResource(R.mipmap.favmdpi)
                         product.isFavorite = null
                     } else
-                        SnackAndToastUtil.makeToast(this, result.errorMesage.toString())
+                        makeToast(this, result.errorMesage.toString())
                 } else
-                    SnackAndToastUtil.makeToast(this, resources.getString(R.string.error))
+                    makeToast(this, resources.getString(R.string.error))
             })
         }
 

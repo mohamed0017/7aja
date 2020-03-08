@@ -11,6 +11,7 @@ import com.haja.haja.R;
 import com.haja.haja.Service.ApiService;
 import com.haja.haja.Service.model.ProductImgs;
 import com.haja.haja.View.ui.ProductDetails.ImageFullScreenActivity;
+import com.haja.haja.View.ui.ProductDetails.ProductDetailsActivity;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -40,9 +41,12 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
                 .error(context.getResources().getDrawable(R.drawable.placeholder)).into(viewHolder.imageViewBackground);
 
         viewHolder.imageViewBackground.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ImageFullScreenActivity.class);
-            intent.putParcelableArrayListExtra("fullScreenImg", (ArrayList<? extends Parcelable>) images);
-            context.startActivity(intent);
+            if (context instanceof ProductDetailsActivity){
+                Intent intent = new Intent(context, ImageFullScreenActivity.class);
+                intent.putParcelableArrayListExtra("fullScreenImg", (ArrayList<? extends Parcelable>) images);
+                context.startActivity(intent);
+            }
+
         });
     }
 

@@ -41,7 +41,6 @@ class MainCategoriesAdapter(
         val parent = parents[position]
         holder.textView.text = parent.name
 
-
         val childLayoutManager = LinearLayoutManager(
             holder.recyclerView.context, LinearLayout.HORIZONTAL, false
         )

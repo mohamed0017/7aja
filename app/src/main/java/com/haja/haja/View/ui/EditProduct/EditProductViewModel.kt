@@ -14,7 +14,7 @@ class EditProductViewModel(application: Application) : AndroidViewModel(applicat
 
     private var productData = HashMap<String, String>()
     private var productAttributes = HashMap<String, String>()
-    private lateinit var parts: List<MultipartBody.Part>
+    private var parts: List<MultipartBody.Part>? = null
     private val token = SharedPreferenceUtil(getApplication()).getString(TOKEN, "")
     private val lang = SharedPreferenceUtil(getApplication()).getString(LANG, "ar")
     private val productRepository = ProductRepository(token.toString())
@@ -56,9 +56,6 @@ class EditProductViewModel(application: Application) : AndroidViewModel(applicat
         return productRepository.getCategoryAttributes(catId!!, "$lang")
     }
 
-    fun addProduct(): SingleLiveEvent2<AddProductResponse> {
-        return productRepository.addProduct(productData, parts , productAttributes)
-    }
 
     fun setProductData(map : HashMap<String, String>){
         productData = map

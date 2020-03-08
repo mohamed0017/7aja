@@ -16,8 +16,6 @@
             android:layout_marginStart="@dimen/_24sdp"
             android:background="@drawable/rounded_corners"/>
     <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -123,6 +121,15 @@
                         android:text="150 KW"/>
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/productItemDraft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_10ssp"
+                android:textColor="@color/red"
+                android:visibility="gone"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:text="@string/dreft"/>
         </LinearLayout>
 
     </LinearLayout>

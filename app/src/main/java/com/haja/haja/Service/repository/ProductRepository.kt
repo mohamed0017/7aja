@@ -16,7 +16,10 @@ class ProductRepository(token: String) {
         apiService = ServiceGenerator(token).createService
     }
 
-    fun getCategoryAttributes(categoryId: Int, language: String): SingleLiveEvent2<AddProAttributesModel> {
+    fun getCategoryAttributes(
+        categoryId: Int,
+        language: String
+    ): SingleLiveEvent2<AddProAttributesModel> {
         val result = SingleLiveEvent2<AddProAttributesModel>()
         val call = apiService?.getCategoryAttributes(categoryId, lang = language)
         call?.enqueue {
@@ -101,11 +104,13 @@ class ProductRepository(token: String) {
     fun editProduct(
         productId: Int,
         map: HashMap<String, String>,
-        parts: List<MultipartBody.Part>,
+        parts: List<MultipartBody.Part>?,
         productAttributes: HashMap<String, String>
     ): SingleLiveEvent2<AddProductResponse> {
         val result = SingleLiveEvent2<AddProductResponse>()
-        val call = apiService?.editProduct(productId,map, parts, productAttributes)
+        val call =
+            if (parts != null) apiService?.editProduct(productId, map, parts, productAttributes)
+            else apiService?.editProduct(productId, map, productAttributes)
         call?.enqueue {
             onResponse = { response ->
                 Log.i("editProduct", response.code().toString())
@@ -144,7 +149,11 @@ class ProductRepository(token: String) {
         return result
     }
 
-    fun getSingleProduct(orderId: Int, language: String, userId: Int): SingleLiveEvent2<ProductsModel> {
+    fun getSingleProduct(
+        orderId: Int,
+        language: String,
+        userId: Int
+    ): SingleLiveEvent2<ProductsModel> {
         val result = SingleLiveEvent2<ProductsModel>()
         val call = apiService?.getSingleProduct(orderId = orderId, lang = language, userId = userId)
         call?.enqueue {
@@ -165,7 +174,7 @@ class ProductRepository(token: String) {
         return result
     }
 
-    fun deleteProductImg(productId: Int, imageId : Int): SingleLiveEvent2<DefultResponse> {
+    fun deleteProductImg(productId: Int, imageId: Int): SingleLiveEvent2<DefultResponse> {
         val result = SingleLiveEvent2<DefultResponse>()
         val call = apiService?.deleteProductImg(productId, imageId)
         call?.enqueue {
@@ -225,9 +234,9 @@ class ProductRepository(token: String) {
 
     }
 
-    fun likeAdvertisement(type: Int, productId:Int): SingleLiveEvent2<DefultResponse> {
+    fun likeAdvertisement(type: Int, productId: Int): SingleLiveEvent2<DefultResponse> {
         val result = SingleLiveEvent2<DefultResponse>()
-        val call = apiService?. likeAd(type, productId)
+        val call = apiService?.likeAd(type, productId)
         call?.enqueue {
             onResponse = { response ->
                 Log.i("likeAdvertisement", response.code().toString())
@@ -237,19 +246,19 @@ class ProductRepository(token: String) {
                     result.value = null
             }
             onFailure = { t ->
-                Log.i("likeAdv/Failure", t!!.message +"..")
+                Log.i("likeAdv/Failure", t!!.message + "..")
                 result.value = null
             }
         }
         return result
     }
 
-    fun searchProducts( language: String , search:SearchRequest): SingleLiveEvent2<ProductsModel> {
+    fun searchProducts(language: String, search: SearchRequest): SingleLiveEvent2<ProductsModel> {
         val result = SingleLiveEvent2<ProductsModel>()
-        val call = apiService?.searchProducts( lang = language ,searchData = search)
+        val call = apiService?.searchProducts(lang = language, searchData = search)
         call?.enqueue {
             onResponse = { response ->
-                Log.i("searchProducts/url" , call.request().url.toString())
+                Log.i("searchProducts/url", call.request().url.toString())
                 Log.i("searchProducts", response.code().toString())
                 if (response.code() / 100 == 2)
                     result.value = response.body()
@@ -257,7 +266,7 @@ class ProductRepository(token: String) {
                     result.value = null
             }
             onFailure = { t ->
-                Log.i("searchProducts/Failure", t!!.message +"..")
+                Log.i("searchProducts/Failure", t!!.message + "..")
                 result.value = null
             }
         }
@@ -269,7 +278,7 @@ class ProductRepository(token: String) {
         val call = apiService?.getAdPrice(userId)
         call?.enqueue {
             onResponse = { response ->
-                Log.i("getAdPrice/url" , call.request().url.toString())
+                Log.i("getAdPrice/url", call.request().url.toString())
                 Log.i("getAdPrice", response.code().toString())
                 if (response.code() / 100 == 2)
                     result.value = response.body()
@@ -277,7 +286,7 @@ class ProductRepository(token: String) {
                     result.value = null
             }
             onFailure = { t ->
-                Log.i("getAdPrice/Failure", t!!.message +"..")
+                Log.i("getAdPrice/Failure", t!!.message + "..")
                 result.value = null
             }
         }

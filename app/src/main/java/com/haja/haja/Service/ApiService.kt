@@ -14,6 +14,12 @@ interface ApiService {
     }
 
     @Headers("Accept: application/json")
+    @GET("/api/categories/cats_4offers/{lang}")
+    fun getOffersCategories(
+        @Path("lang") lang: String
+    ): Call<OffersCategoriesModel>
+
+    @Headers("Accept: application/json")
     @GET("/api/categories/t/{lang}/1/{id}")
     fun getCategories(
         @Path("lang") lang: String,
@@ -80,7 +86,7 @@ interface ApiService {
 
     @Headers("Accept: application/json")
     @GET("/api/categories/cats_4offers/{lang}")
-    fun getOffersCategories(
+    fun getOffersCaedtegories(
         @Path("lang") lang: String
     ): Call<OffersCategoriesModel>
 
@@ -140,6 +146,15 @@ interface ApiService {
         @Part lang: List<MultipartBody.Part>,
         @QueryMap productAttributes: HashMap<String, String>
     ): Call<AddProductResponse>
+
+    @Headers("Accept: application/json")
+    @PUT("/api/products/{id}")
+    fun editProduct(
+        @Path("id") productId: Int,
+        @QueryMap map: HashMap<String, String>,
+        @QueryMap productAttributes: HashMap<String, String>
+    ): Call<AddProductResponse>
+
 
     @Headers("Accept: application/json")
     @POST("/api/products_report")
