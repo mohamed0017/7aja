@@ -66,6 +66,7 @@ class AppRepository(token: String) {
         call?.enqueue {
             onResponse = { response ->
                 Log.i("getAds", response.code().toString())
+                Log.i("getAds/url", call.request().url.toString())
                 if (response.code() / 100 == 2)
                     result.value = response.body()
                 else
@@ -73,6 +74,26 @@ class AppRepository(token: String) {
             }
             onFailure = { t ->
                 Log.i("getAds/Failure", t!!.message)
+                result.value = null
+            }
+        }
+        return result
+    }
+
+    fun getCatAds(categoryId:Int, language: String): SingleLiveEvent2<AdsModel> {
+        val result = SingleLiveEvent2<AdsModel>()
+        val call = apiService?.getCatAds(categoryId = categoryId, lang = language)
+        call?.enqueue {
+            onResponse = { response ->
+                Log.i("getCatAds", response.code().toString())
+                Log.i("getCatAds/url", call.request().url.toString())
+                if (response.code() / 100 == 2)
+                    result.value = response.body()
+                else
+                    result.value = null
+            }
+            onFailure = { t ->
+                Log.i("getCatAds/Failure", t!!.message)
                 result.value = null
             }
         }
@@ -206,6 +227,25 @@ class AppRepository(token: String) {
             }
             onFailure = { t ->
                 Log.i("getMainSlider/Failure", t!!.message)
+                result.value = null
+            }
+        }
+        return result
+    }
+
+    fun getFaq(): MutableLiveData<FaqModel> {
+        val result = MutableLiveData<FaqModel>()
+        val call = apiService?.getFaq()
+        call?.enqueue {
+            onResponse = { response ->
+                Log.i("getFaq", response.code().toString())
+                if (response.code() / 100 == 2)
+                    result.value = response.body()
+                else
+                    result.value = null
+            }
+            onFailure = { t ->
+                Log.i("getFaq/Failure", t!!.message)
                 result.value = null
             }
         }

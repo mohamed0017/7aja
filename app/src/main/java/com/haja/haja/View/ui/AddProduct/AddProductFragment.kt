@@ -122,6 +122,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
     private var selectedCategoriesCount = 0
     private var totalAdPrice = "0"
     private var advPrice = "0"
+    private var seleectedSpecialTime = "0"
     private var special12h = "0"
     private var special1day = "0"
     private var special2day = "0"
@@ -154,7 +155,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         notPublishProductBut.setOnClickListener {
             if (isValidProductData()) {
                 is_published = "N"
-                uploadProduct()
+                showPriceDialog()
             }
         }
         selectCategory.setOnClickListener {
@@ -202,14 +203,17 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         totalAdPrice = special12h
         dialog.hours.setOnClickListener {
             totalAdPrice = special12h
+            seleectedSpecialTime = "12"
             dialog.dismiss()
         }
         dialog.oneDay.setOnClickListener {
             totalAdPrice = special1day
+            seleectedSpecialTime = "24"
             dialog.dismiss()
         }
         dialog.twoDays.setOnClickListener {
             totalAdPrice = special2day
+            seleectedSpecialTime = "48"
             dialog.dismiss()
         }
 
@@ -319,12 +323,12 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
     private fun getProductData(): HashMap<String, String> {
         val map = HashMap<String, String>()
         map["name"] = addProNameAr.text.toString()
-        //   map["name_en"] = addProNameEn.text.toString()
+        map["name_en"] = addProNameEn.text.toString()
         map["price"] = addProPrice.text.toString()
         //  map["discount"] = addProDiscount.text.toString()
         // map["quantity"] = addProQuantity.text.toString()
         map["description"] = addProDescriptionAr.text.toString()
-        // map["description_en"] = addProDescriptionEn.text.toString()
+         map["description_en"] = addProDescriptionEn.text.toString()
         //    map["tags"] = addProTagsAr.text.toString()
         //  map["tags_en"] = addProTags.text.toString()
         map["cat_id"] = selectedCategory.toString()
@@ -333,7 +337,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         /*      map["latitude"] = lati.toString()
               map["longitude"] = longi.toString()*/
         map["type"] = "1"
-        map["is_special"] = "0"
+        map["is_special"] = seleectedSpecialTime
         map["is_published"] = is_published
         map["user_id"] = SharedPreferenceUtil(context!!).getString(USERID, "0").toString()
         return map

@@ -35,6 +35,13 @@ interface ApiService {
 
     @Headers("Accept: application/json")
     @GET("/api/advertising/t/{lang}/0")
+    fun getCatAds(
+        @Path("lang") lang: String,
+        @Query("with_id") categoryId: Int
+    ): Call<AdsModel>
+
+    @Headers("Accept: application/json")
+    @GET("/api/advertising/t/{lang}/0")
     fun getStartupAd(
         @Path("lang") lang: String,
         @Query("user_id") userId: Int
@@ -238,6 +245,10 @@ interface ApiService {
     @Headers("Accept: application/json")
     @GET("/api/profile/{id}")
     fun getProfile(@Path("id") id: Int): Call<UserModel>
+
+    @Headers("Accept: application/json")
+    @GET("/api/art_m/t/ar/1/0")
+    fun getFaq(): Call<FaqModel>
 
     @Headers("Accept: application/json")
     @POST("/api/update_profile/{id}")

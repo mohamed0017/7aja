@@ -123,10 +123,12 @@
     <string name="kwd">KWD</string>
     <string name="save_ad">save draft </string>
     <string name="edit_ad"> Edit Ad</string>
-    <string name="select_time_to_star">اختر وقت التمييز</string>
-    <string name="hours">12 ساعة</string>
-    <string name="one_day">يوم واحد</string>
-    <string name="two_day">يومين فقط</string>
+    <string name="select_time_to_star">Choose time to make Ad premium</string>
+    <string name="hours">12 hours</string>
+    <string name="one_day"> one day </string>
+    <string name="two_day"> two days</string>
     <string name="published">Publish the ad</string>
-    <string name="dreft">مسودة</string>
+    <string name="dreft">draft</string>
+    <string name="faq"> FAQ</string>
+    <string name="ad_stared">  make Ad premium  </string>
 </resources>

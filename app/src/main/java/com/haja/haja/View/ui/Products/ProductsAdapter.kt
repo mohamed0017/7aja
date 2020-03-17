@@ -101,6 +101,7 @@ class ProductsAdapter(
         product: ProductData,
         position: Int
     ) {
+
         if (productsFragment is MyAdsFragment)
         {
             if (product.isPublished == "N")
@@ -119,6 +120,12 @@ class ProductsAdapter(
                     replace(R.id.mainContainer, EditProductActivity.newInstance(product.id!!)).addToBackStack("dd")
                 }
             }
+            holder.productItemStar.visibility = View.GONE
+        }else{
+            if (product.isSpecial == "0")
+                holder.productItemStar.visibility = View.GONE
+            else
+                holder.productItemStar.visibility = View.VISIBLE
         }
     }
 
@@ -143,6 +150,7 @@ class ProductsAdapter(
         val deleteIcon = itemView.productItemDelete
         val editItem = itemView.productItemEdit
         val editItemDraft = itemView.productItemDraft
+        val productItemStar = itemView.productItemStar
 
     }
 }

@@ -28,7 +28,7 @@ class SubCategoriesFragment : Fragment() {
     }
 
     private var viewModel: SubCategoriesViewModel? = null
-
+    private lateinit var adapter: SubCategoriesAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,11 +55,9 @@ class SubCategoriesFragment : Fragment() {
         viewModel?.getCategories()?.observe(this, Observer { subCategories ->
             progress.dismiss()
             if (subCategories != null) {
-                if (subCategories.result == true)
-                {
+                if (subCategories.result == true) {
                     subCategories.data?.let { initCategoryAds(it, categoryId) }
-                }
-                else
+                } else
                     Toast.makeText(context, subCategories.errorMessage, Toast.LENGTH_SHORT).show()
             } else
                 Toast.makeText(
@@ -76,33 +74,47 @@ class SubCategoriesFragment : Fragment() {
     ) {
 
         viewModel?.getAds(categoryId)?.observe(this, Observer {
+            val newData = ArrayList<CategoriesData?>()
+            newData.addAll(data)
             if (it != null) {
-                val newData =  ArrayList<CategoriesData?>()
-                newData.addAll(data)
-                for (i in data.indices){
-                    if ( (i / 6).toString().length == 1){
-                        Log.e("newData/length","${(i / 6).toString().length }")
-                        Log.e("newData/string","${(i / 6)}")
-                        Log.e("newData/int","$i")
-                        val catData  = CategoriesData()
+                if (!it.data.isNullOrEmpty()) {
+                    Log.e("getAds/size", it.data.size.toString())
+                    if (data.size >= 5) {
+                        val catData = CategoriesData()
                         catData.childAds = it.data
-                        newData.add(i + 1 , catData)
+                        newData.add(6, catData)
+                    }
+
+                    if (data.size >= 12) {
+                        val catData2 = CategoriesData()
+                        catData2.childAds = it.data
+                        newData.add(13, catData2)
+                    }
+
+                    if (data.size >= 19) {
+                        val catData2 = CategoriesData()
+                        catData2.childAds = it.data
+                        newData.add(20, catData2)
                     }
                 }
-                initRecycler(newData)
-
             }
+            initRecycler(newData)
         })
     }
 
     private fun initRecycler(data: List<CategoriesData?>?) {
-        subCategoriesList.apply {
-            layoutManager = GridLayoutManager(
-                context, 3
-            )
-            adapter = SubCategoriesAdapter(data as List<CategoriesData>, fragmentManager, context!!)
+        adapter = SubCategoriesAdapter(data as List<CategoriesData>, fragmentManager, context!!)
+        val glm = GridLayoutManager(context, 3)
+        glm.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (adapter.getItemViewType(position)) {
+                    AD_ITEM_TYPE -> 3
+                    else -> 1
+                }
+            }
         }
-
+        subCategoriesList.layoutManager = glm
+        subCategoriesList.adapter = adapter
     }
 
 }

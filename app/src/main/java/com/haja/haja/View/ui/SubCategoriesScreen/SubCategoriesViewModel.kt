@@ -34,7 +34,7 @@ class SubCategoriesViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun getAds(parentId : Int?): SingleLiveEvent2<AdsModel> {
-        return  repository.getAds(parentId!!, "$lang")
+        return  repository.getCatAds(parentId!!, "$lang")
     }
 
 }

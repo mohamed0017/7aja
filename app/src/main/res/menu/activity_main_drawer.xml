@@ -25,6 +25,10 @@
                 android:icon="@drawable/menu_terms"
                 android:title="@string/conditions" />
         <item
+            android:id="@+id/nav_faq"
+            android:icon="@drawable/menu_info"
+            android:title="@string/faq" />
+        <item
                 android:id="@+id/nav_logOut"
                 android:icon="@drawable/menu_logout"
                 android:visible="false"

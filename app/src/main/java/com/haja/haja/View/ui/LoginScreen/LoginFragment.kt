@@ -74,7 +74,7 @@ class LoginFragment : Fragment() {
                     activity?.nav_view?.menu?.findItem(R.id.nav_logOut)?.isVisible = true
                     goToActivationAccount()
                 } else {
-                    makeToast(context!!, user.errorMesage.toString())
+                    CustomDialog.showDialog(context!!, user.errorMesage.toString())
                 }
             } else
                 makeToast(context!!, resources.getString(R.string.error))

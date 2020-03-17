@@ -24,6 +24,7 @@ import com.haja.haja.View.ui.MyFavorites.FavoritesFragment
 import com.haja.haja.View.ui.NotificationsHistory.NotificationsListFragment
 import com.haja.haja.View.ui.OffersScreen.OffersFragment
 import com.haja.haja.View.ui.SearchScreen.SearchFragment
+import com.haja.haja.View.ui.faq.FaqFragment
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
 import kotlinx.android.synthetic.main.activity_main_categories.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -217,6 +218,14 @@ class MainCategoriesActivity : AppCompatActivity(),
                             "FavoritesFragment"
                         )
                     }
+            }
+            R.id.nav_faq -> {
+                supportFragmentManager.inTransaction {
+                    replace(
+                        R.id.mainContainer,
+                        FaqFragment.newInstance()
+                    ).addToBackStack("staticContent")
+                }
             }
             R.id.nav_about -> {
                 supportFragmentManager.inTransaction {

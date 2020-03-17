@@ -47,6 +47,9 @@ data class ProductData(
 	@field:SerializedName("is_published")
 	val isPublished: String? = null,
 
+	@field:SerializedName("is_special")
+	val isSpecial: String? = null,
+
 	@field:SerializedName("whatsapp")
 	val whatsapp: String? = null,
 
