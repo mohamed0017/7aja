@@ -5,14 +5,14 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_width="@dimen/_90sdp"
-        android:layout_height="@dimen/_100sdp"
+        android:layout_height="@dimen/_120sdp"
         android:layout_marginStart="@dimen/_10sdp"
         >
 
     <ImageView
             android:id="@+id/childCatImg"
-            android:layout_width="@dimen/_60sdp"
-            android:layout_height="@dimen/_60sdp"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp"
             android:padding="@dimen/_4sdp"
             app:srcCompat="@mipmap/note_icon2hdpi"/>
 

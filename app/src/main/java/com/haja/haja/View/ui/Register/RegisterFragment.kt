@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -63,6 +65,9 @@ class RegisterFragment : Fragment(), Listener {
         activity?.categoriesBarMenu?.visibility = View.GONE
         activity?.catBarSearch?.visibility = View.GONE
 
+        registerShowPass.setOnClickListener {
+            registerPass.inputType = EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        }
         registerPhoneCode.keyListener = null
         configLocationPremation()
         registerBut.setOnClickListener {
@@ -148,7 +153,7 @@ class RegisterFragment : Fragment(), Listener {
     private fun isValidUserInputs(): Boolean {
         val name = registerName.text.toString()
         val phone = registerPhone.text.toString()
-        val pass = `registerPassُ`.text.toString()
+        val pass = registerPass.text.toString()
         val email = registerEmail.text.toString()
         val confirmPass = `registerConfirmPassُ`.text.toString()
 
@@ -159,7 +164,7 @@ class RegisterFragment : Fragment(), Listener {
             registerPhone.error = resources.getString(R.string.correct_phone)
             false
         } else if (!isValidPassword(pass)) {
-            `registerPassُ`.error = resources.getString(R.string.correct_pass)
+            registerPass.error = resources.getString(R.string.correct_pass)
             false
 
         }/* else if (!isValidEmail(email)) {
@@ -178,7 +183,7 @@ class RegisterFragment : Fragment(), Listener {
       //  map["mobile"] = "${registerPhone.text}" // TODO just for debug
         map["mobile"] = "965${registerPhone.text}"
         map["email"] = registerEmail.text.toString()
-        map["password"] = `registerPassُ`.text.toString()
+        map["password"] = registerPass.text.toString()
         map["c_password"] = `registerConfirmPassُ`.text.toString()
         map["activitation_code"] = generateCode()
         map["onesignal_id"] = "test"  //TODO replace onesignal_id when setup onsignal project

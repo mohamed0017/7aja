@@ -13,7 +13,7 @@ class ImageFullScreenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_image_full_screen)
+                setContentView(R.layout.activity_image_full_screen)
 
         back.setOnClickListener {
             finish()

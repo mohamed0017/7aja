@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
+
 import com.haja.haja.R;
 import com.haja.haja.Service.ApiService;
 import com.haja.haja.Service.model.ProductImgs;
@@ -59,7 +62,7 @@ public class SliderAdapterExample extends SliderViewAdapter<SliderAdapterExample
     class SliderAdapterVH extends SliderViewAdapter.ViewHolder {
 
         View itemView;
-        ImageView imageViewBackground;
+        AppCompatImageView imageViewBackground;
 
         SliderAdapterVH(View itemView) {
             super(itemView);

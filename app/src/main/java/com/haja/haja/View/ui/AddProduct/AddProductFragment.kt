@@ -155,7 +155,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         notPublishProductBut.setOnClickListener {
             if (isValidProductData()) {
                 is_published = "N"
-                showPriceDialog()
+                uploadProduct()
             }
         }
         selectCategory.setOnClickListener {

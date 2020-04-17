@@ -31,6 +31,7 @@ import com.haja.haja.View.ui.AddProduct.AddProductCatAdapter
 import com.haja.haja.View.ui.AddProduct.AddProductCategoriesDialog
 import com.haja.haja.View.ui.AddProduct.SelectedImagesAdapter
 import com.haja.haja.View.ui.MyAdsScreen.MyAdsFragment
+import com.haja.haja.View.ui.Payment.PaymentActivity
 import com.haja.haja.model.CategoriesData
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
@@ -38,20 +39,22 @@ import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
 import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.activity_edit_product.*
+import kotlinx.android.synthetic.main.activity_edit_product.lettersNumber
+import kotlinx.android.synthetic.main.activity_edit_product.proPhone
+import kotlinx.android.synthetic.main.activity_edit_product.proWhatsApp
+import kotlinx.android.synthetic.main.activity_edit_product.selectCategoryToShowAtt
 import kotlinx.android.synthetic.main.add_products_categories.view.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.dialog_message.*
 import kotlinx.android.synthetic.main.dialog_message_price.*
 import kotlinx.android.synthetic.main.dialog_message_price.done
+import kotlinx.android.synthetic.main.dialog_stared.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.List
-import kotlin.collections.indices
-import kotlin.collections.isNullOrEmpty
 import kotlin.collections.set
 
 class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
@@ -76,6 +79,11 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
     private var adPricedata: AdPricedataModel? = null
     private val adapter = EditProductImagesAdapter(this)
     var productId = 0
+    private var totalAdPrice = "0"
+    private var special12h = "0"
+    private var special1day = "0"
+    private var special2day = "0"
+    private var seleectedSpecialTime = "0"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -97,8 +105,12 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
         }
 
         editProductBut.setOnClickListener {
-            uploadProduct()
+            if (isPublished == "N")
+                uploadProduct()
+            else
+                showPriceDialog()
         }
+        getAdPrice()
         initDescriptionLettersCount()
         val userId = SharedPreferenceUtil(context!!).getString(USERID, "0")
         viewModel.getProduct(productId, userId!!.toInt())
@@ -113,6 +125,8 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
                     selectedCategory = product.data?.catId!!
                     setupAttributesList(selectedCategory)
                     addNewProImagesList.adapter = adapter
+                    if (product.data.isSpecial != "0")
+                        AdvStared.isChecked = true
                     if (!product.data.imgs.isNullOrEmpty())
                         adapter.setImagesAndNotifyList(product.data.imgs as ArrayList<ProductImgs?>?)
                 } else
@@ -125,6 +139,7 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
             else
                 "N"
         }
+        advStared()
     }
 
     override fun onDeleteImage(img: ProductImgs?) {
@@ -155,28 +170,6 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
             getNextCategories(itemData.id!!)
     }
 
-
-/*    private fun advStared() {
-        editAdvStared.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
-                showStaredDialog()
-            }else{
-
-            }
-        }
-    }*/
-
-    private fun showStaredDialog() {
-        val dialog = Dialog(context!!)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(true)
-        dialog.setContentView(R.layout.dialog_message)
-        dialog.done.setOnClickListener {
-            dialog.dismiss()
-        }
-        dialog.show()
-    }
-
     private fun initDescriptionLettersCount() {
         editProDescriptionAr.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -202,6 +195,10 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
                     if (adPrice.adPricedata != null) {
                         adPricedata = adPrice.adPricedata
                         advPrice = adPrice.adPricedata.priceAdv.toString()
+                        totalAdPrice = advPrice
+                        special12h = adPrice.adPricedata.special_4_12h.toString()
+                        special1day = adPrice.adPricedata.special_4_1day.toString()
+                        special2day = adPrice.adPricedata.special_4_2day.toString()
                     }
             }
         })
@@ -256,21 +253,57 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
         dialog.setCancelable(true)
         dialog.setContentView(R.layout.dialog_message_price)
         if (adPricedata?.userFreeAds!! <= 0) {
-            dialog.adsFreeCount.text = advPrice
+            dialog.adsFreeCount.text = "$totalAdPrice ${resources.getString(R.string.kwd)}"
             dialog.adsFreeMsg.text = resources.getString(R.string.no_free_ads)
         } else
             dialog.adsFreeCount.text = adPricedata?.userFreeAds.toString()
 
         dialog.done.setOnClickListener {
-            //   if (adPricedata?.userFreeAds!! > 0) {
-            uploadProduct()
-            /* } else {
-                 val intent = Intent(context!!, PaymentActivity::class.java)
-                 intent.putExtra(PaymentActivity.PAYMENT_AMOUNT, advPrice)
-                 startActivityForResult(intent, PaymentActivity.PAYMENT_REQUEST_CODE)
-             }*/
+            if (adPricedata?.userFreeAds!! > 0) {
+                uploadProduct()
+            } else {
+                val intent = Intent(context!!, PaymentActivity::class.java)
+                intent.putExtra(PaymentActivity.PAYMENT_AMOUNT, totalAdPrice)
+                startActivityForResult(intent, PaymentActivity.PAYMENT_REQUEST_CODE)
+            }
             dialog.dismiss()
         }
+        dialog.show()
+    }
+
+
+    private fun advStared() {
+        AdvStared.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                showStaredDialog()
+            } else {
+                totalAdPrice = advPrice
+            }
+        }
+    }
+
+    private fun showStaredDialog() {
+        val dialog = Dialog(context!!)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.dialog_stared)
+        totalAdPrice = special12h
+        dialog.hours.setOnClickListener {
+            totalAdPrice = special12h
+            seleectedSpecialTime = "12"
+            dialog.dismiss()
+        }
+        dialog.oneDay.setOnClickListener {
+            totalAdPrice = special1day
+            seleectedSpecialTime = "24"
+            dialog.dismiss()
+        }
+        dialog.twoDays.setOnClickListener {
+            totalAdPrice = special2day
+            seleectedSpecialTime = "48"
+            dialog.dismiss()
+        }
+
         dialog.show()
     }
 
@@ -291,7 +324,7 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
         /*      map["latitude"] = lati.toString()
               map["longitude"] = longi.toString()*/
         map["type"] = "1"
-        map["is_special"] = "0"
+        map["is_special"] = seleectedSpecialTime
         map["is_published"] = isPublished
         map["user_id"] = SharedPreferenceUtil(context!!).getString(USERID, "0").toString()
         return map

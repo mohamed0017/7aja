@@ -291,13 +291,22 @@
                 app:layout_constraintTop_toBottomOf="@+id/editProductAttributes"/>
 
             <CheckBox
+                android:id="@+id/AdvStared"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ad_stared"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:textSize="@dimen/_14ssp"
+                app:layout_constraintTop_toBottomOf="@+id/selectCategoryToShowAtt"/>
+
+            <CheckBox
                 android:id="@+id/AdvPublish"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/published"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:textSize="@dimen/_14ssp"
-                app:layout_constraintTop_toBottomOf="@+id/selectCategoryToShowAtt"/>
+                app:layout_constraintTop_toBottomOf="@+id/AdvStared"/>
 
             <Button
                 android:id="@+id/editProductBut"
