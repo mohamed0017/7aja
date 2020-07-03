@@ -55,6 +55,7 @@
                     android:layout_alignParentStart="true"
                     android:lines="1"
                     android:text="for sale"
+                    android:textDirection="locale"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/_16ssp" />
 
@@ -106,6 +107,7 @@
                     android:lines="2"
                     android:maxLines="2"
                     android:layout_marginTop="@dimen/_4sdp"
+                    android:textDirection="locale"
                     android:layout_below="@id/productItemTitle"
                     android:text="for sale for sale for sale "
                     android:textSize="@dimen/_12ssp" />

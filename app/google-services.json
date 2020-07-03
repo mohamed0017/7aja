@@ -42,6 +42,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023899595446:android:ebc1bfadda75decf02ac17",
+        "android_client_info": {
+          "package_name": "com.haja.hja"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1023899595446-06gjscj8g7d29t0e3dqdrmlt3hr6cc7o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.haja.hja",
+            "certificate_hash": "232973ee61f39b2304be56f3dde1c07e14f3502f"
+          }
+        },
+        {
+          "client_id": "1023899595446-v0f02smplvvts6qnp27pe56ru8rq10uu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFDVg3uVE3-AeV3qB3Ut0CcijwV0ERqLs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1023899595446-v0f02smplvvts6qnp27pe56ru8rq10uu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

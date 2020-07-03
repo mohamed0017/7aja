@@ -9,9 +9,9 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
-        applicationId "com.haja.haja"
+        applicationId "com.haja.hja"
         minSdkVersion 19
         versionCode 2
         versionName "1.1"
@@ -91,7 +91,7 @@ dependencies {
     implementation 'com.github.smarteist:autoimageslider:1.3.2'
     implementation 'com.hannesdorfmann:adapterdelegates4:4.0.0'
     implementation 'com.afollestad.material-dialogs:core:3.1.1'
-    implementation 'com.github.nguyenhoanglam:ImagePicker:1.3.3'
+    implementation 'com.github.nguyenhoanglam:ImagePicker:1.4.3'
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
     //implementation 'androidx.vectordrawable:vectordrawable:1.1.0'

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">تطبيق حاجة</string>
+    <string name="app_name"> حاجة</string>
 
     <string name="title_activity_ad">AdActivity</string>
     <string name="dummy_button">Dummy Button</string>
@@ -131,4 +131,5 @@
     <string name="published">نشر الأعلان </string>
     <string name="dreft">مسودة</string>
     <string name="faq">الاسئلة الشائعة</string>
+    <string name="enter">دخول</string>
 </resources>
