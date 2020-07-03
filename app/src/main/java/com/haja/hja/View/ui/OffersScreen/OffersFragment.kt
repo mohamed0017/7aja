@@ -51,7 +51,6 @@ class OffersFragment : Fragment(), OnItemClick {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Log.e("onResume", "onResume")
         activity?.appBarTitle?.text = resources.getString(R.string.offers)
         activity?.categoriesBarBack?.visibility = View.GONE
         activity?.categoriesBarMenu?.visibility = View.VISIBLE
@@ -59,7 +58,6 @@ class OffersFragment : Fragment(), OnItemClick {
 
         viewModel = ViewModelProviders.of(this).get(OffersViewModel::class.java)
         progress = CustomProgressBar.showProgressBar(context!!)
-        progress?.show()
         val childAdsLayoutManager = LinearLayoutManager(
             context, LinearLayout.HORIZONTAL, false
         )
@@ -70,6 +68,7 @@ class OffersFragment : Fragment(), OnItemClick {
         offersAdapter = OffiersAdapter(context!!, this)
         offersList.adapter = offersAdapter
 
+        progress?.show()
         viewModel.getCategories().observe(this, Observer { categories ->
             progress?.dismiss()
             if (categories != null) {
@@ -100,5 +99,15 @@ class OffersFragment : Fragment(), OnItemClick {
             } else
                 makeToast(context!!, resources.getString(R.string.error))
         })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        progress?.dismiss()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        progress?.dismiss()
     }
 }

@@ -3,6 +3,7 @@ package com.haja.hja.View.ui.AdScreen
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -12,8 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.haja.hja.R
 import com.haja.hja.Service.ApiService
 import com.haja.hja.Service.model.AdsModel
-import com.haja.hja.Utils.ApplicationLanguageHelper
-import com.haja.hja.Utils.LANG
+import com.haja.hja.Utils.LocalizationHelper
 import com.haja.hja.Utils.SharedPreferenceUtil
 import com.haja.hja.Utils.USERID
 import com.haja.hja.View.ui.MainCategoriesActivity.MainCategoriesActivity
@@ -29,6 +29,9 @@ class AdActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(baseContext))
+        }
         setContentView(R.layout.activity_ad)
         val offerId = intent.getStringExtra("offerId")
         val offerName = intent.getStringExtra("offerName")
@@ -203,7 +206,9 @@ class AdActivity : AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context?) {
-        val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
-        super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase, "$lang"))
+        //  val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
+        // super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase, "$lang"))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(newBase))
     }
 }

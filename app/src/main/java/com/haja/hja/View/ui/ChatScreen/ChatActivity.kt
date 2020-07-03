@@ -2,6 +2,7 @@ package com.haja.hja.View.ui.ChatScreen
 
 import android.app.Dialog
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -13,10 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.haja.hja.OnItemClickWithId
 import com.haja.hja.R
 import com.haja.hja.Service.model.ChatMessagesDataModel
-import com.haja.hja.Utils.ApplicationLanguageHelper
-import com.haja.hja.Utils.LANG
-import com.haja.hja.Utils.SharedPreferenceUtil
-import com.haja.hja.Utils.USERID
+import com.haja.hja.Utils.*
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.makeToast
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.delete_message.*
@@ -32,6 +30,9 @@ class ChatActivity : AppCompatActivity(), OnItemClickWithId {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(baseContext))
+        }
         setContentView(R.layout.activity_chat)
         viewModel = ViewModelProviders.of(this).get(ChatViewModel::class.java)
         mHandler = Handler()
@@ -169,7 +170,11 @@ class ChatActivity : AppCompatActivity(), OnItemClickWithId {
     }
 
     override fun attachBaseContext(newBase: Context?) {
-        val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
-        super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase, "$lang"))
+      //  val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
+       // super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase, "$lang"))
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(newBase))
+        }
     }
 }

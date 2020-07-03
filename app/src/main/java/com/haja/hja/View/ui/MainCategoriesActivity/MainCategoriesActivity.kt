@@ -3,6 +3,7 @@ package com.haja.hja.View.ui.MainCategoriesActivity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -35,6 +36,9 @@ class MainCategoriesActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(baseContext))
+        }
         setContentView(R.layout.activity_main_categories)
 
         this.bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
@@ -258,7 +262,10 @@ class MainCategoriesActivity : AppCompatActivity(),
     }
 
     override fun attachBaseContext(newBase: Context?) {
-        val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
-        super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase, "$lang"))
+     //   val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
+       // super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase, "$lang"))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(newBase))
+        }
     }
 }

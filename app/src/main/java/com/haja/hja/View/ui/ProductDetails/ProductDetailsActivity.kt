@@ -15,6 +15,7 @@ import com.smarteist.autoimageslider.SliderAnimations
 import kotlinx.android.synthetic.main.activity_product_details.*
 import android.app.Dialog
 import android.content.Context
+import android.os.Build
 import android.view.View
 import android.view.Window
 import com.haja.hja.R
@@ -35,6 +36,9 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(baseContext))
+        }
         setContentView(R.layout.activity_product_details)
 
         val progress = CustomProgressBar.showProgressBar(this)
@@ -223,7 +227,10 @@ class ProductDetailsActivity : AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context?) {
-        val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
-        super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase!!, "$lang"))
+      //  val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
+      //  super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase!!, "$lang"))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(newBase))
+        }
     }
 }

@@ -35,6 +35,7 @@ class ApplicationLanguageHelper(base: Context) : ContextThemeWrapper(base, R.sty
         @TargetApi(Build.VERSION_CODES.N)
         fun setSystemLocale(config: Configuration, locale: Locale) {
             config.setLocale(locale)
+
         }
     }
 }

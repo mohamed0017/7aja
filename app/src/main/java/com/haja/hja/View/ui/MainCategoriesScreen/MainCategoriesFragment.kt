@@ -127,16 +127,16 @@ class MainCategoriesFragment : Fragment() {
                 if (it != null) {
                     categories[i].childCategories = it.data
                     requestsCount++
-                    Log.i("sub_categories/size", it.data?.size.toString())
-                    Log.i("requestsCount/size", requestsCount.toString())
+                  //  Log.i("sub_categories/size", it.data?.size.toString())
+                   // Log.i("requestsCount/size", requestsCount.toString())
                     if ((parentCategories.data.size) * 2 == requestsCount) {
                         progress?.dismiss()
-                        Log.i("cat/competed", "$requestsCount")
+                     //   Log.i("cat/competed", "$requestsCount")
                         initRecycler()
                     }
                 } else {
                     progress?.dismiss()
-                    Log.i("getChildCategories", "getChildCategories")
+                 //   Log.i("getChildCategories", "getChildCategories")
                 }
             })
         }
@@ -185,6 +185,11 @@ class MainCategoriesFragment : Fragment() {
             adapter = MainCategoriesAdapter(categories, context, fragmentManager)
         }
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        progress?.dismiss()
     }
 
     override fun onStop() {
