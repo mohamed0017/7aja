@@ -7,11 +7,12 @@ import android.graphics.Bitmap
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
+import com.haja.hja.BaseActivity
 import com.haja.hja.R
 import im.delight.android.webview.AdvancedWebView
 
 
-class WebviewActivity : AppCompatActivity() , AdvancedWebView.Listener  {
+class WebviewActivity : BaseActivity() , AdvancedWebView.Listener  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -18,6 +18,7 @@ import android.content.Context
 import android.os.Build
 import android.view.View
 import android.view.Window
+import com.haja.hja.BaseActivity
 import com.haja.hja.R
 import com.haja.hja.Service.ApiService.Companion.IMAGEBASEURL
 import com.haja.hja.Utils.*
@@ -30,15 +31,15 @@ import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.mak
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.report_dialog.*
 
-class ProductDetailsActivity : AppCompatActivity() {
+class ProductDetailsActivity : BaseActivity() {
 
     private lateinit var viewModel: ProductDetailsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+       /*  if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
             super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(baseContext))
-        }
+        }*/
         setContentView(R.layout.activity_product_details)
 
         val progress = CustomProgressBar.showProgressBar(this)
@@ -223,14 +224,6 @@ class ProductDetailsActivity : AppCompatActivity() {
             val intent = Intent(this, MainCategoriesActivity::class.java)
             startActivity(intent)
             finish()
-        }
-    }
-
-    override fun attachBaseContext(newBase: Context?) {
-      //  val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
-      //  super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase!!, "$lang"))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(newBase))
         }
     }
 }

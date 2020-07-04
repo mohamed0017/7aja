@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.haja.hja.BaseActivity
 import com.haja.hja.OnItemClickWithId
 import com.haja.hja.R
 import com.haja.hja.Service.model.ChatMessagesDataModel
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.delete_message.*
 import java.util.*
 
-class ChatActivity : AppCompatActivity(), OnItemClickWithId {
+class ChatActivity : BaseActivity(), OnItemClickWithId {
 
     private lateinit var viewModel: ChatViewModel
     private var adapter: ChatMessagesAdapter? = null
@@ -30,9 +31,9 @@ class ChatActivity : AppCompatActivity(), OnItemClickWithId {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+       /*  if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
             super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(baseContext))
-        }
+        }*/
         setContentView(R.layout.activity_chat)
         viewModel = ViewModelProviders.of(this).get(ChatViewModel::class.java)
         mHandler = Handler()
@@ -169,12 +170,4 @@ class ChatActivity : AppCompatActivity(), OnItemClickWithId {
         super.onDestroy()
     }
 
-    override fun attachBaseContext(newBase: Context?) {
-      //  val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
-       // super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase, "$lang"))
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(newBase))
-        }
-    }
 }

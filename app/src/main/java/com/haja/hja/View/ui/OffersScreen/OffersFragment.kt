@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.haja.hja.R
 import com.haja.hja.Service.model.OfferCategoriesData
 import com.haja.hja.Service.model.ProductData
+import com.haja.hja.Utils.LANG
+import com.haja.hja.Utils.SharedPreferenceUtil
 import com.infovass.lawyerskw.lawyerskw.Utils.ui.CustomProgressBar
 import com.kaopiz.kprogresshud.KProgressHUD
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -94,8 +96,12 @@ class OffersFragment : Fragment(), OnItemClick {
                 if (offers.result == true) {
                     offersAdapter.setNewProducts(offers.data?.data as ArrayList<ProductData?>)
                     offersAdapter.notifyDataSetChanged()
-                } else
-                    makeToast(context!!, offers.errorMesage.toString())
+                } else {
+                    if (SharedPreferenceUtil(requireContext()).getString(LANG, "ar") == "ar")
+                        makeToast(context!!, offers.errorMesage.toString())
+                    else
+                        makeToast(context!!, offers.errorMesageEn.toString())
+                }
             } else
                 makeToast(context!!, resources.getString(R.string.error))
         })

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.haja.hja.BaseActivity
 import com.haja.hja.R
 import com.haja.hja.Utils.ApplicationLanguageHelper
 import com.haja.hja.Utils.LANG
@@ -15,13 +16,13 @@ import com.haja.hja.Utils.SharedPreferenceUtil
 import com.haja.hja.View.ui.AdScreen.AdActivity
 import com.haja.hja.View.ui.ProductDetails.ProductDetailsActivity
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
-            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(baseContext))
-        }
+        /*  if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+             super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(baseContext))
+         }*/
         setContentView(R.layout.activity_splash)
 
         /** Duration of wait  */
@@ -44,18 +45,10 @@ class SplashActivity : AppCompatActivity() {
         }, length.toLong())
     }
 
-    override fun attachBaseContext(newBase: Context?) {
-      //  val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
-       // super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase, lang.toString()))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(newBase))
-        }
-    }
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         this.intent = intent
-        Log.e("onNewIntent" , intent?.extras.toString() + "....")
+        Log.e("onNewIntent", intent?.extras.toString() + "....")
     }
 
     override fun onResume() {

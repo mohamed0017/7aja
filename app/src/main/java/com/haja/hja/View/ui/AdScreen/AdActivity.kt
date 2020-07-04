@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.haja.hja.BaseActivity
 import com.haja.hja.R
 import com.haja.hja.Service.ApiService
 import com.haja.hja.Service.model.AdsModel
@@ -21,7 +22,7 @@ import com.infovass.lawyerskw.lawyerskw.Utils.ui.SnackAndToastUtil.Companion.mak
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_ad.*
 
-class AdActivity : AppCompatActivity() {
+class AdActivity : BaseActivity() {
 
     lateinit var viewModel: StartupAdViewModel
     private var isLike: String? = null
@@ -29,9 +30,9 @@ class AdActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+       /*  if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
             super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(baseContext))
-        }
+        }*/
         setContentView(R.layout.activity_ad)
         val offerId = intent.getStringExtra("offerId")
         val offerName = intent.getStringExtra("offerName")
@@ -205,10 +206,4 @@ class AdActivity : AppCompatActivity() {
         }
     }
 
-    override fun attachBaseContext(newBase: Context?) {
-        //  val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
-        // super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase, "$lang"))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(newBase))
-    }
 }

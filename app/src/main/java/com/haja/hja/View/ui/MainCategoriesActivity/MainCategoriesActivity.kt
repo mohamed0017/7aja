@@ -14,6 +14,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.haja.hja.BaseActivity
 import com.haja.hja.R
 import com.haja.hja.Utils.*
 import com.haja.hja.View.ui.AboutusScreen.AboutFragment
@@ -31,14 +32,14 @@ import kotlinx.android.synthetic.main.activity_main_categories.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.dialog_exit.*
 
-class MainCategoriesActivity : AppCompatActivity(),
+class MainCategoriesActivity : BaseActivity(),
     NavigationView.OnNavigationItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+       /*  if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
             super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(baseContext))
-        }
+        }*/
         setContentView(R.layout.activity_main_categories)
 
         this.bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
@@ -261,11 +262,4 @@ class MainCategoriesActivity : AppCompatActivity(),
         return true
     }
 
-    override fun attachBaseContext(newBase: Context?) {
-     //   val lang = SharedPreferenceUtil(newBase!!).getString(LANG, "ar")
-       // super.attachBaseContext(ApplicationLanguageHelper.wrap(newBase, "$lang"))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(newBase))
-        }
-    }
 }

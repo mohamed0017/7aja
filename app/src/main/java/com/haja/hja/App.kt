@@ -1,12 +1,16 @@
 package com.haja.hja
 
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.util.Log
+import androidx.multidex.MultiDex
+import com.haja.hja.Utils.LocalizationHelper
 import com.haja.hja.View.ui.SplashScreen.SplashActivity
 import com.onesignal.OneSignal
+import java.util.*
 
 class App : Application() {
 
@@ -38,4 +42,10 @@ class App : Application() {
             }
             .init()
     }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(LocalizationHelper.updateBaseContextLocale(base))
+        MultiDex.install(this)
+    }
+
 }

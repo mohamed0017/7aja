@@ -2,6 +2,7 @@ package com.haja.hja.View.ui.ProductDetails
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.haja.hja.BaseActivity
 import com.haja.hja.R
 import com.haja.hja.Service.model.ProductImgs
 import com.haja.hja.View.Adapter.SliderAdapterExample
@@ -9,7 +10,7 @@ import com.smarteist.autoimageslider.IndicatorAnimations
 import com.smarteist.autoimageslider.SliderAnimations
 import kotlinx.android.synthetic.main.activity_image_full_screen.*
 
-class ImageFullScreenActivity : AppCompatActivity() {
+class ImageFullScreenActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
