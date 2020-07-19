@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit
 
 class ServiceGenerator(token:String) {
         private val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(900, TimeUnit.SECONDS)
+            .writeTimeout(900, TimeUnit.SECONDS)
+            .readTimeout(900, TimeUnit.SECONDS)
             .addInterceptor { chain ->
                 var request = chain.request()
                 var httpUrl = request.url

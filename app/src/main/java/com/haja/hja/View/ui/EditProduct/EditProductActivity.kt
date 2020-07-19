@@ -107,8 +107,14 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
         editProductBut.setOnClickListener {
             if (isPublished == "N")
                 uploadProduct()
-            else
-                showPriceDialog()
+            else {
+                if (seleectedSpecialTime != "0") {
+                    val intent = Intent(context!!, PaymentActivity::class.java)
+                    intent.putExtra(PaymentActivity.PAYMENT_AMOUNT, totalAdPrice)
+                    startActivityForResult(intent, PaymentActivity.PAYMENT_REQUEST_CODE)
+                } else
+                    showPriceDialog()
+            }
         }
         getAdPrice()
         initDescriptionLettersCount()
@@ -127,6 +133,9 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
                     addNewProImagesList.adapter = adapter
                     if (product.data.isSpecial != "0")
                         AdvStared.isChecked = true
+                    isPublished = product.data.isPublished.toString()
+                    if (product.data.isPublished == "Y")
+                        AdvPublish.isChecked = true
                     if (!product.data.imgs.isNullOrEmpty())
                         adapter.setImagesAndNotifyList(product.data.imgs as ArrayList<ProductImgs?>?)
                 } else
@@ -288,6 +297,7 @@ class EditProductActivity : Fragment(), OnDeleteImage, OnCategoryItemClick {
             if (isChecked) {
                 showStaredDialog()
             } else {
+                seleectedSpecialTime = "0"
                 totalAdPrice = advPrice
             }
         }

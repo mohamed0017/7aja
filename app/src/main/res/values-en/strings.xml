@@ -43,7 +43,7 @@
     <string name="correct_name">enter correct name</string>
     <string name="added">added to Favorites</string>
     <string name="select_cat">select category</string>
-    <string name="upload_img">please upload images max 6</string>
+    <string name="upload_img">please upload images max 4 and size 10 M for total </string>
     <string name="product_info">Ad information</string>
     <string name="pro_name_ar">product name in arabic</string>
     <string name="pro_name_en">product name in english</string>
@@ -132,4 +132,5 @@
     <string name="faq"> FAQ</string>
     <string name="ad_stared">  make Ad premium  </string>
     <string name="enter">enter</string>
+    <string name="max_size_images">"total images size bigger than 10 M "</string>
 </resources>

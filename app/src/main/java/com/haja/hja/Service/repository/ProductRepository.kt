@@ -86,16 +86,14 @@ class ProductRepository(token: String) {
         val call = apiService?.addProduct(map, parts, productAttributes)
         call?.enqueue {
             onResponse = { response ->
-                Log.i("AddProductResponse", response.code().toString())
                 if (response.code() / 100 == 2) {
                     result.value = response.body()
-                    Log.i("AddProductResponse/body", response.body().toString())
                 } else
                     result.value = null
             }
             onFailure = { t ->
-                Log.i("addProResponse/Failure", t!!.message + "..")
-                result.value = null
+                if (t?.message.isNullOrEmpty())
+                result.value = AddProductResponse(errorMesage = t?.message ?: t?.stackTrace.toString())
             }
         }
         return result

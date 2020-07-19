@@ -43,7 +43,7 @@
     <string name="correct_name">ادخل الاسم الصحيح</string>
     <string name="added">اضافة الي المفضلة</string>
     <string name="select_cat">اختر القسم</string>
-    <string name="upload_img">اضغط لرفع الصور 6 صور بحد اقصي </string>
+    <string name="upload_img">اختر ٤ صور بحد اقصي وبحجم ١٠ ميجا اجمالي </string>
     <string name="product_info">معلومات الاعلان</string>
     <string name="pro_name_ar">اسم المنتج بالغة العربية</string>
     <string name="pro_name_en">اسم المنتج بالغة الانجليزية</string>
@@ -135,4 +135,5 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="max_size_images">"حجم الصور اكبر من ١٠ ميجا "</string>
 </resources>

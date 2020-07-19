@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -179,6 +180,11 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         addProductBut.setOnClickListener {
             if (isValidProductData()) {
                 is_published = "Y"
+                if (seleectedSpecialTime != "0"){
+                    val intent = Intent(context!!, PaymentActivity::class.java)
+                    intent.putExtra(PaymentActivity.PAYMENT_AMOUNT, totalAdPrice)
+                    startActivityForResult(intent, PaymentActivity.PAYMENT_REQUEST_CODE)
+                }else
                 showPriceDialog()
             }
         }
@@ -191,6 +197,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
             if (isChecked) {
                 showStaredDialog()
             } else {
+                seleectedSpecialTime = "0"
                 totalAdPrice = advPrice
             }
         }
@@ -263,11 +270,13 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         viewModel.setProductData(getProductData())
         viewModel.addProduct().observe(this, Observer { products ->
             progress.dismiss()
-            if (products != null) {
+            if (products != null && products.result == true) {
                 showAddProductDoneDialog(products.errorMesage.toString())
-            } else {
+            } else if (products != null && !products.errorMesage.isNullOrEmpty()){
+                makeToast(context!!, products.errorMesage.toString())
+            }else
                 makeToast(context!!, resources.getString(R.string.error))
-            }
+
         })
     }
 
@@ -341,7 +350,7 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         //  map["discount"] = addProDiscount.text.toString()
         // map["quantity"] = addProQuantity.text.toString()
         map["description"] = addProDescriptionAr.text.toString()
-         map["description_en"] = addProDescriptionEn.text.toString()
+        map["description_en"] = addProDescriptionEn.text.toString()
         //    map["tags"] = addProTagsAr.text.toString()
         //  map["tags_en"] = addProTags.text.toString()
         map["cat_id"] = selectedCategory.toString()
@@ -384,6 +393,17 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
         if (requestCode == Config.RC_PICK_IMAGES && resultCode == RESULT_OK && data != null) {
             val images = data.getParcelableArrayListExtra<Image>(Config.EXTRA_IMAGES)
             // do your logic here...
+            var imagesSize = 0
+            images?.forEach {
+                val file = File(it.path)
+                val file_size = Integer.parseInt((file.length() / 1024).toString())
+                imagesSize = imagesSize + file_size
+            }
+            if (imagesSize > 10000){
+                Toast.makeText(context, getString(R.string.max_size_images), Toast.LENGTH_LONG).show()
+                openGallery()
+                return
+            }
             selectedImages = images
             val adapter = SelectedImagesAdapter(context!!)
             //Log.i("onActivityResult", images[0].path + "...")
@@ -416,9 +436,9 @@ class AddProductFragment : Fragment(), OnCategoryItemClick {
             .setShowCamera(true)                //  Show camera button
             //  .setFolderTitle("Albums")           //  Folder title (works with FolderMode = true)
             .setImageTitle("Galleries")         //  Image title (works with FolderMode = false)
-            .setDoneTitle("Done")               //  Done button title
-            .setLimitMessage("You have reached selection limit")    // Selection limit message
-            .setMaxSize(6)                     //  Max images can be selected
+            .setDoneTitle(getString(R.string.done))               //  Done button title
+            .setLimitMessage(getString(R.string.upload_img))    // Selection limit message
+            .setMaxSize(4)                     //  Max images can be selected
             .setShowNumberIndicator(true)
             // .setSavePath("ImagePicker")         //  Image capture folder name
             .setSelectedImages(selectedImages)            //  Selected images
